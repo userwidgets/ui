@@ -7,7 +7,7 @@ try {
 } catch (e) {
 	apiUrl = window.origin
 }
-
+console.log(apiUrl)
 const key = window.sessionStorage.getItem("key")
 export const client = Client.create(
 	apiUrl,
