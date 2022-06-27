@@ -1,0 +1,67 @@
+@import "./common.css";
+@import "./typography.css";
+:root {
+	--smoothly-semitransparent: .8;
+
+	--smoothly-default-color: 245, 245, 245;
+	--smoothly-default-contrast: 0, 0, 0;
+	--smoothly-default-shade: 225, 225, 224;
+	--smoothly-default-tint: 250, 250, 250;
+
+	--smoothly-primary-color: 231, 152, 3;
+	--smoothly-primary-contrast: 255, 247, 232;
+	--smoothly-primary-shade: 152, 100, 2;
+	--smoothly-primary-tint: 252, 193, 82;
+
+	--smoothly-secondary-color: 89, 116, 143;
+	--smoothly-secondary-contrast: 217, 225, 233;
+	--smoothly-secondary-shade: 66, 86, 106;
+	--smoothly-secondary-tint: 121, 146, 171;
+
+	--smoothly-tertiary-color: 52, 101, 164;
+	--smoothly-tertiary-contrast: 238, 238, 238;
+	--smoothly-tertiary-shade: 32, 74, 135;
+	--smoothly-tertiary-tint: 114, 159, 207;
+
+	--smoothly-medium-color: 160, 160, 159;
+	--smoothly-medium-contrast: 245, 245, 244;
+	--smoothly-medium-shade: 79, 92, 48;
+	--smoothly-medium-tint: 255, 255, 255;
+
+	--smoothly-success-color: 124, 145, 76;
+	--smoothly-success-contrast: 227, 229, 217;
+	--smoothly-success-shade: 55, 80, 70;
+	--smoothly-success-tint: 56, 78, 150;
+
+	--smoothly-warning-color: 225, 118, 16;
+	--smoothly-warning-contrast: 0, 0, 0;
+	--smoothly-warning-shade: 168, 77, 12;
+	--smoothly-warning-tint: 242, 158, 78;
+
+	--smoothly-danger-color: 196, 56, 21;
+	--smoothly-danger-contrast: 250, 234, 232;
+	--smoothly-danger-shade: 141, 40, 15;
+	--smoothly-danger-tint: 239, 41, 41;
+
+	--smoothly-dark-color: 52, 58, 64;
+	--smoothly-dark-contrast: 196, 196, 196;
+	--smoothly-dark-shade:	0, 0, 0;
+	--smoothly-dark-tint: 123, 135, 148;
+	
+	--smoothly-light-color: 248, 249, 250;
+	--smoothly-light-contrast: 0, 0, 0;
+	--smoothly-light-shade: 219, 224, 229;
+	--smoothly-light-tint: 255, 255, 255;
+
+	--smoothly-shadow: 0 0 4px 2px rgba(var(--smoothly-light-color), 0.25);
+	--smoothly-shadow-strong: 0 0 4px 4px rgba(var(--smoothly-light-color), 0.25);
+
+}
+smoothly-app > header > h1 > a,
+smoothly-app > smoothly-notifier > header > h1 > a {
+	color: transparent;
+	width: 10em;
+	background-image: url("https://issuefab.com/logo/issuefab-l06.svg");
+	background-repeat: no-repeat;
+	background-size: contain;
+}
