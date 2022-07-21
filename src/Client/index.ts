@@ -8,7 +8,7 @@ import { Version } from "./Version"
 export class Client extends rest.Client<gracely.Error> {
 	readonly version = new Version(this.client)
 	readonly user = new User(this.client)
-	readonly me = new User(this.client)
+	readonly me = new Me(this.client)
 	static create<T = Record<string, any>, Error = never>(
 		url?: string,
 		key?: string,

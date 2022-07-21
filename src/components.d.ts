@@ -16,6 +16,10 @@ export namespace Components {
     }
     interface TemplateVersion {
     }
+    interface UserwidgetsDemo {
+    }
+    interface UserwidgetsDemoVersion {
+    }
     interface UwApp {
     }
     interface UwChangeName {
@@ -80,6 +84,18 @@ declare global {
         prototype: HTMLTemplateVersionElement;
         new (): HTMLTemplateVersionElement;
     };
+    interface HTMLUserwidgetsDemoElement extends Components.UserwidgetsDemo, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsDemoElement: {
+        prototype: HTMLUserwidgetsDemoElement;
+        new (): HTMLUserwidgetsDemoElement;
+    };
+    interface HTMLUserwidgetsDemoVersionElement extends Components.UserwidgetsDemoVersion, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsDemoVersionElement: {
+        prototype: HTMLUserwidgetsDemoVersionElement;
+        new (): HTMLUserwidgetsDemoVersionElement;
+    };
     interface HTMLUwAppElement extends Components.UwApp, HTMLStencilElement {
     }
     var HTMLUwAppElement: {
@@ -137,6 +153,8 @@ declare global {
     interface HTMLElementTagNameMap {
         "a-table": HTMLATableElement;
         "template-version": HTMLTemplateVersionElement;
+        "userwidgets-demo": HTMLUserwidgetsDemoElement;
+        "userwidgets-demo-version": HTMLUserwidgetsDemoVersionElement;
         "uw-app": HTMLUwAppElement;
         "uw-change-name": HTMLUwChangeNameElement;
         "uw-change-password": HTMLUwChangePasswordElement;
@@ -153,6 +171,10 @@ declare namespace LocalJSX {
         "data"?: RecursiveData;
     }
     interface TemplateVersion {
+    }
+    interface UserwidgetsDemo {
+    }
+    interface UserwidgetsDemoVersion {
     }
     interface UwApp {
     }
@@ -187,6 +209,8 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "a-table": ATable;
         "template-version": TemplateVersion;
+        "userwidgets-demo": UserwidgetsDemo;
+        "userwidgets-demo-version": UserwidgetsDemoVersion;
         "uw-app": UwApp;
         "uw-change-name": UwChangeName;
         "uw-change-password": UwChangePassword;
@@ -204,6 +228,8 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "a-table": LocalJSX.ATable & JSXBase.HTMLAttributes<HTMLATableElement>;
             "template-version": LocalJSX.TemplateVersion & JSXBase.HTMLAttributes<HTMLTemplateVersionElement>;
+            "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
+            "userwidgets-demo-version": LocalJSX.UserwidgetsDemoVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoVersionElement>;
             "uw-app": LocalJSX.UwApp & JSXBase.HTMLAttributes<HTMLUwAppElement>;
             "uw-change-name": LocalJSX.UwChangeName & JSXBase.HTMLAttributes<HTMLUwChangeNameElement>;
             "uw-change-password": LocalJSX.UwChangePassword & JSXBase.HTMLAttributes<HTMLUwChangePasswordElement>;
