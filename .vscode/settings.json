@@ -37,6 +37,7 @@
 		"persistly",
 		"servly",
 		"uply",
+		"userwidget",
 		"userwidgets"
 	],
   "debug.javascript.autoAttachFilter": "disabled",

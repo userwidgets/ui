@@ -1,20 +1,20 @@
 import { Component, Event, EventEmitter, h, Listen } from "@stencil/core"
 import { Notice } from "smoothly"
-import { UserCredentials } from "../UserCredentials"
+import { model } from "../../../../model"
 
 @Component({
-	tag: "uw-login-dialog",
+	tag: "userwidgets-login-dialog",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class Login {
 	@Event() notice: EventEmitter<Notice>
-	@Event() login: EventEmitter<UserCredentials>
+	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
 	@Listen("submit")
 	async handleSubmit(event: CustomEvent<Record<string, string>>) {
 		event.preventDefault()
 		const credentials = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-		if (!UserCredentials.is(credentials)) {
+		if (!model.userwidgets.User.Credentials.is(credentials)) {
 			console.log("missing email or pw")
 			this.notice.emit(Notice.warn("Both email and password is required to login."))
 		} else if (!credentials.user.match(/^\S+@\S+$/)) {

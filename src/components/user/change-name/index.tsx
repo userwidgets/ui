@@ -1,19 +1,19 @@
 import { Component, Event, EventEmitter, h, Listen, Prop } from "@stencil/core"
 import * as gracely from "gracely"
 import { Notice } from "smoothly"
-import { Name } from "../../../../model/User/Name"
 import { client } from "../../../client"
+import { model } from "../../../model"
 
 @Component({
-	tag: "uw-change-name",
+	tag: "userwidgets-change-name",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class ChangeName {
 	private changed = false
-	private initialName: Name
+	private initialName: model.userwidgets.User.Name
 	@Event() notice: EventEmitter<Notice>
-	@Prop() name: Name
+	@Prop() name: model.userwidgets.User.Name
 
 	connectedCallback() {
 		this.initialName = this.name
@@ -29,7 +29,7 @@ export class ChangeName {
 		event.preventDefault()
 		event.stopPropagation()
 		const name = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-		if (!Name.is(name))
+		if (!model.userwidgets.User.Name.is(name))
 			this.notice.emit(Notice.warn("Missing fields."))
 		else if (!(this.name.first == this.initialName.first && this.name.last == this.initialName.last))
 			this.notice.emit(Notice.warn("Names are not changed."))

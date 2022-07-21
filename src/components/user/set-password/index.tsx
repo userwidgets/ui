@@ -1,16 +1,16 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import { Notice } from "smoothly"
-import { User } from "../../../../model"
 import { client } from "../../../client"
+import { model } from "../../../model"
 
 @Component({
-	tag: "uw-set-password",
+	tag: "userwidgets-set-password",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class SetPassword {
-	@Prop() user: User
+	@Prop() user: model.userwidgets.User
 	@Event() notice: EventEmitter<Notice>
 	@State() new: string
 	@State() repeat: string
@@ -23,7 +23,7 @@ export class SetPassword {
 		event.preventDefault()
 		event.stopPropagation()
 		const passwords = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-		if (!User.Password.is(passwords))
+		if (!model.userwidgets.User.Password.Change.is(passwords))
 			this.notice.emit(Notice.warn("Missing fields."))
 		else if (passwords.new != passwords.repeat)
 			this.notice.emit(Notice.warn("New password was not repeated correctly."))

@@ -1,7 +1,7 @@
 import * as gracely from "gracely"
 import * as authly from "authly"
+import * as model from "@userwidgets/model"
 import * as rest from "cloudly-rest"
-import * as model from "../model"
 
 export class Me extends rest.Collection<gracely.Error> {
 	async login(user: string, password: string): Promise<model.User.Key | gracely.Error>
@@ -20,7 +20,7 @@ export class Me extends rest.Collection<gracely.Error> {
 				: (await model.User.Key.unpack(token)) ?? gracely.client.unauthorized("Failed to verify token.")
 			if (!gracely.Error.is(result)) {
 				this.client.key = result.token
-				localStorage.setItem("key", JSON.stringify(result))
+				sessionStorage.setItem("userwidget-token", JSON.stringify(result))
 			}
 		}
 		return result

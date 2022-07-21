@@ -1,25 +1,29 @@
-import { Component, h, Listen, Prop } from "@stencil/core"
-import { User } from "../../../../model"
+import { Component, h, Listen, State } from "@stencil/core"
+import { model } from "../../../model"
+import { store } from "../../../Store"
 import { TableData } from "./TableData"
 
 @Component({
-	tag: "uw-user-list",
+	tag: "userwidgets-user-list",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class UserList {
-	@Prop({ mutable: true }) users: User[]
+	componentWillLoad() {
+		store.users.listen("changed", users => (users ? (this.users = users) : []))
+	}
+	@State() users: model.userwidgets.User[]
 	@Listen("updated")
-	handleUpdated(event: CustomEvent<User>) {
+	handleUpdated(event: CustomEvent<model.userwidgets.User>) {
 		event.stopPropagation()
 		this.users[this.users.findIndex(user => user.email == event.detail.email)] = event.detail
 	}
-	transform(users: User[]): TableData {
+	transform(users: model.userwidgets.User[]): TableData {
 		return {
 			headings: ["User", "Email"],
 			rows: users.map(user => ({
 				cells: [`${user.name.first} ${user.name.last}`, user.email],
-				detail: <uw-user-edit user={user}></uw-user-edit>,
+				detail: <userwidgets-user-edit user={user}></userwidgets-user-edit>,
 			})),
 		}
 	}

@@ -1,14 +1,15 @@
 import { Component, Event, EventEmitter, h, Listen, Prop } from "@stencil/core"
-import { User } from "../../../../model"
+import { model } from "../../../model"
+
 @Component({
-	tag: "uw-user-edit",
+	tag: "userwidgets-user-edit",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class UserEdit {
-	private initialUser: User
-	@Prop() user: User
-	@Event() updated: EventEmitter<User>
+	private initialUser: model.userwidgets.User
+	@Prop() user: model.userwidgets.User
+	@Event() updated: EventEmitter<model.userwidgets.User>
 	connectedCallback() {
 		this.initialUser = structuredClone(this.user)
 	}
@@ -27,8 +28,8 @@ export class UserEdit {
 	render() {
 		return (
 			<div>
-				<uw-change-name user={this.user}></uw-change-name>
-				<uw-set-password user={this.user}></uw-set-password>
+				<userwidgets-change-name name={this.user.name}></userwidgets-change-name>
+				<userwidgets-set-password user={this.user}></userwidgets-set-password>
 			</div>
 		)
 	}

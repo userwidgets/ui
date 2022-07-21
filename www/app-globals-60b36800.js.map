@@ -1,1 +1,0 @@
-{"file":"app-globals-60b36800.js","mappings":";;;AACY,MAAC,aAAa,GAAGA;;;;","names":["appGlobalScript"],"sources":["@stencil/core/internal/app-globals"],"sourcesContent":["import appGlobalScript from '/home/elias/versioned/userwidgets/ui/src/global/app.ts';\nexport const globalScripts = appGlobalScript;\n"],"version":3}
