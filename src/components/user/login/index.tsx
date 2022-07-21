@@ -1,36 +1,35 @@
-import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Listen, State } from "@stencil/core"
+import { Component, ComponentWillLoad, h, Host, Listen, State } from "@stencil/core"
 import * as gracely from "gracely"
-import { client } from "../../../client"
-import { UserCredentials } from "./UserCredentials"
+import { model } from "../../../model"
+import { store } from "../../../Store"
 
 @Component({
-	tag: "uw-login",
+	tag: "userwidgets-login",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class Login implements ComponentWillLoad {
-	@State() resolve?: (result: boolean | PromiseLike<boolean>) => void
-	@Event() loggedIn: EventEmitter
+	@State() resolve?: (result: boolean) => void
+	@State() error?: gracely.Error
 	@Listen("login")
-	async handleLogin(event: CustomEvent<UserCredentials>) {
+	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await client.me.login(event.detail.user, event.detail.password)
-		if (this.resolve != undefined && !gracely.Error.is(response)) {
-			this.resolve(true)
-			sessionStorage.setItem("jwt", response.token)
-			this.loggedIn.emit()
-		}
-		if (!gracely.Error.is(response)) {
+		const response = await store.me.login(event.detail)
+		if (gracely.Error.is(response))
+			this.error = response
+		else {
+			this.resolve?.(true)
 			this.resolve = undefined
+			this.error = undefined
 		}
 	}
-	componentWillLoad(): void | Promise<void> {
-		client.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
+	async componentWillLoad(): Promise<void> {
+		store.me.listen("unauthorized", resolve => (this.resolve = resolve))
 	}
 	render() {
 		return (
 			<Host>
-				{this.resolve ? <uw-login-dialog></uw-login-dialog> : []}
+				{this.resolve ? <userwidgets-login-dialog></userwidgets-login-dialog> : []}
 				<slot></slot>
 			</Host>
 		)

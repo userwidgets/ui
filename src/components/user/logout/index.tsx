@@ -2,7 +2,7 @@ import { Component, ComponentWillLoad, Event, EventEmitter, h, Host } from "@ste
 import { client } from "../../../client"
 
 @Component({
-	tag: "uw-logout",
+	tag: "userwidgets-logout",
 	styleUrl: "style.css",
 	scoped: true,
 })

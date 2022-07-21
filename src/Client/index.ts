@@ -1,14 +1,19 @@
 import * as gracely from "gracely"
+import * as model from "@userwidgets/model"
 import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
-import * as model from "../model"
+import { Application } from "./Application"
+import { Me } from "./Me"
+import { Organization } from "./Organization"
 import { User } from "./User"
 import { Version } from "./Version"
 
 export class Client extends rest.Client<gracely.Error> {
 	readonly version = new Version(this.client)
 	readonly user = new User(this.client)
-	readonly me = new User(this.client)
+	readonly me = new Me(this.client)
+	readonly organization = new Organization(this.client)
+	readonly application = new Application(this.client)
 	static create<T = Record<string, any>, Error = never>(
 		url?: string,
 		key?: string,

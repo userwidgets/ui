@@ -1,6 +1,5 @@
-import { Component, h, Host, State } from "@stencil/core"
-import * as gracely from "gracely"
-import { client } from "../../client"
+import { Component, h, State } from "@stencil/core"
+import { store } from "../../Store"
 
 @Component({
 	tag: "template-version",
@@ -8,17 +7,20 @@ import { client } from "../../client"
 	scoped: true,
 })
 export class ApiVersion {
-	@State() version?: string
+	@State() apiInformation?: { name: string; version: string }
 	@State() error?: string
 
-	async connectedCallback() {
-		const response = await client.version.fetch()
-		if (gracely.Error.is(response))
-			this.error = JSON.stringify(response)
-		else
-			this.version = response.version
+	async componentWillLoad() {
+		store.version.listen("changed", version => (this.apiInformation = version))
 	}
+
 	render() {
-		return <Host>{this.version ? `api version: ${this.version}` : this.error}</Host>
+		return this.apiInformation ? (
+			<p>
+				Current {this.apiInformation.name} version: {this.apiInformation.version}
+			</p>
+		) : (
+			<p>Loading api information...</p>
+		)
 	}
 }

@@ -1,15 +1,16 @@
-import { Client } from "../Client"
-import * as model from "../model"
+import { Client } from "./Client"
 
+const appUrl = new URL(window.location.href)
 let apiUrl: string
 try {
-	apiUrl = process.env.apiUrl ?? window.origin
+	apiUrl =
+		appUrl.searchParams.get("userwidgetPreview") ??
+		(appUrl.hostname == "localhost" || appUrl.hostname == "127.0.0.1"
+			? process.env.localUrl
+			: process.env.productionUrl) ??
+		window.origin
 } catch (e) {
 	apiUrl = window.origin
 }
-
-const key = window.sessionStorage.getItem("key")
-export const client = Client.create(
-	apiUrl,
-	(key && model.User.Key.is(key) ? JSON.parse(key) : undefined)?.token ?? undefined
-)
+console.log("api url:", apiUrl)
+export const client = Client.create(apiUrl, window.sessionStorage.getItem("userwidget-token") ?? undefined)
