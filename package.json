@@ -2,7 +2,7 @@
   "name": "@userwidgets/ui",
   "version": "0.0.3",
   "description": "The userwidgets app ui.",
-  "private": true,
+  "private": false,
   "repository": "https://github.com/userwidgets/ui",
   "type": "module",
   "bugs": {
@@ -71,7 +71,7 @@
     "tslib": "^2.4.0"
   },
   "dependencies": {
-    "@userwidgets/model": "^0.0.10",
+    "@userwidgets/model": "^0.0.11",
     "cloudly-http": "^0.0.50",
     "cloudly-rest": "^0.0.15",
     "gracely": "^2.0.2",
