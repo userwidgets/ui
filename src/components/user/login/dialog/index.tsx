@@ -1,27 +1,23 @@
-import { Component, Event, EventEmitter, h, Listen } from "@stencil/core"
+import { Component, Event, EventEmitter, h } from "@stencil/core"
 import { Notice } from "smoothly"
 import { model } from "../../../../model"
 
 @Component({
-	tag: "userwidgets-login-dialog",
+	tag: "userwidget-login-dialog",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class Login {
 	@Event() notice: EventEmitter<Notice>
 	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
-	@Listen("submit")
-	async handleSubmit(event: CustomEvent<Record<string, string>>) {
-		event.preventDefault()
-		const credentials = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-		if (!model.userwidgets.User.Credentials.is(credentials)) {
-			console.log("missing email or pw")
+
+	handleSubmit(event: CustomEvent<Record<string, string>>) {
+		if (!model.userwidgets.User.Credentials.is(event.detail))
 			this.notice.emit(Notice.warn("Both email and password is required to login."))
-		} else if (!credentials.user.match(/^\S+@\S+$/)) {
-			console.log("not an email")
+		else if (!event.detail.user.match(/^\S+@\S+$/))
 			this.notice.emit(Notice.warn("Provided email is not an email."))
-		} else
-			this.login.emit(credentials)
+		else
+			this.login.emit(event.detail)
 	}
 
 	render() {
@@ -35,10 +31,9 @@ export class Login {
 						<smoothly-input type="password" name="password">
 							Password
 						</smoothly-input>
-						<smoothly-submit>Login</smoothly-submit>
-						<p>
-							Do you not have an account? <a href="/register">Create a new account</a>
-						</p>
+						<smoothly-submit prevent={true} onSubmit={this.handleSubmit.bind(this) as any}>
+							Login
+						</smoothly-submit>
 					</form>
 				</div>
 			</div>

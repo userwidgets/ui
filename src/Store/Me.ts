@@ -22,10 +22,10 @@ export class Me {
 		}
 		this.#listeners[event].push(listener as any) // TODO fix type
 	}
-	login(user: model.User.Credentials): Promise<model.User.Key | gracely.Error> {
-		const result = this.client.me.login(user)
-		this.#value = result.then(u => {
-			const result = gracely.Error.is(u) ? undefined : u
+	login(applicationId: string, user: model.User.Credentials): Promise<model.User.Key | gracely.Error> {
+		const result = this.client.me.login(applicationId, user)
+		this.#value = result.then(user => {
+			const result = gracely.Error.is(user) ? undefined : user
 			if (result)
 				this.#listeners.changed.forEach(listener => listener(result))
 			return result
@@ -45,5 +45,21 @@ export namespace Me {
 	export type Listener<T> = (value: T | undefined) => void
 	export type Listeners = {
 		readonly [E in keyof ListenerTypeMap]: Listener<ListenerTypeMap[E]>[]
+	}
+}
+
+export namespace M {
+	export type Event = keyof TypeMap
+	export interface TypeMap {
+		changes: model.User.Key
+		unauthorized: (cancel: boolean) => void
+	}
+	export type Value<Value> = Promise<Value>
+	export type Values = {
+		[Event in keyof TypeMap]: Value<TypeMap[Event]>
+	}
+	export type Listener<Value> = (value: Value) => void
+	export type Listeners = {
+		[Event in keyof TypeMap]: Listener<TypeMap[Event]>
 	}
 }
