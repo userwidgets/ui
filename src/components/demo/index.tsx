@@ -14,6 +14,9 @@ export class Demo {
 					<smoothly-room path="/version" label="Version">
 						<userwidgets-demo-version></userwidgets-demo-version>
 					</smoothly-room>
+					<smoothly-room path="/seed" label="Seed">
+						<userwidget-seed></userwidget-seed>
+					</smoothly-room>
 				</App>
 			</userwidget-login>
 		)
