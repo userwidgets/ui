@@ -3,11 +3,11 @@ import { Notice } from "smoothly"
 import { model } from "../../../../model"
 
 @Component({
-	tag: "userwidget-login-dialog",
+	tag: "userwidgets-login-dialog",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class Login {
+export class UserwidgetsLoginDialog {
 	@Event() notice: EventEmitter<Notice>
 	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
 

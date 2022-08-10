@@ -1,20 +1,20 @@
-import { Component, Event, EventEmitter, h, Host, Listen, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Listen, State } from "@stencil/core"
 import * as gracely from "gracely"
 import { client } from "../../../client"
 import { model } from "../../../model"
 
 @Component({
-	tag: "userwidget-login",
+	tag: "userwidgets-login",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class Login {
+export class UserwidgetsLogin {
 	@State() resolve?: (result: boolean | PromiseLike<boolean>) => void
 	@Event() loggedIn: EventEmitter
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await client.me.login("issuefabAppId", {
+		const response = await client.me.login("issuefabApplicationId", {
 			user: event.detail.user,
 			password: event.detail.password,
 		})
@@ -30,11 +30,6 @@ export class Login {
 	}
 
 	render() {
-		return (
-			<Host>
-				{this.resolve ? <userwidget-login-dialog></userwidget-login-dialog> : null}
-				<slot></slot>
-			</Host>
-		)
+		return [this.resolve ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
 	}
 }

@@ -19,7 +19,7 @@ export class ChangeName {
 		this.initialName = this.name
 	}
 
-	@Listen("smoothlyChanged")
+	@Listen("smoothlyInput")
 	handleInputChanged(event: CustomEvent<{ name: "first" | "last"; value: string }>) {
 		this.name[event.detail.name] = event.detail.value
 		this.changed = this.name.first == this.initialName.first && this.name.last == this.initialName.last ? false : true
@@ -34,7 +34,7 @@ export class ChangeName {
 		else if (!(this.name.first == this.initialName.first && this.name.last == this.initialName.last))
 			this.notice.emit(Notice.warn("Names are not changed."))
 		else {
-			const response = await client.user.changeName("", name)
+			const response = await client.user.changeName("", name, "*")
 			if (gracely.Error.is(response))
 				this.notice.emit(Notice.warn(response.body))
 		}

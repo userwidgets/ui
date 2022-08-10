@@ -13,7 +13,7 @@ export class User extends rest.Collection<gracely.Error> {
 		const response = await this.client.put<"">(`api/user/${email}/password`, passwords)
 		return response == "" ? gracely.success.noContent() : response
 	}
-	async changeName(email: string, name: model.User.Name): Promise<model.User | gracely.Error> {
-		return await this.client.put<model.User>(`api/user/${email}/name`, name)
+	async changeName(email: string, name: model.User.Name, entityTag: string): Promise<model.User | gracely.Error> {
+		return await this.client.put<model.User>(`api/user/${email}/name`, name, { ifMatch: [entityTag] })
 	}
 }

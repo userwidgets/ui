@@ -12,5 +12,4 @@ try {
 } catch (e) {
 	apiUrl = window.origin
 }
-console.log("api url:", apiUrl)
-export const client = Client.create(apiUrl, window.sessionStorage.getItem("userwidget-token") ?? undefined)
+export const client = Client.create(apiUrl, window.sessionStorage.getItem("token") ?? undefined)

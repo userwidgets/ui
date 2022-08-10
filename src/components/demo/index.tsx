@@ -9,13 +9,16 @@ import { App } from "smoothly"
 export class Demo {
 	render() {
 		return (
-			<userwidget-login>
+			<userwidgets-login>
 				<App label="Userwidgets ui demo">
 					<smoothly-room path="/version" label="Version">
 						<userwidgets-demo-version></userwidgets-demo-version>
 					</smoothly-room>
+					<smoothly-room path="/login" label="Login">
+						<userwidgets-login-trigger></userwidgets-login-trigger>
+					</smoothly-room>
 				</App>
-			</userwidget-login>
+			</userwidgets-login>
 		)
 	}
 }
