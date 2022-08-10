@@ -5,6 +5,7 @@ import { Users as StoreUsers } from "./Users"
 import { Version as StoreVersion } from "./Version"
 
 export class Store {
+	#client: Client
 	readonly me: StoreMe
 	readonly users: StoreUsers
 	readonly version: StoreVersion
@@ -12,6 +13,10 @@ export class Store {
 		this.me = new StoreMe(client)
 		this.users = new StoreUsers(client)
 		this.version = new StoreVersion(client)
+		this.#client = client
+	}
+	set onUnauthorized(value: () => Promise<boolean>) {
+		this.#client.onUnauthorized = value
 	}
 }
 export namespace Store {
