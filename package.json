@@ -14,7 +14,7 @@
   "collection": "./dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "types": "./dist/types/components.d.ts",
-  "unpkg": "dist/userwidgets/userwidgets.js",
+  "unpkg": "dist/userwidgets/userwidgets.esm.js",
   "files": [
     "dist/",
     "loader/"
