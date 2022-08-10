@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
+import { Store } from "./Store";
 export namespace Components {
     interface TemplateVersion {
     }
@@ -20,6 +21,7 @@ export namespace Components {
     interface UserwidgetsDemoVersion {
     }
     interface UserwidgetsLogin {
+        "store": Store;
     }
     interface UserwidgetsLoginDialog {
     }
@@ -145,6 +147,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
+        "store"?: Store;
     }
     interface UserwidgetsLoginDialog {
         "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;

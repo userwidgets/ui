@@ -47,19 +47,3 @@ export namespace Me {
 		readonly [E in keyof ListenerTypeMap]: Listener<ListenerTypeMap[E]>[]
 	}
 }
-
-export namespace M {
-	export type Event = keyof TypeMap
-	export interface TypeMap {
-		changes: model.User.Key
-		unauthorized: (cancel: boolean) => void
-	}
-	export type Value<Value> = Promise<Value>
-	export type Values = {
-		[Event in keyof TypeMap]: Value<TypeMap[Event]>
-	}
-	export type Listener<Value> = (value: Value) => void
-	export type Listeners = {
-		[Event in keyof TypeMap]: Listener<TypeMap[Event]>
-	}
-}
