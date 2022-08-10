@@ -32,6 +32,8 @@ export namespace Components {
     interface UserwidgetsSetPassword {
         "user": model.userwidgets.User;
     }
+    interface UserwidgetsTesting {
+    }
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -118,6 +120,12 @@ declare global {
         prototype: HTMLUserwidgetsSetPasswordElement;
         new (): HTMLUserwidgetsSetPasswordElement;
     };
+    interface HTMLUserwidgetsTestingElement extends Components.UserwidgetsTesting, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsTestingElement: {
+        prototype: HTMLUserwidgetsTestingElement;
+        new (): HTMLUserwidgetsTestingElement;
+    };
     interface HTMLElementTagNameMap {
         "template-version": HTMLTemplateVersionElement;
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
@@ -129,6 +137,7 @@ declare global {
         "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
+        "userwidgets-testing": HTMLUserwidgetsTestingElement;
     }
 }
 declare namespace LocalJSX {
@@ -162,6 +171,8 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
         "user"?: model.userwidgets.User;
     }
+    interface UserwidgetsTesting {
+    }
     interface IntrinsicElements {
         "template-version": TemplateVersion;
         "userwidgets-change-name": UserwidgetsChangeName;
@@ -173,6 +184,7 @@ declare namespace LocalJSX {
         "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-set-password": UserwidgetsSetPassword;
+        "userwidgets-testing": UserwidgetsTesting;
     }
 }
 export { LocalJSX as JSX };
@@ -189,6 +201,7 @@ declare module "@stencil/core" {
             "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
+            "userwidgets-testing": LocalJSX.UserwidgetsTesting & JSXBase.HTMLAttributes<HTMLUserwidgetsTestingElement>;
         }
     }
 }
