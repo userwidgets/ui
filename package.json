@@ -59,18 +59,18 @@
     "start": "export NODE_ENV='local' && stencil build --dev --serve --watch"
   },
   "devDependencies": {
-    "@stencil/core": "^2.17.1",
+    "@stencil/core": "^2.17.3",
     "@stencil/router": "^1.0.1",
     "@types/jest": "^28.1.6",
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.30.7",
-    "eslint": "^8.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.21.0",
     "eslint-plugin-prettierx": "github:utily/eslint-plugin-prettierx#utily-20220323",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^28.1.3",
     "jest-cli": "^28.1.3",
     "prettierx": "github:utily/prettierx#utily-20220323",
-    "puppeteer": "^15.4.2",
+    "puppeteer": "^16.1.0",
     "rimraf": "^3.0.2",
     "rollup-plugin-dotenv": "^0.3.0",
     "ts-jest": "^28.0.7",
@@ -80,7 +80,7 @@
     "@userwidgets/model": "^0.0.11",
     "cloudly-http": "^0.0.50",
     "cloudly-rest": "^0.0.15",
-    "gracely": "^2.0.2",
-    "smoothly": "^0.1.120"
+    "gracely": "^2.0.3",
+    "smoothly": "^0.2.2"
   }
 }

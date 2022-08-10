@@ -5,16 +5,10 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Notice } from "smoothly";
 import { model } from "./model";
+import { Notice } from "smoothly";
 export namespace Components {
     interface TemplateVersion {
-    }
-    interface UserwidgetLogin {
-    }
-    interface UserwidgetLoginDialog {
-    }
-    interface UserwidgetSeed {
     }
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
@@ -25,19 +19,17 @@ export namespace Components {
     }
     interface UserwidgetsDemoVersion {
     }
+    interface UserwidgetsLogin {
+    }
+    interface UserwidgetsLoginDialog {
+    }
+    interface UserwidgetsLoginTrigger {
+    }
     interface UserwidgetsLogout {
     }
     interface UserwidgetsSetPassword {
         "user": model.userwidgets.User;
     }
-}
-export interface UserwidgetLoginCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetLoginElement;
-}
-export interface UserwidgetLoginDialogCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetLoginDialogElement;
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -46,6 +38,14 @@ export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsChangePasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsChangePasswordElement;
+}
+export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsLoginElement;
+}
+export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsLoginDialogElement;
 }
 export interface UserwidgetsLogoutCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -61,24 +61,6 @@ declare global {
     var HTMLTemplateVersionElement: {
         prototype: HTMLTemplateVersionElement;
         new (): HTMLTemplateVersionElement;
-    };
-    interface HTMLUserwidgetLoginElement extends Components.UserwidgetLogin, HTMLStencilElement {
-    }
-    var HTMLUserwidgetLoginElement: {
-        prototype: HTMLUserwidgetLoginElement;
-        new (): HTMLUserwidgetLoginElement;
-    };
-    interface HTMLUserwidgetLoginDialogElement extends Components.UserwidgetLoginDialog, HTMLStencilElement {
-    }
-    var HTMLUserwidgetLoginDialogElement: {
-        prototype: HTMLUserwidgetLoginDialogElement;
-        new (): HTMLUserwidgetLoginDialogElement;
-    };
-    interface HTMLUserwidgetSeedElement extends Components.UserwidgetSeed, HTMLStencilElement {
-    }
-    var HTMLUserwidgetSeedElement: {
-        prototype: HTMLUserwidgetSeedElement;
-        new (): HTMLUserwidgetSeedElement;
     };
     interface HTMLUserwidgetsChangeNameElement extends Components.UserwidgetsChangeName, HTMLStencilElement {
     }
@@ -104,6 +86,24 @@ declare global {
         prototype: HTMLUserwidgetsDemoVersionElement;
         new (): HTMLUserwidgetsDemoVersionElement;
     };
+    interface HTMLUserwidgetsLoginElement extends Components.UserwidgetsLogin, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsLoginElement: {
+        prototype: HTMLUserwidgetsLoginElement;
+        new (): HTMLUserwidgetsLoginElement;
+    };
+    interface HTMLUserwidgetsLoginDialogElement extends Components.UserwidgetsLoginDialog, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsLoginDialogElement: {
+        prototype: HTMLUserwidgetsLoginDialogElement;
+        new (): HTMLUserwidgetsLoginDialogElement;
+    };
+    interface HTMLUserwidgetsLoginTriggerElement extends Components.UserwidgetsLoginTrigger, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsLoginTriggerElement: {
+        prototype: HTMLUserwidgetsLoginTriggerElement;
+        new (): HTMLUserwidgetsLoginTriggerElement;
+    };
     interface HTMLUserwidgetsLogoutElement extends Components.UserwidgetsLogout, HTMLStencilElement {
     }
     var HTMLUserwidgetsLogoutElement: {
@@ -118,28 +118,19 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "template-version": HTMLTemplateVersionElement;
-        "userwidget-login": HTMLUserwidgetLoginElement;
-        "userwidget-login-dialog": HTMLUserwidgetLoginDialogElement;
-        "userwidget-seed": HTMLUserwidgetSeedElement;
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
         "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
         "userwidgets-demo-version": HTMLUserwidgetsDemoVersionElement;
+        "userwidgets-login": HTMLUserwidgetsLoginElement;
+        "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
+        "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
     }
 }
 declare namespace LocalJSX {
     interface TemplateVersion {
-    }
-    interface UserwidgetLogin {
-        "onLoggedIn"?: (event: UserwidgetLoginCustomEvent<any>) => void;
-    }
-    interface UserwidgetLoginDialog {
-        "onLogin"?: (event: UserwidgetLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
-        "onNotice"?: (event: UserwidgetLoginDialogCustomEvent<Notice>) => void;
-    }
-    interface UserwidgetSeed {
     }
     interface UserwidgetsChangeName {
         "name"?: model.userwidgets.User.Name;
@@ -152,6 +143,15 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsDemoVersion {
     }
+    interface UserwidgetsLogin {
+        "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
+    }
+    interface UserwidgetsLoginDialog {
+        "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
+        "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
+    }
+    interface UserwidgetsLoginTrigger {
+    }
     interface UserwidgetsLogout {
         "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
     }
@@ -161,13 +161,13 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "template-version": TemplateVersion;
-        "userwidget-login": UserwidgetLogin;
-        "userwidget-login-dialog": UserwidgetLoginDialog;
-        "userwidget-seed": UserwidgetSeed;
         "userwidgets-change-name": UserwidgetsChangeName;
         "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
         "userwidgets-demo-version": UserwidgetsDemoVersion;
+        "userwidgets-login": UserwidgetsLogin;
+        "userwidgets-login-dialog": UserwidgetsLoginDialog;
+        "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-set-password": UserwidgetsSetPassword;
     }
@@ -177,13 +177,13 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "template-version": LocalJSX.TemplateVersion & JSXBase.HTMLAttributes<HTMLTemplateVersionElement>;
-            "userwidget-login": LocalJSX.UserwidgetLogin & JSXBase.HTMLAttributes<HTMLUserwidgetLoginElement>;
-            "userwidget-login-dialog": LocalJSX.UserwidgetLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetLoginDialogElement>;
-            "userwidget-seed": LocalJSX.UserwidgetSeed & JSXBase.HTMLAttributes<HTMLUserwidgetSeedElement>;
             "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
             "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
             "userwidgets-demo-version": LocalJSX.UserwidgetsDemoVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoVersionElement>;
+            "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
+            "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
+            "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
         }

@@ -14,8 +14,8 @@ export class SetPassword {
 	@Event() notice: EventEmitter<Notice>
 	@State() new: string
 	@State() repeat: string
-	@Listen("smoothlyChanged")
-	handleSmoothlyChanged(event: CustomEvent<{ name: "new" | "repeat"; value: string }>) {
+	@Listen("smoothlyInput")
+	handleSmoothlyInput(event: CustomEvent<{ name: "new" | "repeat"; value: string }>) {
 		event.detail.name == "new" ? (this.new = event.detail.value) : (this.repeat = event.detail.value)
 	}
 	@Listen("submit")
