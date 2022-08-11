@@ -9,13 +9,13 @@
     "url": "https://github.com/userwidgets/ui/issues"
   },
   "homepage": "https://github.com/userwidgets/ui",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.js",
-  "es2015": "dist/esm/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+	"es2015": "dist/esm/index.js",
   "es2017": "dist/esm/index.js",
-  "collection": "./dist/collection/collection-manifest.json",
+  "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "types": "./dist/types/components.d.ts",
+  "types": "dist/types/components.d.ts",
   "unpkg": "dist/userwidgets/userwidgets.esm.js",
   "files": [
     "dist/",
@@ -55,10 +55,8 @@
     "test": "npm run build && node --experimental-vm-modules node_modules/.bin/jest --maxWorkers=2",
     "transpile": "tsc --project tsconfig.test.json",
     "test:watch": "watch jest",
-    "build": "export NODE_ENV='production' && stencil build",
-    "build:noenv": "stencil build",
-    "build:local": "export NODE_ENV='local' && stencil build",
-    "start": "export NODE_ENV='local' && stencil build --dev --serve --watch"
+    "build": "stencil build",
+    "start": "stencil build --dev --serve --watch"
   },
   "devDependencies": {
     "@stencil/core": "^2.17.3",

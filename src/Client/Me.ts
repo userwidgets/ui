@@ -17,7 +17,7 @@ export class Me extends rest.Collection<gracely.Error> {
 				: (await model.User.Key.unpack(token)) ?? gracely.client.unauthorized("Failed to verify token.")
 			if (!gracely.Error.is(result)) {
 				this.client.key = result.token
-				sessionStorage.setItem("token", JSON.stringify(result))
+				sessionStorage.setItem("token", result.token)
 			}
 		}
 		return result

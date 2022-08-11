@@ -7,10 +7,8 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
-import { Store } from "./Store";
+import { Me } from "./Store";
 export namespace Components {
-    interface TemplateVersion {
-    }
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
     }
@@ -21,7 +19,7 @@ export namespace Components {
     interface UserwidgetsDemoVersion {
     }
     interface UserwidgetsLogin {
-        "store": Store;
+        "store": { me: Me; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
     }
@@ -33,6 +31,8 @@ export namespace Components {
         "user": model.userwidgets.User;
     }
     interface UserwidgetsTesting {
+    }
+    interface UserwidgetsVersion {
     }
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
@@ -60,12 +60,6 @@ export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     target: HTMLUserwidgetsSetPasswordElement;
 }
 declare global {
-    interface HTMLTemplateVersionElement extends Components.TemplateVersion, HTMLStencilElement {
-    }
-    var HTMLTemplateVersionElement: {
-        prototype: HTMLTemplateVersionElement;
-        new (): HTMLTemplateVersionElement;
-    };
     interface HTMLUserwidgetsChangeNameElement extends Components.UserwidgetsChangeName, HTMLStencilElement {
     }
     var HTMLUserwidgetsChangeNameElement: {
@@ -126,8 +120,13 @@ declare global {
         prototype: HTMLUserwidgetsTestingElement;
         new (): HTMLUserwidgetsTestingElement;
     };
+    interface HTMLUserwidgetsVersionElement extends Components.UserwidgetsVersion, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsVersionElement: {
+        prototype: HTMLUserwidgetsVersionElement;
+        new (): HTMLUserwidgetsVersionElement;
+    };
     interface HTMLElementTagNameMap {
-        "template-version": HTMLTemplateVersionElement;
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
         "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
@@ -138,11 +137,10 @@ declare global {
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-testing": HTMLUserwidgetsTestingElement;
+        "userwidgets-version": HTMLUserwidgetsVersionElement;
     }
 }
 declare namespace LocalJSX {
-    interface TemplateVersion {
-    }
     interface UserwidgetsChangeName {
         "name"?: model.userwidgets.User.Name;
         "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<Notice>) => void;
@@ -156,7 +154,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
-        "store"?: Store;
+        "store"?: { me: Me; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
         "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
@@ -173,8 +171,9 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsTesting {
     }
+    interface UserwidgetsVersion {
+    }
     interface IntrinsicElements {
-        "template-version": TemplateVersion;
         "userwidgets-change-name": UserwidgetsChangeName;
         "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
@@ -185,13 +184,13 @@ declare namespace LocalJSX {
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-testing": UserwidgetsTesting;
+        "userwidgets-version": UserwidgetsVersion;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "template-version": LocalJSX.TemplateVersion & JSXBase.HTMLAttributes<HTMLTemplateVersionElement>;
             "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
             "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
@@ -202,6 +201,7 @@ declare module "@stencil/core" {
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-testing": LocalJSX.UserwidgetsTesting & JSXBase.HTMLAttributes<HTMLUserwidgetsTestingElement>;
+            "userwidgets-version": LocalJSX.UserwidgetsVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsVersionElement>;
         }
     }
 }
