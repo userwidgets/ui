@@ -1,3 +1,3 @@
 export { Components, JSX } from "./components"
-export * from "./Client"
-export * from "./Store"
+export * as Client from "./Client"
+export * as Store from "./Store"
