@@ -2,7 +2,7 @@ import { Component, h, State } from "@stencil/core"
 import { store } from "../../Store"
 
 @Component({
-	tag: "template-version",
+	tag: "userwidgets-version",
 	styleUrl: "style.css",
 	scoped: true,
 })

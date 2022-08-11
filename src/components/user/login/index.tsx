@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import { model } from "../../../model"
-import { Store, store } from "../../../Store"
+import { Me, store } from "../../../Store"
 
 @Component({
 	tag: "userwidgets-login",
@@ -10,7 +10,7 @@ import { Store, store } from "../../../Store"
 })
 export class UserwidgetsLogin {
 	@State() resolve?: (result: boolean | PromiseLike<boolean>) => void
-	@Prop() store: Store = store
+	@Prop() store: { me: Me } = store
 	@Event() loggedIn: EventEmitter
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {

@@ -1,27 +1,25 @@
 import { Client } from "../Client"
 import { client } from "../client"
-import { Me as StoreMe } from "./Me"
-import { Users as StoreUsers } from "./Users"
-import { Version as StoreVersion } from "./Version"
+import { Me } from "./Me"
+import { Users } from "./Users"
+import { Version } from "./Version"
 
 export class Store {
 	#client: Client
-	readonly me: StoreMe
-	readonly users: StoreUsers
-	readonly version: StoreVersion
+	readonly me: Me
+	readonly users: Users
+	readonly version: Version
 	constructor(client: Client) {
-		this.me = new StoreMe(client)
-		this.users = new StoreUsers(client)
-		this.version = new StoreVersion(client)
+		this.me = new Me(client)
+		this.users = new Users(client)
+		this.version = new Version(client)
 		this.#client = client
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
 		this.#client.onUnauthorized = value
 	}
 }
-export namespace Store {
-	export type Me = StoreMe
-	export type Users = StoreUsers
-	export type Version = StoreVersion
-}
+
 export const store = new Store(client)
+
+export { Me, Users, Version }
