@@ -15,7 +15,7 @@ export class ChangeName {
 	@Event() notice: EventEmitter<Notice>
 	@Prop() name: model.userwidgets.User.Name
 
-	connectedCallback() {
+	componentWillLoad() {
 		this.initialName = this.name
 	}
 

@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
-import { model } from "../../../model"
-import { Me } from "../../../Store"
+import { model } from "../../model"
+import { Me } from "../../Store"
 
 @Component({
 	tag: "userwidgets-login",
@@ -15,7 +15,7 @@ export class UserwidgetsLogin {
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await this.store.me.login("issuefabApplicationId", {
+		const response = await this.store.me.login({
 			user: event.detail.user,
 			password: event.detail.password,
 		})
@@ -26,12 +26,10 @@ export class UserwidgetsLogin {
 		}
 	}
 	async componentWillLoad(): Promise<void> {
-		console.log(Object.keys(this.store))
 		this.store.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
 	}
 
 	render() {
-		console.log("login rendered!")
 		return [this.resolve ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
 	}
 }

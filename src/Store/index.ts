@@ -1,25 +1,33 @@
 import { Client } from "../Client"
 import { client } from "../client"
-import { Me } from "./Me"
-import { Users } from "./Users"
+import { Listenable } from "./Listenable"
+import { Me, me } from "./Me"
+import { Options } from "./Options"
+import { Users, users } from "./Users"
 import { Version } from "./Version"
 
 export class Store {
-	#client: Client
-	readonly me: Me
-	readonly users: Users
+	#options: Options
+	set options(options: Options) {
+		this.#options = { ...this.#options, ...options }
+		this.users.options = this.options
+		this.me.options = this.options
+	}
+	get options() {
+		return this.#options
+	}
+	readonly me: Listenable<Me> & Me
+	readonly users: Listenable<Users> & Users
 	readonly version: Version
 	constructor(client: Client) {
-		this.me = new Me(client)
-		this.users = new Users(client)
+		this.me = me
+		this.users = users
 		this.version = new Version(client)
-		this.#client = client
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
-		this.#client.onUnauthorized = value
+		client.onUnauthorized = value
 	}
 }
 
 export const store = new Store(client)
-
 export { Me, Users, Version }

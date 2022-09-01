@@ -7,12 +7,12 @@ export class Organization extends rest.Collection<gracely.Error> {
 		organization: model.Organization.Creatable,
 		applicationId: string
 	): Promise<model.Organization | gracely.Error> {
-		return await this.client.post<model.Organization>("api/organization", organization, {
+		return await this.client.post<model.Organization>("organization", organization, {
 			application: applicationId,
 		})
 	}
 	async fetch(id: string, applicationId: string): Promise<model.Organization | gracely.Error> {
-		return await this.client.get<model.Organization>(`api/organization/${id}`, {
+		return await this.client.get<model.Organization>(`organization/${id}`, {
 			application: applicationId,
 		})
 	}
@@ -22,7 +22,7 @@ export class Organization extends rest.Collection<gracely.Error> {
 		applicationId: string,
 		entityTag = "*"
 	): Promise<model.Organization | gracely.Error> {
-		return await this.client.put<model.Organization>(`api/organization/${id}/name`, organization, {
+		return await this.client.put<model.Organization>(`organization/${id}/name`, organization, {
 			ifMatch: [entityTag],
 			application: applicationId,
 		})
