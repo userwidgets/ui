@@ -28,7 +28,7 @@ export class Listenable<T extends Record<string, any>> {
 					: descriptor.writable || descriptor.set
 					? Object.defineProperty(result, property, {
 							get() {
-								return backend[property].bind(backend)
+								return backend[property]
 							},
 							set(value: T[keyof T]) {
 								backend[property] = value
@@ -37,7 +37,7 @@ export class Listenable<T extends Record<string, any>> {
 					  })
 					: Object.defineProperty(result, property, {
 							get() {
-								return backend[property].bind(backend)
+								return backend[property]
 							},
 					  })
 			}
