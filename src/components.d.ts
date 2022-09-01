@@ -27,10 +27,10 @@ export namespace Components {
     }
     interface UserwidgetsLogout {
     }
+    interface UserwidgetsRegister {
+    }
     interface UserwidgetsSetPassword {
         "user": model.userwidgets.User;
-    }
-    interface UserwidgetsTesting {
     }
     interface UserwidgetsVersion {
     }
@@ -54,6 +54,10 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsLogoutCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLogoutElement;
+}
+export interface UserwidgetsRegisterCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsRegisterElement;
 }
 export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -108,17 +112,17 @@ declare global {
         prototype: HTMLUserwidgetsLogoutElement;
         new (): HTMLUserwidgetsLogoutElement;
     };
+    interface HTMLUserwidgetsRegisterElement extends Components.UserwidgetsRegister, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsRegisterElement: {
+        prototype: HTMLUserwidgetsRegisterElement;
+        new (): HTMLUserwidgetsRegisterElement;
+    };
     interface HTMLUserwidgetsSetPasswordElement extends Components.UserwidgetsSetPassword, HTMLStencilElement {
     }
     var HTMLUserwidgetsSetPasswordElement: {
         prototype: HTMLUserwidgetsSetPasswordElement;
         new (): HTMLUserwidgetsSetPasswordElement;
-    };
-    interface HTMLUserwidgetsTestingElement extends Components.UserwidgetsTesting, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsTestingElement: {
-        prototype: HTMLUserwidgetsTestingElement;
-        new (): HTMLUserwidgetsTestingElement;
     };
     interface HTMLUserwidgetsVersionElement extends Components.UserwidgetsVersion, HTMLStencilElement {
     }
@@ -135,8 +139,8 @@ declare global {
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
+        "userwidgets-register": HTMLUserwidgetsRegisterElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
-        "userwidgets-testing": HTMLUserwidgetsTestingElement;
         "userwidgets-version": HTMLUserwidgetsVersionElement;
     }
 }
@@ -165,11 +169,12 @@ declare namespace LocalJSX {
     interface UserwidgetsLogout {
         "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
     }
+    interface UserwidgetsRegister {
+        "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
+    }
     interface UserwidgetsSetPassword {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
         "user"?: model.userwidgets.User;
-    }
-    interface UserwidgetsTesting {
     }
     interface UserwidgetsVersion {
     }
@@ -182,8 +187,8 @@ declare namespace LocalJSX {
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
+        "userwidgets-register": UserwidgetsRegister;
         "userwidgets-set-password": UserwidgetsSetPassword;
-        "userwidgets-testing": UserwidgetsTesting;
         "userwidgets-version": UserwidgetsVersion;
     }
 }
@@ -199,8 +204,8 @@ declare module "@stencil/core" {
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
+            "userwidgets-register": LocalJSX.UserwidgetsRegister & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
-            "userwidgets-testing": LocalJSX.UserwidgetsTesting & JSXBase.HTMLAttributes<HTMLUserwidgetsTestingElement>;
             "userwidgets-version": LocalJSX.UserwidgetsVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsVersionElement>;
         }
     }

@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, h } from "@stencil/core"
 import { Notice } from "smoothly"
-import { model } from "../../../../model"
+import { model } from "../../../model"
 
 @Component({
 	tag: "userwidgets-login-dialog",

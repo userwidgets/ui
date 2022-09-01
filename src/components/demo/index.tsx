@@ -18,8 +18,8 @@ export class Demo {
 					<smoothly-room path="/login" label="Login">
 						<userwidgets-login-trigger></userwidgets-login-trigger>
 					</smoothly-room>
-					<smoothly-room path="/testing" label="Testing">
-						<userwidgets-testing></userwidgets-testing>
+					<smoothly-room path="/register">
+						<userwidgets-register></userwidgets-register>
 					</smoothly-room>
 				</App>
 			</userwidgets-login>

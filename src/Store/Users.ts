@@ -1,41 +1,26 @@
 import * as gracely from "gracely"
-import * as model from "@userwidgets/model"
 import { Client } from "../Client"
+import { client } from "../client"
+import { model } from "../model"
+import { Listenable } from "./Listenable"
+import { Options } from "./Options"
 
 export class Users {
-	#value?: Promise<model.User[]>
-	get value(): Promise<model.User[]> {
-		return this.#value ?? (this.#value = this.client.user.list().then(v => (gracely.Error.is(v) ? [] : v)))
+	#options?: Options
+	set options(options: Options) {
+		options.organizationId != this.#options?.organizationId && (this.#users = undefined)
+		this.#options = options
 	}
-	set value(value: Promise<model.User[]>) {
-		this.#value = value
-		value.then(v => this.#listeners["changed"].forEach(listener => listener(v)))
+	#users?: Promise<model.userwidgets.User[] | undefined>
+	get users() {
+		return this.#users ?? this.client.user.list().then(response => (gracely.Error.is(response) ? undefined : response))
 	}
-	#listeners: Users.Listeners = { changed: [], created: [] }
-	constructor(private readonly client: Client) {}
-	listen<E extends Users.Event>(event: E, listener: Users.Listener<Users.ListenerTypeMap[E]>): void {
-		switch (event) {
-			case "changed":
-				this.value.then(v => listener(v as any)) // TODO fix type
-				break
-		}
-		this.#listeners[event].push(listener)
+	set users(users: Promise<model.userwidgets.User[] | undefined>) {
+		this.#users = users
 	}
-	create(user: model.User.Credentials): Promise<model.User | gracely.Error> {
-		return this.client.user.create(user)
+	constructor(private readonly client: Client, options?: Options) {
+		options && (this.options = options)
 	}
 }
-export namespace Users {
-	export type Event = typeof Event.values[number]
-	export namespace Event {
-		export const values = ["changed"] as const // temporarily removed "created"
-	}
-	export interface ListenerTypeMap extends Record<Event, any> {
-		changed: model.User[]
-		created: [model.User]
-	}
-	export type Listener<T> = (value: T | undefined) => void
-	export type Listeners = {
-		readonly [E in keyof ListenerTypeMap]: Listener<ListenerTypeMap[E]>[]
-	}
-}
+
+export const users = Listenable.load(new Users(client))

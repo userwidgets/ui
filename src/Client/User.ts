@@ -4,16 +4,16 @@ import * as rest from "cloudly-rest"
 
 export class User extends rest.Collection<gracely.Error> {
 	async list(): Promise<model.User[] | gracely.Error> {
-		return await this.client.get<model.User[]>("api/user")
+		return await this.client.get<model.User[]>("user")
 	}
 	async create(user: model.User.Credentials): Promise<model.User | gracely.Error> {
-		return await this.client.post<model.User>("api/user", user)
+		return await this.client.post<model.User>("user", user)
 	}
 	async changePassword(email: string, passwords: model.User.Password.Change): Promise<gracely.Result | gracely.Error> {
-		const response = await this.client.put<"">(`api/user/${email}/password`, passwords)
+		const response = await this.client.put<"">(`user/${email}/password`, passwords)
 		return response == "" ? gracely.success.noContent() : response
 	}
 	async changeName(email: string, name: model.User.Name, entityTag: string): Promise<model.User | gracely.Error> {
-		return await this.client.put<model.User>(`api/user/${email}/name`, name, { ifMatch: [entityTag] })
+		return await this.client.put<model.User>(`user/${email}/name`, name, { ifMatch: [entityTag] })
 	}
 }

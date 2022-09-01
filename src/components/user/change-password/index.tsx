@@ -14,7 +14,7 @@ export class ChangePassword {
 	@State() key?: model.userwidgets.User.Key
 	@Event() notice: EventEmitter<Notice>
 	async componentWillLoad(): Promise<void> {
-		store.me.listen("changed", key => (this.key = key))
+		store.me.listen("key", async key => (this.key = await key))
 	}
 	@Listen("submit")
 	async handleSubmit(event: CustomEvent<{ old: string; new: string; repeat: string }>) {
