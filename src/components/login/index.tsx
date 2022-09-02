@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import { model } from "../../model"
-import { Me } from "../../Store"
+import { Me } from "../../State"
 
 @Component({
 	tag: "userwidgets-login",
@@ -10,12 +10,12 @@ import { Me } from "../../Store"
 })
 export class UserwidgetsLogin {
 	@State() resolve?: (result: boolean | PromiseLike<boolean>) => void
-	@Prop() store: { me: Me; onUnauthorized: () => Promise<boolean> }
+	@Prop() state: { me: Me; onUnauthorized: () => Promise<boolean> }
 	@Event() loggedIn: EventEmitter
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await this.store.me.login({
+		const response = await this.state.me.login({
 			user: event.detail.user,
 			password: event.detail.password,
 		})
@@ -26,7 +26,7 @@ export class UserwidgetsLogin {
 		}
 	}
 	async componentWillLoad(): Promise<void> {
-		this.store.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
+		this.state.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
 	}
 
 	render() {

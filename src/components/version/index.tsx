@@ -1,5 +1,5 @@
 import { Component, h, State } from "@stencil/core"
-import { store } from "../../Store"
+import { state } from "../../State"
 
 @Component({
 	tag: "userwidgets-version",
@@ -11,7 +11,7 @@ export class ApiVersion {
 	@State() error?: string
 
 	async componentWillLoad() {
-		store.version.listen("changed", version => (this.apiInformation = version))
+		state.version.listen("changed", version => (this.apiInformation = version))
 	}
 
 	render() {
