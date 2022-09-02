@@ -6,7 +6,7 @@ import { Options } from "./Options"
 import { Users, users } from "./Users"
 import { Version } from "./Version"
 
-export class Store {
+export class State {
 	#options: Options
 	set options(options: Options) {
 		this.#options = { ...this.#options, ...options }
@@ -29,5 +29,5 @@ export class Store {
 	}
 }
 
-export const store = new Store(client)
+export const state = new State(client)
 export { Me, Users, Version }

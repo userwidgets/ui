@@ -7,7 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
-import { Me } from "./Store";
+import { Me } from "./State";
 export namespace Components {
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
@@ -19,7 +19,7 @@ export namespace Components {
     interface UserwidgetsDemoVersion {
     }
     interface UserwidgetsLogin {
-        "store": { me: Me; onUnauthorized: () => Promise<boolean> };
+        "state": { me: Me; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
     }
@@ -158,7 +158,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
-        "store"?: { me: Me; onUnauthorized: () => Promise<boolean> };
+        "state"?: { me: Me; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
         "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;

@@ -1,6 +1,6 @@
 import { Component, h } from "@stencil/core"
 import { App } from "smoothly"
-import { store } from "../../Store"
+import { state } from "../../State"
 
 @Component({
 	tag: "userwidgets-demo",
@@ -10,7 +10,7 @@ import { store } from "../../Store"
 export class Demo {
 	render() {
 		return (
-			<userwidgets-login store={store}>
+			<userwidgets-login state={state}>
 				<App label="Userwidgets ui demo">
 					<smoothly-room path="/version" label="Version">
 						<userwidgets-demo-version></userwidgets-demo-version>

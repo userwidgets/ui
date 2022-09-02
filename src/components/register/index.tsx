@@ -2,8 +2,7 @@ import { Component, Event, EventEmitter, h, State } from "@stencil/core"
 import * as isoly from "isoly"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
-// import { client } from "../../client"
-import { store } from "../../Store"
+import { state } from "../../State"
 
 @Component({
 	tag: "userwidgets-register",
@@ -20,9 +19,9 @@ export class UserwidgetsRegister {
 		if (!this.tag)
 			window.location.href = window.origin
 		else {
-			store.options = { applicationId: this.tag.audience }
+			state.options = { applicationId: this.tag.audience }
 			if (this.tag.active)
-				store.me.join(this.tag)
+				state.me.join(this.tag)
 		}
 	}
 
@@ -30,7 +29,7 @@ export class UserwidgetsRegister {
 		event.preventDefault()
 		event.stopPropagation()
 		if (this.tag) {
-			const response = await store.me.register(this.tag, {
+			const response = await state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
 					first: event.detail.first,
@@ -88,7 +87,7 @@ export class UserwidgetsRegister {
 								console.log("login starting!", this.tag)
 								if (this.tag) {
 									console.log("first onion")
-									const key = await store.me.join(this.tag).then(p => {
+									const key = await state.me.join(this.tag).then(p => {
 										console.log("login finished")
 										return p
 									})
@@ -99,7 +98,7 @@ export class UserwidgetsRegister {
 										console.log("login failed")
 									}
 								}
-								this.tag && (await store.me.join(this.tag)) && (window.location.href = window.origin)
+								this.tag && (await state.me.join(this.tag)) && (window.location.href = window.origin)
 							}}>
 							Login
 						</a>

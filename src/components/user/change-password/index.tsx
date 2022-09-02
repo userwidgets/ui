@@ -3,7 +3,7 @@ import * as gracely from "gracely"
 import { Notice } from "smoothly"
 import { client } from "../../../client"
 import { model } from "../../../model"
-import { store } from "../../../Store"
+import { state } from "../../../State"
 
 @Component({
 	tag: "userwidgets-change-password",
@@ -14,7 +14,7 @@ export class ChangePassword {
 	@State() key?: model.userwidgets.User.Key
 	@Event() notice: EventEmitter<Notice>
 	async componentWillLoad(): Promise<void> {
-		store.me.listen("key", async key => (this.key = await key))
+		state.me.listen("key", async key => (this.key = await key))
 	}
 	@Listen("submit")
 	async handleSubmit(event: CustomEvent<{ old: string; new: string; repeat: string }>) {
