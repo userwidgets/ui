@@ -27,6 +27,8 @@ export namespace Components {
     }
     interface UserwidgetsLogout {
     }
+    interface UserwidgetsOrganizationPicker {
+    }
     interface UserwidgetsRegister {
     }
     interface UserwidgetsSetPassword {
@@ -112,6 +114,12 @@ declare global {
         prototype: HTMLUserwidgetsLogoutElement;
         new (): HTMLUserwidgetsLogoutElement;
     };
+    interface HTMLUserwidgetsOrganizationPickerElement extends Components.UserwidgetsOrganizationPicker, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsOrganizationPickerElement: {
+        prototype: HTMLUserwidgetsOrganizationPickerElement;
+        new (): HTMLUserwidgetsOrganizationPickerElement;
+    };
     interface HTMLUserwidgetsRegisterElement extends Components.UserwidgetsRegister, HTMLStencilElement {
     }
     var HTMLUserwidgetsRegisterElement: {
@@ -139,6 +147,7 @@ declare global {
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
+        "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-register": HTMLUserwidgetsRegisterElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-version": HTMLUserwidgetsVersionElement;
@@ -169,6 +178,8 @@ declare namespace LocalJSX {
     interface UserwidgetsLogout {
         "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
     }
+    interface UserwidgetsOrganizationPicker {
+    }
     interface UserwidgetsRegister {
         "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
     }
@@ -187,6 +198,7 @@ declare namespace LocalJSX {
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
+        "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-register": UserwidgetsRegister;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-version": UserwidgetsVersion;
@@ -204,6 +216,7 @@ declare module "@stencil/core" {
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
+            "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-register": LocalJSX.UserwidgetsRegister & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-version": LocalJSX.UserwidgetsVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsVersionElement>;
