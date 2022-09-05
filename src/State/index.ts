@@ -1,9 +1,9 @@
 import { Client } from "../Client"
 import { client } from "../client"
 import { Listenable } from "./Listenable"
-import { Me, me } from "./Me"
+import { Me } from "./Me"
 import { Options } from "./Options"
-import { Users, users } from "./Users"
+import { Users } from "./Users"
 import { Version } from "./Version"
 
 export class State {
@@ -20,9 +20,12 @@ export class State {
 	readonly users: Listenable<Users> & Users
 	readonly version: Version
 	constructor(client: Client) {
-		this.me = me
-		this.users = users
+		this.me = Listenable.load(new Me(client))
+		this.users = Listenable.load(new Users(client))
 		this.version = new Version(client)
+		this.me.listen("options", options => {
+			return options && options.applicationId != this.#options.applicationId && (this.options = options)
+		})
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
 		client.onUnauthorized = value
