@@ -1,12 +1,10 @@
 import * as gracely from "gracely"
 import { Client } from "../Client"
-import { client } from "../client"
 import { model } from "../model"
-import { Listenable } from "./Listenable"
 import { Options } from "./Options"
 
 export class Users {
-	#options?: Options
+	#options: Options = {}
 	set options(options: Options) {
 		options.organizationId != this.#options?.organizationId && (this.#users = undefined)
 		this.#options = options
@@ -22,5 +20,3 @@ export class Users {
 		options && (this.options = options)
 	}
 }
-
-export const users = Listenable.load(new Users(client))
