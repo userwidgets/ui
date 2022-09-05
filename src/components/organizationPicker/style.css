@@ -1,0 +1,24 @@
+:host {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 0 1em;
+	height: 100%;
+	border: 2px solid red;
+	margin: 1rem;
+	float: left;
+}
+.background {
+	background-color: rgba(255, 255, 255, 0.55);
+}
+.viewport {
+	position: sticky;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	top: 0;
+	width: 100%;
+}
+
