@@ -8,7 +8,7 @@ import { client } from "../../../client"
 })
 export class UserwidgetsLoginTrigger {
 	componentWillLoad() {
-		client.user.changeName("mail@example.com", { first: "mail", last: "example" }, "*")
+		client.user.list()
 	}
 	render() {
 		return <p>Attempting to change name to trigger login</p>

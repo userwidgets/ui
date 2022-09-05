@@ -13,6 +13,7 @@ export class UserwidgetsOrganizationPicker {
 
 	componentWillLoad() {
 		state.me.listen("key", async key => (this.key = await key))
+		console.log("organization picker componentWillLoad")
 	}
 	handleMenuClose(event: CustomEvent<OptionType[]>) {
 		event.stopPropagation()
@@ -20,16 +21,21 @@ export class UserwidgetsOrganizationPicker {
 		window.location.href = window.origin // you only get one chance
 	}
 	render() {
+		let result: any
 		if (this.key) {
 			const organizations = Object.keys(this.key.permissions)
 				.filter(([organizationId]) => organizationId != "*")
 				.map(organizationId => ({ name: organizationId, value: organizationId }))
 
-			return organizations.length != 0 ? null : (
-				<smoothly-picker label="Organization" multiple={false} options={organizations}></smoothly-picker>
-				// probably going to need a submit button to actually close the window
-			)
+			state.options.organizationId = organizations[0].value
+			result =
+				organizations.length != 0 ? null : (
+					<smoothly-picker label="Organization" multiple={false} options={organizations}></smoothly-picker>
+					// probably going to need a submit button to actually close the window
+				)
 		} else
-			null
+			result = "testing"
+
+		return result
 	}
 }
