@@ -11,7 +11,7 @@
 	width: 20rem;
 
 	margin: 1rem;
-	transition: 1s transform linear;
+	transition: 0.3s transform ease-in-out;
 	color: black; 
 }
 :host[menu-open] .menu{
