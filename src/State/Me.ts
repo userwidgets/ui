@@ -13,7 +13,7 @@ export class Me {
 		this.#options = options
 	}
 	get options(): Options {
-		return this.#options 
+		return this.#options
 	}
 	#key?: Promise<model.userwidgets.User.Key | undefined>
 	get key(): Promise<model.userwidgets.User.Key | undefined> | undefined {
@@ -42,6 +42,12 @@ export class Me {
 			: response
 					.then(key => (gracely.Error.is(key) ? undefined : key))
 					.then(key => (this.options = { applicationId: key?.audience }) && key))
+	}
+	logout(): void {
+		this.options = { organizationId: undefined, user: undefined }
+		this.key = undefined
+		this.client.key = undefined
+		window.sessionStorage.clear()
 	}
 	join(tag: model.userwidgets.User.Tag): Promise<model.userwidgets.User.Key | undefined> {
 		return (this.key = this.client.me
