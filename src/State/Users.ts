@@ -11,7 +11,10 @@ export class Users {
 	}
 	#users?: Promise<model.userwidgets.User[] | undefined>
 	get users() {
-		return this.#users ?? this.client.user.list().then(response => (gracely.Error.is(response) ? undefined : response))
+		return (
+			this.#users ??
+			(this.#users = this.client.user.list().then(response => (gracely.Error.is(response) ? undefined : response)))
+		)
 	}
 	set users(users: Promise<model.userwidgets.User[] | undefined>) {
 		this.#users = users

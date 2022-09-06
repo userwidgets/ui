@@ -20,12 +20,10 @@ export class State {
 	readonly users: Listenable<Users> & Users
 	readonly version: Version
 	constructor(client: Client) {
-		this.me = Listenable.load(new Me(client))
+		this.me = Me.create(client)
 		this.users = Listenable.load(new Users(client))
 		this.version = new Version(client)
-		this.me.listen("options", options => {
-			return options && options.applicationId != this.#options.applicationId && (this.options = options)
-		})
+		this.me.listen("options", options => (this.#options = options) && (this.users.options = this.#options))
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
 		client.onUnauthorized = value
