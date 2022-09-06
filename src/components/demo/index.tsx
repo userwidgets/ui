@@ -8,9 +8,9 @@ import { state } from "../../State"
 	scoped: true,
 })
 export class Demo {
-	componentWillLoad(){
+	componentWillLoad() {
 		state.options = {
-			applicationId: "issuefabApplicationId"
+			applicationId: "issuefabApplicationId",
 		}
 	}
 	render() {
@@ -26,9 +26,8 @@ export class Demo {
 					<smoothly-room path="/register">
 						<userwidgets-register></userwidgets-register>
 					</smoothly-room>
-					<smoothly-room path="/organizationpicker" label="Organizationpicker">
-						<userwidgets-organization-picker></userwidgets-organization-picker>
-					</smoothly-room>
+
+					<userwidgets-organization-picker slot="header"></userwidgets-organization-picker>
 				</App>
 			</userwidgets-login>
 		)

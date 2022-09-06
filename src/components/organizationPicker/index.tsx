@@ -9,9 +9,9 @@ import { state } from "../../State"
 	scoped: true,
 })
 export class UserwidgetsOrganizationPicker {
-	// @Prop() location:
 	@State() key?: model.userwidgets.User.Key
 	@State() organizations?: { name: string; value: string }[]
+	@Prop({ mutable: true, reflect: true }) menuOpen = false
 	@Watch("key")
 	handelKey() {
 		this.key &&
@@ -32,42 +32,29 @@ export class UserwidgetsOrganizationPicker {
 	handleMenuClose(event: CustomEvent<OptionType[]>) {
 		event.stopPropagation()
 		console.log("handleMenuClose state", state.options.organizationId)
-		state.options = { organizationId: event.detail[0].value } // not pretty but the length of event.detail should = 1 because picker multiple=false
-		window.location.href = window.origin // you only get one chance
+		state.options = { organizationId: event.detail[0].value }
+	}
+	handleClick() {
+		console.log("handeClick")
+		this.menuOpen = !this.menuOpen
 	}
 
 	render() {
 		return this.organizations ? (
 			<div>
-				<smoothly-picker label="Organization" multiple={false} options={this.organizations}></smoothly-picker>
-				<p>
-					Choose <a href={window.origin}> organization</a>{" "}
-					{/* this wont be necessary. The table should rerender with correct data immediately*/}
-				</p>
+				<smoothly-button fill="solid" color="primary" onClick={() => this.handleClick()}>
+					<smoothly-icon name="menu"></smoothly-icon>
+				</smoothly-button>
+				<smoothly-picker
+					label="Organization"
+					multiple={false}
+					options={this.organizations}
+					class={this.menuOpen ? "open" : "closed"}></smoothly-picker>
 			</div>
 		) : (
 			<div>
 				<p>You are not a member of any organization.</p>
 			</div>
 		)
-		// if (this.key) {
-		// 	const organizations = Object.keys(this.key.permissions)
-		// 		.filter(([organizationId]) => organizationId != "*")
-		// 		.map(organizationId => ({ name: organizationId, value: organizationId }))
-
-		// 	state.options.organizationId = organizations[0].value
-		// 	result =
-		// 		organizations.length != 0 ? null : (
-		// 			<div>
-		// 				<smoothly-picker label="Organization" multiple={false} options={organizations}></smoothly-picker>
-		// 				<p>
-		// 					Choose <a href={window.origin}> organization</a>
-		// 				</p>
-		// 			</div>
-		// 		)
-		// } else
-		// 	result = "testing"
-
-		// return result
 	}
 }

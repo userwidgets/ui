@@ -1,24 +1,23 @@
-:host {
-	display: flex;
+
+smoothly-picker{
+	position: absolute;
+	top: 5rem;
+	right: -14%;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
 	padding: 0 1em;
 	height: 100%;
-	border: 2px solid red;
+	width: 20rem;
+	border: 2px solid black;
 	margin: 1rem;
-	float: left;
+	transition: 1s right linear;
+	color: black; 
+}
+:host[menu-open] smoothly-picker{
+	right: 0;
 }
 .background {
 	background-color: rgba(255, 255, 255, 0.55);
 }
-.viewport {
-	position: sticky;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-	top: 0;
-	width: 100%;
-}
+
 

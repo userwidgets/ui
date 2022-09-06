@@ -28,6 +28,7 @@ export namespace Components {
     interface UserwidgetsLogout {
     }
     interface UserwidgetsOrganizationPicker {
+        "menuOpen": boolean;
     }
     interface UserwidgetsRegister {
     }
@@ -179,6 +180,7 @@ declare namespace LocalJSX {
         "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
     }
     interface UserwidgetsOrganizationPicker {
+        "menuOpen"?: boolean;
     }
     interface UserwidgetsRegister {
         "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
