@@ -1,27 +1,4 @@
 
-.menu{
-	position: absolute;
-	top: 5rem;
-	right: auto ;
-	left: 100%;
-	justify-content: center;
-	align-items: center;
-	padding: 0 1em;
-	height: 100%;
-	margin: 1rem;
-	transition: 0.3s transform ease-in-out;
-	color: black; 
-}
-:host[menu-open] .menu{
-	transform: translate(-100%,0)
-}
-.menu > * {
-	padding: 1rem;
-}
-.background {
-	background-color: rgba(255, 255, 255, 0.55);
-}
-
 smoothly-picker{
 	width: 15rem;
 }

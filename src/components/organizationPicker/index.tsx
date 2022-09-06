@@ -1,4 +1,4 @@
-import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
+import { Component, h, Listen, State, Watch } from "@stencil/core"
 import { OptionType } from "smoothly"
 import { model } from "../../model"
 import { state } from "../../State"
@@ -11,7 +11,6 @@ import { state } from "../../State"
 export class UserwidgetsOrganizationPicker {
 	@State() key?: model.userwidgets.User.Key
 	@State() organizations?: { name: string; value: string }[]
-	@Prop({ mutable: true, reflect: true }) menuOpen = false
 	@Watch("key")
 	handelKey() {
 		this.key &&
@@ -34,27 +33,9 @@ export class UserwidgetsOrganizationPicker {
 		console.log("handleMenuClose state", state.options.organizationId)
 		state.options = { organizationId: event.detail[0].value }
 	}
-	handleClick() {
-		console.log("handeClick")
-		this.menuOpen = !this.menuOpen
-	}
-
 	render() {
 		return this.organizations ? (
-			<div>
-				<smoothly-button fill="solid" color="primary" onClick={() => this.handleClick()}>
-					<smoothly-icon name="menu"></smoothly-icon>
-				</smoothly-button>
-				<div class="menu">
-					<div>
-						<smoothly-picker
-							label="Organization"
-							multiple={false}
-							options={this.organizations}
-							class={this.menuOpen ? "open" : "closed"}></smoothly-picker>
-					</div>
-				</div>
-			</div>
+			<smoothly-picker label="Organization" multiple={false} options={this.organizations}></smoothly-picker>
 		) : (
 			<div>
 				<p>You are not a member of any organization.</p>

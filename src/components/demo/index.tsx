@@ -27,7 +27,9 @@ export class Demo {
 						<userwidgets-register></userwidgets-register>
 					</smoothly-room>
 
-					<userwidgets-organization-picker slot="header"></userwidgets-organization-picker>
+					<userwidgets-menu slot="header">
+						<userwidgets-organization-picker></userwidgets-organization-picker>
+					</userwidgets-menu>
 				</App>
 			</userwidgets-login>
 		)
