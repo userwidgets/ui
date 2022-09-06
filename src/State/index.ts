@@ -7,7 +7,7 @@ import { Users } from "./Users"
 import { Version } from "./Version"
 
 export class State {
-	#options: Options
+	#options: Options = {}
 	set options(options: Options) {
 		this.#options = { ...this.#options, ...options }
 		this.users.options = this.options

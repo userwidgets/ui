@@ -13,7 +13,7 @@ export class Me {
 		this.#options = options
 	}
 	get options(): Options {
-		return this.#options ?? {}
+		return this.#options 
 	}
 	#key?: Promise<model.userwidgets.User.Key | undefined>
 	get key(): Promise<model.userwidgets.User.Key | undefined> | undefined {
