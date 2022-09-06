@@ -1,4 +1,4 @@
-import { Component, ComponentWillLoad, Event, EventEmitter, h, Host } from "@stencil/core"
+import { Component,  Event, EventEmitter, h } from "@stencil/core"
 import { client } from "../../../client"
 
 @Component({
@@ -6,14 +6,18 @@ import { client } from "../../../client"
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class Logout implements ComponentWillLoad {
+export class Logout  {
 	@Event() logout: EventEmitter
-	componentWillLoad(): void | Promise<void> {
+	handleClick(): void | Promise<void> {
 		sessionStorage.clear()
-		client.key = undefined
+		client.key = undefined // the state should do this instead. Among other things
 		window.location.href = window.location.origin
 	}
 	render() {
-		return <Host></Host>
+		return (
+			<smoothly-button fill="solid" color="primary" onClick={() => this.handleClick()}>
+				<smoothly-icon name="log-out-outline"></smoothly-icon>
+			</smoothly-button>
+		)
 	}
 }

@@ -29,6 +29,7 @@ export class Demo {
 
 					<userwidgets-menu slot="header">
 						<userwidgets-organization-picker></userwidgets-organization-picker>
+						<userwidgets-logout></userwidgets-logout>
 					</userwidgets-menu>
 				</App>
 			</userwidgets-login>
