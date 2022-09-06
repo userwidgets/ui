@@ -16,9 +16,11 @@ export class UserwidgetsOrganizationPicker {
 		this.key &&
 			(this.organizations = Object.keys(this.key.permissions)
 				.filter(([organizationId]) => organizationId != "*")
-				.map(organizationId => ({ name: organizationId, value: organizationId })))
+				.map(organizationId => ({ name: organizationId, value: organizationId }))) &&
+			(state.options = { organizationId: this.organizations[0].value })
 		console.log("this.key", this.key)
 		console.log("this.organizations", this.organizations)
+		console.log("state.options", state.options)
 	}
 
 	componentWillLoad() {
@@ -38,14 +40,12 @@ export class UserwidgetsOrganizationPicker {
 			<div>
 				<p>You are not a member of any organization.</p>
 			</div>
-		) : this.organizations.length == 1 ? (
-			(state.options = { organizationId: this.organizations[0].value } && (
-				<div>
-					<p> Organization: {state.options.organizationId}</p>
-				</div>
-			)) // I think this should work
 		) : (
-			<smoothly-picker label="Organization" multiple={false} options={this.organizations}></smoothly-picker>
+			<smoothly-picker
+				label="Organization"
+				multiple={false}
+				options={this.organizations}
+				selections={[this.organizations[0]]}></smoothly-picker>
 		)
 	}
 }
