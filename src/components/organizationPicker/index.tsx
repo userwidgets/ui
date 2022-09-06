@@ -45,11 +45,15 @@ export class UserwidgetsOrganizationPicker {
 				<smoothly-button fill="solid" color="primary" onClick={() => this.handleClick()}>
 					<smoothly-icon name="menu"></smoothly-icon>
 				</smoothly-button>
-				<smoothly-picker
-					label="Organization"
-					multiple={false}
-					options={this.organizations}
-					class={this.menuOpen ? "open" : "closed"}></smoothly-picker>
+				<div class="menu">
+					<div>
+						<smoothly-picker
+							label="Organization"
+							multiple={false}
+							options={this.organizations}
+							class={this.menuOpen ? "open" : "closed"}></smoothly-picker>
+					</div>
+				</div>
 			</div>
 		) : (
 			<div>
