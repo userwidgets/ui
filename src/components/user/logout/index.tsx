@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h } from "@stencil/core"
+import { Component, h } from "@stencil/core"
 import { state } from "../../../State"
 
 @Component({
@@ -7,7 +7,6 @@ import { state } from "../../../State"
 	scoped: true,
 })
 export class Logout {
-	@Event() logout: EventEmitter // i don't thinks this is needed.
 	handleClick(): void | Promise<void> {
 		state.me.logout()
 		window.location.href = window.location.origin

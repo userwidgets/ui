@@ -56,10 +56,6 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
 }
-export interface UserwidgetsLogoutCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsLogoutElement;
-}
 export interface UserwidgetsRegisterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsRegisterElement;
@@ -186,7 +182,6 @@ declare namespace LocalJSX {
     interface UserwidgetsLoginTrigger {
     }
     interface UserwidgetsLogout {
-        "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
     }
     interface UserwidgetsMenu {
         "menuOpen"?: boolean;
