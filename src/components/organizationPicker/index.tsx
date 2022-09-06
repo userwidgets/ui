@@ -34,12 +34,18 @@ export class UserwidgetsOrganizationPicker {
 		state.options = { organizationId: event.detail[0].value }
 	}
 	render() {
-		return this.organizations ? (
-			<smoothly-picker label="Organization" multiple={false} options={this.organizations}></smoothly-picker>
-		) : (
+		return !this.organizations ? (
 			<div>
 				<p>You are not a member of any organization.</p>
 			</div>
+		) : this.organizations.length == 1 ? (
+			(state.options = { organizationId: this.organizations[0].value } && (
+				<div>
+					<p> Organization: {state.options.organizationId}</p>
+				</div>
+			)) // I think this should work
+		) : (
+			<smoothly-picker label="Organization" multiple={false} options={this.organizations}></smoothly-picker>
 		)
 	}
 }
