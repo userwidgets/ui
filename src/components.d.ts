@@ -27,6 +27,11 @@ export namespace Components {
     }
     interface UserwidgetsLogout {
     }
+    interface UserwidgetsMenu {
+        "menuOpen": boolean;
+    }
+    interface UserwidgetsOrganizationPicker {
+    }
     interface UserwidgetsRegister {
     }
     interface UserwidgetsSetPassword {
@@ -50,10 +55,6 @@ export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
-}
-export interface UserwidgetsLogoutCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsLogoutElement;
 }
 export interface UserwidgetsRegisterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -112,6 +113,18 @@ declare global {
         prototype: HTMLUserwidgetsLogoutElement;
         new (): HTMLUserwidgetsLogoutElement;
     };
+    interface HTMLUserwidgetsMenuElement extends Components.UserwidgetsMenu, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsMenuElement: {
+        prototype: HTMLUserwidgetsMenuElement;
+        new (): HTMLUserwidgetsMenuElement;
+    };
+    interface HTMLUserwidgetsOrganizationPickerElement extends Components.UserwidgetsOrganizationPicker, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsOrganizationPickerElement: {
+        prototype: HTMLUserwidgetsOrganizationPickerElement;
+        new (): HTMLUserwidgetsOrganizationPickerElement;
+    };
     interface HTMLUserwidgetsRegisterElement extends Components.UserwidgetsRegister, HTMLStencilElement {
     }
     var HTMLUserwidgetsRegisterElement: {
@@ -139,6 +152,8 @@ declare global {
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
+        "userwidgets-menu": HTMLUserwidgetsMenuElement;
+        "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-register": HTMLUserwidgetsRegisterElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-version": HTMLUserwidgetsVersionElement;
@@ -167,7 +182,11 @@ declare namespace LocalJSX {
     interface UserwidgetsLoginTrigger {
     }
     interface UserwidgetsLogout {
-        "onLogout"?: (event: UserwidgetsLogoutCustomEvent<any>) => void;
+    }
+    interface UserwidgetsMenu {
+        "menuOpen"?: boolean;
+    }
+    interface UserwidgetsOrganizationPicker {
     }
     interface UserwidgetsRegister {
         "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
@@ -187,6 +206,8 @@ declare namespace LocalJSX {
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
+        "userwidgets-menu": UserwidgetsMenu;
+        "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-register": UserwidgetsRegister;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-version": UserwidgetsVersion;
@@ -204,6 +225,8 @@ declare module "@stencil/core" {
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
+            "userwidgets-menu": LocalJSX.UserwidgetsMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMenuElement>;
+            "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-register": LocalJSX.UserwidgetsRegister & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-version": LocalJSX.UserwidgetsVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsVersionElement>;

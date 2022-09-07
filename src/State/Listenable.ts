@@ -8,8 +8,8 @@ export class Listenable<T extends Record<string, any>> {
 		const index = this.#listeners[property]?.indexOf(listener)
 		index != undefined && index >= 0 && this.#listeners[property]?.splice(index, 1)
 	}
-	static load<T extends Record<string, any>>(backend: T): T & Listenable<T> {
-		const result = new Listenable()
+	static load<T extends Record<string, any>>(backend: T, listenable?: Listenable<T>): T & Listenable<T> {
+		const result = listenable ?? new Listenable()
 
 		Object.entries({
 			...Object.getOwnPropertyDescriptors(backend),

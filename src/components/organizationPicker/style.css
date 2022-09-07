@@ -1,0 +1,7 @@
+
+smoothly-picker{
+	width: 15rem;
+}
+smoothly-picker::part(search) {
+	display: none;
+}

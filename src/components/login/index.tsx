@@ -1,5 +1,4 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
-import * as gracely from "gracely"
 import { model } from "../../model"
 import { Me } from "../../State"
 
@@ -19,7 +18,7 @@ export class UserwidgetsLogin {
 			user: event.detail.user,
 			password: event.detail.password,
 		})
-		if (this.resolve != undefined && !gracely.Error.is(response)) {
+		if (this.resolve != undefined && response) {
 			this.resolve(true)
 			this.resolve = undefined
 			this.loggedIn.emit()

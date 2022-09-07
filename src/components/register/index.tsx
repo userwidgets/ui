@@ -28,8 +28,9 @@ export class UserwidgetsRegister {
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
 		event.preventDefault()
 		event.stopPropagation()
-		if (this.tag) {
-			const response = await state.me.register(this.tag, {
+
+		this.tag &&
+			(await state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
 					first: event.detail.first,
@@ -39,10 +40,9 @@ export class UserwidgetsRegister {
 					new: event.detail.new,
 					repeat: event.detail.repeat,
 				},
-			})
-			if (response)
-				window.location.href = window.origin
-		}
+			})) &&
+			(state.options = { user: this.tag.email }) &&
+			(window.location.href = window.origin)
 	}
 
 	render() {
@@ -81,24 +81,13 @@ export class UserwidgetsRegister {
 					<p>
 						Already have an account?{" "}
 						<a
-							href="#"
+							href={window.origin}
 							onClick={async e => {
 								e.preventDefault()
-								console.log("login starting!", this.tag)
-								if (this.tag) {
-									console.log("first onion")
-									const key = await state.me.join(this.tag).then(p => {
-										console.log("login finished")
-										return p
-									})
-									console.log("awaited")
-									if (key) {
-										console.log("successful login", key)
-									} else {
-										console.log("login failed")
-									}
-								}
-								this.tag && (await state.me.join(this.tag)) && (window.location.href = window.origin)
+								this.tag &&
+									(await state.me.join(this.tag).then(p => p)) &&
+									(await state.me.join(this.tag)) &&
+									(window.location.href = window.origin)
 							}}>
 							Login
 						</a>
