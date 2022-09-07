@@ -8,6 +8,9 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
 import { Me } from "./State";
+import { Listenable } from "./State/Listenable";
+import { Application } from "./State/Application";
+import { Options } from "./State/Options";
 export namespace Components {
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
@@ -31,6 +34,11 @@ export namespace Components {
         "menuOpen": boolean;
     }
     interface UserwidgetsOrganizationPicker {
+        "state": {
+		me: Me & Listenable<Me>
+		application: Application & Listenable<Application>
+		options: Options
+	};
     }
     interface UserwidgetsRegister {
     }
@@ -187,6 +195,11 @@ declare namespace LocalJSX {
         "menuOpen"?: boolean;
     }
     interface UserwidgetsOrganizationPicker {
+        "state"?: {
+		me: Me & Listenable<Me>
+		application: Application & Listenable<Application>
+		options: Options
+	};
     }
     interface UserwidgetsRegister {
         "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
