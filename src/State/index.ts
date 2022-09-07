@@ -21,7 +21,7 @@ export class State {
 	readonly version: Version
 	constructor(client: Client) {
 		this.me = Me.create(client)
-		this.users = Listenable.load(new Users(client))
+		this.users = Users.create(client)
 		this.version = new Version(client)
 		this.me.listen("options", options => (this.#options = options) && (this.users.options = this.#options))
 	}

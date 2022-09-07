@@ -1,6 +1,7 @@
 import * as gracely from "gracely"
 import { Client } from "../Client"
 import { model } from "../model"
+import { Listenable } from "./Listenable"
 import { Options } from "./Options"
 
 export class Users {
@@ -13,13 +14,22 @@ export class Users {
 	get users() {
 		return (
 			this.#users ??
-			(this.#users = this.client.user.list().then(response => (gracely.Error.is(response) ? undefined : response)))
+			(this.#self.users = this.#client.user
+				.list()
+				.then(response => (gracely.Error.is(response) ? undefined : response)))
 		)
 	}
 	set users(users: Promise<model.userwidgets.User[] | undefined>) {
 		this.#users = users
 	}
-	constructor(private readonly client: Client, options?: Options) {
-		options && (this.options = options)
+	#client: Client
+	#self: Users & Listenable<Users>
+	constructor(listenable: Users & Listenable<Users>, client: Client) {
+		this.#client = client
+		this.#self = listenable
+	}
+	static create(client: Client): Users & Listenable<Users> {
+		const listenable = new Listenable<Users>() as Users & Listenable<Users>
+		return Listenable.load(new this(listenable, client), listenable)
 	}
 }
