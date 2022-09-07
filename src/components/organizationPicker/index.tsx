@@ -10,7 +10,6 @@ import { Options } from "../../State/Options"
 	styleUrl: "style.css",
 	scoped: true,
 })
-// this component have to take a state to function properly
 export class UserwidgetsOrganizationPicker {
 	@Prop() state: {
 		me: Me & Listenable<Me>
