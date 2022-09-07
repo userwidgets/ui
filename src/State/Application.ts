@@ -1,7 +1,8 @@
-import * as  gracely from "gracely"
+import * as gracely from "gracely"
 import { Client } from "../Client"
 import { model } from "../model"
 import { Listenable } from "./Listenable"
+import { Me } from "./Me"
 import { Options } from "./Options"
 
 export class Application {
@@ -19,18 +20,31 @@ export class Application {
 				.then(response => (gracely.Error.is(response) ? undefined : response)))
 		)
 	}
-
 	set application(application: Promise<model.userwidgets.Application | undefined>) {
 		this.#application = application
 	}
+	get me(): Me & Listenable<Me> {
+		return this.#me
+	}
 	#client: Client
 	#self: Application & Listenable<Application>
-	constructor(listenable: Application & Listenable<Application>, client: Client) {
+	#me: Me & Listenable<Me>
+	constructor(listenable: Application & Listenable<Application>, client: Client, me: Me & Listenable<Me>) {
 		this.#client = client
 		this.#self = listenable
+		this.#me = me
 	}
-	static create(client: Client): Application & Listenable<Application> {
+	static create(client: Client, me: Me & Listenable<Me>): Application & Listenable<Application> {
 		const listenable = new Listenable<Application>() as Application & Listenable<Application>
-		return Listenable.load(new this(listenable, client), listenable)
+		Listenable.load(new this(listenable, client, me), listenable)
+		listenable.me.listen("key", key =>
+			key?.then(
+				() =>
+					(listenable.application = client.application
+						.fetch()
+						.then(response => (gracely.Error.is(response) ? undefined : response)))
+			)
+		)
+		return listenable
 	}
 }

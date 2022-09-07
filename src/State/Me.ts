@@ -67,13 +67,11 @@ export class Me {
 	}
 	static create(client: Client): Me & Listenable<Me> {
 		const listenable = new Listenable<Me>() as Me & Listenable<Me>
-		console.log("me create", Object.keys(listenable))
 		Listenable.load(new this(listenable as typeof listenable & Me, client), listenable)
 		client.key &&
-			(listenable.key = model.userwidgets.User.Key.unpack(client.key).then(key => {
-				console.log("me constructor init")
-				return (listenable.options = { applicationId: key?.audience, user: key?.email }) && key
-			}))
+			(listenable.key = model.userwidgets.User.Key.unpack(client.key).then(
+				key => (listenable.options = { applicationId: key?.audience, user: key?.email }) && key
+			))
 		client.onUnauthorized = () => {
 			client.key &&
 				(listenable.key = model.userwidgets.User.Key.unpack(client.key).then(

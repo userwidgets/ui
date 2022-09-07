@@ -8,37 +8,36 @@ import { state } from "../../State"
 	styleUrl: "style.css",
 	scoped: true,
 })
+// now use the new state application to fetch names
 export class UserwidgetsOrganizationPicker {
 	@State() key?: model.userwidgets.User.Key
 	@State() organizations?: { name: string; value: string }[]
-	@Watch("key")
+	@State() application?: model.userwidgets.Application
+	@Watch("application")
 	handelKey() {
-		this.key &&
-			(this.organizations = Object.keys(this.key.permissions)
-				.filter(([organizationId]) => organizationId != "*")
-				.map(organizationId => ({ name: organizationId, value: organizationId }))) &&
-			(state.options = { organizationId: this.organizations[0].value })
+		this.application?.organizations &&
+			(this.organizations = Object.values(this.application.organizations).map(({ name, id }) => ({
+				name: name,
+				value: id,
+			})))
 	}
-
 	componentWillLoad() {
 		state.me.listen("key", async key => (this.key = await key))
-		
+		state.application.listen("application", async application => (this.application = await application))
 	}
 
 	@Listen("menuClose")
 	handleMenuClose(event: CustomEvent<OptionType[]>) {
-		event.stopPropagation()
 		state.options = { organizationId: event.detail[0].value }
 	}
 	render() {
 		return (
-
 			<smoothly-picker
 				label="Organization"
 				multiple={false}
 				options={this.organizations}
 				selections={
-					!this.organizations
+					!this.organizations?.length
 						? [{ name: "you are not a member of any organization", value: "" }]
 						: [this.organizations[0]]
 				}></smoothly-picker>

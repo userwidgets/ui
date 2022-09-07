@@ -12,6 +12,7 @@ export class State {
 		this.#options = { ...this.#options, ...options }
 		this.users.options = this.options
 		this.me.options = this.options
+		this.application.options = this.options
 	}
 	get options() {
 		return this.#options
@@ -26,7 +27,7 @@ export class State {
 	constructor(client: Client) {
 		this.me = Me.create(client)
 		this.users = Users.create(client)
-		this.application = Application.create(client)
+		this.application = Application.create(client, this.me)
 		this.version = new Version(client)
 		this.me.listen("options", options => (this.#options = options) && (this.users.options = this.#options))
 	}
