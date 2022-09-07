@@ -24,7 +24,7 @@ export class Users {
 	}
 	#client: Client
 	#self: Users & Listenable<Users>
-	constructor(listenable: Users & Listenable<Users>, client: Client) {
+	private constructor(listenable: Users & Listenable<Users>, client: Client) {
 		this.#client = client
 		this.#self = listenable
 	}

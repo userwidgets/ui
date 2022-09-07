@@ -8,13 +8,12 @@ import { state } from "../../State"
 	styleUrl: "style.css",
 	scoped: true,
 })
-// now use the new state application to fetch names
 export class UserwidgetsOrganizationPicker {
 	@State() key?: model.userwidgets.User.Key
 	@State() organizations?: { name: string; value: string }[]
 	@State() application?: model.userwidgets.Application
 	@Watch("application")
-	handelKey() {
+	handelApplicationChange() {
 		this.application?.organizations &&
 			(this.organizations = Object.values(this.application.organizations).map(({ name, id }) => ({
 				name: name,
@@ -29,6 +28,7 @@ export class UserwidgetsOrganizationPicker {
 	@Listen("menuClose")
 	handleMenuClose(event: CustomEvent<OptionType[]>) {
 		state.options = { organizationId: event.detail[0].value }
+		event.stopPropagation()
 	}
 	render() {
 		return (
