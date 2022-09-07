@@ -1,14 +1,18 @@
-import { Component, h } from "@stencil/core"
-import { state } from "../../../State"
-
+import { Component, h, Prop } from "@stencil/core"
+import { Listenable } from "../../../State/Listenable"
+import { Me } from "../../../State/Me"
 @Component({
 	tag: "userwidgets-logout",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class Logout {
+	@Prop() state: {
+		me: Me & Listenable<Me>
+	}
+
 	handleClick(): void | Promise<void> {
-		state.me.logout()
+		this.state.me.logout()
 		window.location.href = window.location.origin
 	}
 	render() {

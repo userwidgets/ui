@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
 import { Me } from "./State";
+import { Me as Me1 } from "./State/Me";
 import { Listenable } from "./State/Listenable";
 import { Application } from "./State/Application";
 import { Options } from "./State/Options";
@@ -29,6 +30,9 @@ export namespace Components {
     interface UserwidgetsLoginTrigger {
     }
     interface UserwidgetsLogout {
+        "state": {
+		me: Me1 & Listenable<Me1>
+	};
     }
     interface UserwidgetsMenu {
         "menuOpen": boolean;
@@ -190,6 +194,9 @@ declare namespace LocalJSX {
     interface UserwidgetsLoginTrigger {
     }
     interface UserwidgetsLogout {
+        "state"?: {
+		me: Me1 & Listenable<Me1>
+	};
     }
     interface UserwidgetsMenu {
         "menuOpen"?: boolean;
