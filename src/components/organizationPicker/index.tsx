@@ -22,6 +22,7 @@ export class UserwidgetsOrganizationPicker {
 
 	componentWillLoad() {
 		state.me.listen("key", async key => (this.key = await key))
+		
 	}
 
 	@Listen("menuClose")
@@ -31,6 +32,7 @@ export class UserwidgetsOrganizationPicker {
 	}
 	render() {
 		return (
+
 			<smoothly-picker
 				label="Organization"
 				multiple={false}
