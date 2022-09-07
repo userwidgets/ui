@@ -26,6 +26,7 @@ export class UserwidgetsOrganizationPicker {
 				name: name,
 				value: id,
 			})))
+		this.organizations?.length && (this.state.options = { organizationId: this.organizations[0].value })
 	}
 	componentWillLoad() {
 		this.state.me.listen("key", async key => (this.key = await key))

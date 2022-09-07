@@ -28,8 +28,8 @@ export class Demo {
 					</smoothly-room>
 
 					<userwidgets-menu slot="header">
-						<userwidgets-organization-picker></userwidgets-organization-picker>
-						<userwidgets-logout></userwidgets-logout>
+						<userwidgets-organization-picker state={state}></userwidgets-organization-picker>
+						<userwidgets-logout state={state}></userwidgets-logout>
 					</userwidgets-menu>
 				</App>
 			</userwidgets-login>

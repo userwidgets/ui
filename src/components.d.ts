@@ -8,8 +8,8 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
 import { Me } from "./State";
-import { Me as Me1 } from "./State/Me";
 import { Listenable } from "./State/Listenable";
+import { Me as Me1 } from "./State/Me";
 import { Application } from "./State/Application";
 import { Options } from "./State/Options";
 export namespace Components {
@@ -23,7 +23,7 @@ export namespace Components {
     interface UserwidgetsDemoVersion {
     }
     interface UserwidgetsLogin {
-        "state": { me: Me; onUnauthorized: () => Promise<boolean> };
+        "state": { me: Me & Listenable<Me>; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
     }
@@ -185,7 +185,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
-        "state"?: { me: Me; onUnauthorized: () => Promise<boolean> };
+        "state"?: { me: Me & Listenable<Me>; onUnauthorized: () => Promise<boolean> };
     }
     interface UserwidgetsLoginDialog {
         "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
