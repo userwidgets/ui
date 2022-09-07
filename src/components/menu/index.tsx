@@ -9,7 +9,6 @@ export class UserwidgetsMenu {
 	@Prop({ mutable: true, reflect: true }) menuOpen = false
 
 	handleClick() {
-		console.log("handleClick")
 		this.menuOpen = !this.menuOpen
 	}
 

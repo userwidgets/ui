@@ -18,34 +18,28 @@ export class UserwidgetsOrganizationPicker {
 				.filter(([organizationId]) => organizationId != "*")
 				.map(organizationId => ({ name: organizationId, value: organizationId }))) &&
 			(state.options = { organizationId: this.organizations[0].value })
-		console.log("this.key", this.key)
-		console.log("this.organizations", this.organizations)
-		console.log("state.options", state.options)
 	}
 
 	componentWillLoad() {
 		state.me.listen("key", async key => (this.key = await key))
-		console.log("key ", this.key)
-		console.log("organization picker componentWillLoad")
 	}
 
 	@Listen("menuClose")
 	handleMenuClose(event: CustomEvent<OptionType[]>) {
 		event.stopPropagation()
-		console.log("handleMenuClose state", state.options.organizationId)
 		state.options = { organizationId: event.detail[0].value }
 	}
 	render() {
-		return !this.organizations ? (
-			<div>
-				<p>You are not a member of any organization.</p>
-			</div>
-		) : (
+		return (
 			<smoothly-picker
 				label="Organization"
 				multiple={false}
 				options={this.organizations}
-				selections={[this.organizations[0]]}></smoothly-picker>
+				selections={
+					!this.organizations
+						? [{ name: "you are not a member of any organization", value: "" }]
+						: [this.organizations[0]]
+				}></smoothly-picker>
 		)
 	}
 }

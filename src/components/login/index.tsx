@@ -1,7 +1,6 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import { model } from "../../model"
 import { Me } from "../../State"
-import { state } from "../../State"
 
 @Component({
 	tag: "userwidgets-login",
@@ -21,7 +20,6 @@ export class UserwidgetsLogin {
 		})
 		if (this.resolve != undefined && response) {
 			this.resolve(true)
-			state.options = { user: response.email, applicationId: response.audience }
 			this.resolve = undefined
 			this.loggedIn.emit()
 		}
