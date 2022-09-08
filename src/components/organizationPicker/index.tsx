@@ -17,8 +17,18 @@ export class UserwidgetsOrganizationPicker {
 		options: Options
 	}
 	@State() key?: model.userwidgets.User.Key
-	@State() organizations?: { name: string; value: string }[]
 	@State() application?: model.userwidgets.Application
+	@State() organizations?: { name: string; value: string }[]
+	@State() receivedKey?: (value: boolean) => void
+	@Watch("key")
+	handleKeyChange() {
+		;(!this.key || !this.application) &&
+			this.state.application.listen("application", async promise => {
+				const application = await promise
+				this.application = application ? application : undefined
+			})
+	}
+
 	@Watch("application")
 	handelApplicationChange() {
 		this.application?.organizations &&
@@ -29,8 +39,16 @@ export class UserwidgetsOrganizationPicker {
 		this.organizations?.length && (this.state.options = { organizationId: this.organizations[0].value })
 	}
 	componentWillLoad() {
-		this.state.me.listen("key", async key => (this.key = await key))
-		this.state.application.listen("application", async application => (this.application = await application))
+		this.state.me.listen("key", async promise => {
+			const key = await promise
+			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
+		})
+		new Promise(resolve => (this.receivedKey = resolve)).then(() => {
+			this.state.application.listen("application", async promise => {
+				const application = await promise
+				this.application = application ? application : undefined
+			})
+		})
 	}
 
 	@Listen("menuClose")
@@ -39,16 +57,16 @@ export class UserwidgetsOrganizationPicker {
 		event.stopPropagation()
 	}
 	render() {
-		return (
+		return this.key ? (
 			<smoothly-picker
 				label="Organization"
 				multiple={false}
 				options={this.organizations}
 				selections={
 					!this.organizations?.length
-						? [{ name: "you are not a member of any organization", value: "" }]
+						? [{ name: "You are not a member of any organization", value: "" }]
 						: [this.organizations[0]]
 				}></smoothly-picker>
-		)
+		) : null
 	}
 }

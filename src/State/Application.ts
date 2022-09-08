@@ -11,16 +11,16 @@ export class Application {
 		options.applicationId != this.#options?.applicationId && (this.#application = undefined)
 		this.#options = options
 	}
-	#application?: Promise<model.userwidgets.Application | undefined>
+	#application?: Promise<model.userwidgets.Application | false>
 	get application() {
 		return (
 			this.#application ??
 			(this.#self.application = this.#client.application
 				.fetch()
-				.then(response => (gracely.Error.is(response) ? undefined : response)))
+				.then(response => (gracely.Error.is(response) ? false : response)))
 		)
 	}
-	set application(application: Promise<model.userwidgets.Application | undefined>) {
+	set application(application: Promise<model.userwidgets.Application | false>) {
 		this.#application = application
 	}
 	get me(): Me & Listenable<Me> {
@@ -35,16 +35,16 @@ export class Application {
 		this.#me = me
 	}
 	static create(client: Client, me: Me & Listenable<Me>): Application & Listenable<Application> {
-		const listenable = new Listenable<Application>() as Application & Listenable<Application>
-		Listenable.load(new this(listenable, client, me), listenable)
-		listenable.me.listen("key", key =>
+		const self = new Listenable<Application>() as Application & Listenable<Application>
+		Listenable.load(new this(self, client, me), self)
+		self.me.listen("key", key =>
 			key?.then(
 				() =>
-					(listenable.application = client.application
+					(self.application = client.application
 						.fetch()
-						.then(response => (gracely.Error.is(response) ? undefined : response)))
+						.then(response => (gracely.Error.is(response) ? false : response)))
 			)
 		)
-		return listenable
+		return self
 	}
 }
