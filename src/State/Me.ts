@@ -7,17 +7,17 @@ import { Options } from "./Options"
 
 export class Me {
 	#options: Options = {}
-	set options(options: Options) {
-		this.#options = { ...this.#options, ...options }
-	}
 	get options(): Options {
 		return this.#options
 	}
-	#key?: Promise<model.userwidgets.User.Key | undefined>
-	get key(): Promise<model.userwidgets.User.Key | undefined> | undefined {
+	set options(options: Options) {
+		this.#options = { ...this.#options, ...options }
+	}
+	#key?: Promise<model.userwidgets.User.Key | false>
+	get key(): Promise<model.userwidgets.User.Key | false> | undefined {
 		return this.#key
 	}
-	set key(key: Promise<model.userwidgets.User.Key | undefined> | undefined) {
+	set key(key: Promise<model.userwidgets.User.Key | false> | undefined) {
 		this.#key = key
 	}
 	#client: Client
@@ -26,30 +26,35 @@ export class Me {
 		this.#self = listenable
 		this.#client = client
 	}
-	login(user: model.userwidgets.User.Credentials): Promise<model.userwidgets.User.Key | undefined> | undefined {
-		const response = !this.#self.options.applicationId
+	async login(user: model.userwidgets.User.Credentials): Promise<model.userwidgets.User.Key | false> {
+		const promise = !this.#self.options.applicationId
 			? undefined
-			: this.#client.me.login(this.#self.options.applicationId, user)
-		return (this.#self.key = !response
-			? response
-			: response
-					.then(key => (gracely.Error.is(key) ? undefined : key))
-					.then(key => (this.#self.options = { applicationId: key?.audience, user: key?.email }) && key))
+			: this.#client.me
+					.login(this.#self.options.applicationId, user)
+					.then(response => (gracely.Error.is(response) ? false : response))
+		const response = await promise
+		response &&
+			(this.#self.key = promise) &&
+			(this.#self.options = { applicationId: response.audience, user: response.email })
+		return response ? response : false
 	}
-	join(tag: model.userwidgets.User.Tag): Promise<model.userwidgets.User.Key | undefined> {
-		return (this.#key = this.#client.me
+	async join(tag: model.userwidgets.User.Tag): Promise<model.userwidgets.User.Key | false> {
+		const promise = this.#client.me
 			.join(tag)
 			.then(async key =>
 				gracely.Error.is(key)
-					? undefined
+					? false
 					: gracely.Result.is(key)
 					? !client.key
-						? undefined
-						: model.userwidgets.User.Key.unpack(client.key).then(
-								key => (this.#self.options = { applicationId: key?.audience, user: key?.email }) && key
+						? false
+						: model.userwidgets.User.Key.unpack(client.key).then(key =>
+								key ? (this.#self.options = { applicationId: key?.audience, user: key?.email }) && key : false
 						  )
 					: key
-			))
+			)
+		const response = await promise
+		response && (this.#self.key = promise)
+		return response ? response : false
 	}
 	logout(): void {
 		this.#self.options = { organizationId: undefined, user: undefined }
@@ -57,28 +62,31 @@ export class Me {
 		this.#client.key = undefined
 		window.sessionStorage.clear()
 	}
-	register(
+	async register(
 		tag: model.userwidgets.User.Tag,
 		credentials: model.userwidgets.User.Credentials.Register
-	): Promise<model.userwidgets.User.Key | undefined> {
-		return (this.#self.key = this.#client.me
+	): Promise<model.userwidgets.User.Key | false> {
+		const promise = this.#client.me
 			.register(tag, credentials)
-			.then(response => (gracely.Error.is(response) ? undefined : response)))
+			.then(response => (gracely.Error.is(response) ? false : response))
+		const response = await promise
+		response && (this.#self.key = promise)
+		return response
 	}
 	static create(client: Client): Me & Listenable<Me> {
-		const listenable = new Listenable<Me>() as Me & Listenable<Me>
-		Listenable.load(new this(listenable as typeof listenable & Me, client), listenable)
+		const self = new Listenable<Me>() as Me & Listenable<Me>
+		Listenable.load(new this(self, client), self)
 		client.key &&
-			(listenable.key = model.userwidgets.User.Key.unpack(client.key).then(
-				key => (listenable.options = { applicationId: key?.audience, user: key?.email }) && key
+			(self.key = model.userwidgets.User.Key.unpack(client.key).then(key =>
+				key ? (self.options = { applicationId: key?.audience, user: key?.email }) && key : false
 			))
 		client.onUnauthorized = () => {
 			client.key &&
-				(listenable.key = model.userwidgets.User.Key.unpack(client.key).then(
-					key => (listenable.options = { applicationId: key?.audience, user: key?.email }) && key
+				(self.key = model.userwidgets.User.Key.unpack(client.key).then(key =>
+					key ? (self.options = { applicationId: key?.audience, user: key?.email }) && key : false
 				))
 			return client.key ? new Promise(resolve => resolve(true)) : new Promise(resolve => resolve(false))
 		}
-		return listenable
+		return self
 	}
 }

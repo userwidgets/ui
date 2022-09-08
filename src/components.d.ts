@@ -9,14 +9,19 @@ import { model } from "./model";
 import { Notice } from "smoothly";
 import { Me } from "./State";
 import { Listenable } from "./State/Listenable";
-import { Me as Me1 } from "./State/Me";
 import { Application } from "./State/Application";
 import { Options } from "./State/Options";
+import { Me as Me1 } from "./State/Me";
 export namespace Components {
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
     }
     interface UserwidgetsChangePassword {
+        "state": {
+		me: Me & Listenable<Me>
+		application: Application & Listenable<Application>
+		options: Options
+	};
     }
     interface UserwidgetsDemo {
     }
@@ -178,6 +183,11 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsChangePassword {
         "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<Notice>) => void;
+        "state"?: {
+		me: Me & Listenable<Me>
+		application: Application & Listenable<Application>
+		options: Options
+	};
     }
     interface UserwidgetsDemo {
     }

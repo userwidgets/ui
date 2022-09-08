@@ -1,10 +1,12 @@
-import { Component, Event, EventEmitter, h, Listen, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import { Notice } from "smoothly"
 import { client } from "../../../client"
 import { model } from "../../../model"
-import { state } from "../../../State"
-
+import { Me } from "../../../State"
+import { Application } from "../../../State/Application"
+import { Listenable } from "../../../State/Listenable"
+import { Options } from "../../../State/Options"
 @Component({
 	tag: "userwidgets-change-password",
 	styleUrl: "style.css",
@@ -13,8 +15,16 @@ import { state } from "../../../State"
 export class ChangePassword {
 	@State() key?: model.userwidgets.User.Key
 	@Event() notice: EventEmitter<Notice>
+	@Prop() state: {
+		me: Me & Listenable<Me>
+		application: Application & Listenable<Application>
+		options: Options
+	}
 	async componentWillLoad(): Promise<void> {
-		state.me.listen("key", async key => (this.key = await key))
+		this.state.me.listen("key", async promise => {
+			const key = await promise
+			this.key = key ? key : undefined
+		})
 	}
 	@Listen("submit")
 	async handleSubmit(event: CustomEvent<{ old: string; new: string; repeat: string }>) {
