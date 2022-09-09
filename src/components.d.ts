@@ -50,6 +50,10 @@ export namespace Components {
 	};
     }
     interface UserwidgetsRegister {
+        "state": {
+		me: Me & Listenable<Me>
+		options: Options
+	};
     }
     interface UserwidgetsSetPassword {
         "user": model.userwidgets.User;
@@ -220,6 +224,10 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsRegister {
         "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
+        "state"?: {
+		me: Me & Listenable<Me>
+		options: Options
+	};
     }
     interface UserwidgetsSetPassword {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
