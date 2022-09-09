@@ -1,9 +1,10 @@
-import { Component, Event, EventEmitter, h, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
-import { state } from "../../State"
-
+import { Me } from "../../State"
+import { Listenable } from "../../State/Listenable"
+import { Options } from "../../State/Options"
 @Component({
 	tag: "userwidgets-register",
 	styleUrl: "style.css",
@@ -12,6 +13,10 @@ import { state } from "../../State"
 export class UserwidgetsRegister {
 	@State() tag?: model.userwidgets.User.Tag
 	@State() key?: model.userwidgets.User.Key
+	@Prop() state: {
+		me: Me & Listenable<Me>
+		options: Options
+	}
 	@Event() click: EventEmitter<void>
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
@@ -19,9 +24,9 @@ export class UserwidgetsRegister {
 		if (!this.tag)
 			window.location.href = window.origin
 		else {
-			state.options = { applicationId: this.tag.audience }
+			this.state.options = { applicationId: this.tag.audience }
 			if (this.tag.active)
-				state.me.join(this.tag)
+				this.state.me.join(this.tag)
 		}
 	}
 
@@ -30,7 +35,7 @@ export class UserwidgetsRegister {
 		event.stopPropagation()
 
 		this.tag &&
-			(await state.me.register(this.tag, {
+			(await this.state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
 					first: event.detail.first,
@@ -41,7 +46,7 @@ export class UserwidgetsRegister {
 					repeat: event.detail.repeat,
 				},
 			})) &&
-			(state.options = { user: this.tag.email }) &&
+			(this.state.options = { user: this.tag.email }) &&
 			(window.location.href = window.origin)
 	}
 
@@ -85,8 +90,8 @@ export class UserwidgetsRegister {
 							onClick={async e => {
 								e.preventDefault()
 								this.tag &&
-									(await state.me.join(this.tag).then(p => p)) &&
-									(await state.me.join(this.tag)) &&
+									(await this.state.me.join(this.tag).then(p => p)) &&
+									(await this.state.me.join(this.tag)) &&
 									(window.location.href = window.origin)
 							}}>
 							Login

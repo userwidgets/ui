@@ -24,7 +24,7 @@ export class Demo {
 						<userwidgets-login-trigger></userwidgets-login-trigger>
 					</smoothly-room>
 					<smoothly-room path="/register">
-						<userwidgets-register></userwidgets-register>
+						<userwidgets-register state={state}></userwidgets-register>
 					</smoothly-room>
 
 					<userwidgets-menu slot="header">
