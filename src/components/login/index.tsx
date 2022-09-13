@@ -27,6 +27,7 @@ export class UserwidgetsLogin {
 	}
 	async componentWillLoad(): Promise<void> {
 		this.state.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
+		window.sessionStorage.getItem("token") ?? new Promise<boolean>(resolve => (this.resolve = resolve))
 	}
 
 	render() {
