@@ -11,6 +11,7 @@ import { Me } from "./State";
 import { Listenable } from "./State/Listenable";
 import { Application } from "./State/Application";
 import { Options } from "./State/Options";
+import { Users } from "./State/Users";
 import { Me as Me1 } from "./State/Me";
 export namespace Components {
     interface UserwidgetsChangeName {
@@ -33,6 +34,7 @@ export namespace Components {
     interface UserwidgetsLoginDialog {
     }
     interface UserwidgetsLoginTrigger {
+        "state": { users: Listenable<Users> & Users };
     }
     interface UserwidgetsLogout {
         "state": {
@@ -206,6 +208,7 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
     }
     interface UserwidgetsLoginTrigger {
+        "state"?: { users: Listenable<Users> & Users };
     }
     interface UserwidgetsLogout {
         "state"?: {
