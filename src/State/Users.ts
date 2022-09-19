@@ -10,26 +10,24 @@ export class Users {
 		options.organizationId != this.#options?.organizationId && (this.#users = undefined)
 		this.#options = options
 	}
-	#users?: Promise<model.userwidgets.User[] | undefined>
+	#users?: Promise<model.userwidgets.User[] | false>
 	get users() {
 		return (
 			this.#users ??
-			(this.#self.users = this.#client.user
-				.list()
-				.then(response => (gracely.Error.is(response) ? undefined : response)))
+			(this.#self.users = this.#client.user.list().then(response => (gracely.Error.is(response) ? false : response)))
 		)
 	}
-	set users(users: Promise<model.userwidgets.User[] | undefined>) {
+	set users(users: Promise<model.userwidgets.User[] | false>) {
 		this.#users = users
 	}
 	#client: Client
 	#self: Users & Listenable<Users>
-	private constructor(listenable: Users & Listenable<Users>, client: Client) {
+	constructor(listenable: Users & Listenable<Users>, client: Client) {
 		this.#client = client
 		this.#self = listenable
 	}
 	static create(client: Client): Users & Listenable<Users> {
-		const listenable = new Listenable<Users>() as Users & Listenable<Users>
-		return Listenable.load(new this(listenable, client), listenable)
+		const self = new Listenable<Users>() as Users & Listenable<Users>
+		return Listenable.load(new this(self, client), self)
 	}
 }
