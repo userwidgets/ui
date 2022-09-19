@@ -18,18 +18,20 @@ export class State {
 		return this.#options
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
-		client.onUnauthorized = value
+		this.#client.onUnauthorized = value
 	}
 	readonly me: Listenable<Me> & Me
 	readonly users: Listenable<Users> & Users
 	readonly application: Listenable<Application> & Application
 	readonly version: Version
+	#client: Client
 	constructor(client: Client) {
 		this.me = Me.create(client)
 		this.users = Users.create(client)
 		this.application = Application.create(client, this.me)
 		this.version = new Version(client)
 		this.me.listen("options", options => (this.#options = options) && (this.users.options = this.#options))
+		this.#client = client
 	}
 }
 

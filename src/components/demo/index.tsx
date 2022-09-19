@@ -10,7 +10,7 @@ import { state } from "../../State"
 export class Demo {
 	componentWillLoad() {
 		state.options = {
-			applicationId: "issuefabApplicationId",
+			applicationId: "r7zH",
 		}
 	}
 	render() {

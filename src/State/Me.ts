@@ -1,6 +1,5 @@
 import * as gracely from "gracely"
 import { Client } from "../Client"
-import { client } from "../client"
 import { model } from "../model"
 import { Listenable } from "./Listenable"
 import { Options } from "./Options"
@@ -45,9 +44,9 @@ export class Me {
 				gracely.Error.is(key)
 					? false
 					: gracely.Result.is(key)
-					? !client.key
+					? !this.#client.key
 						? false
-						: model.userwidgets.User.Key.unpack(client.key).then(key =>
+						: model.userwidgets.User.Key.unpack(this.#client.key).then(key =>
 								key ? (this.#self.options = { applicationId: key?.audience, user: key?.email }) && key : false
 						  )
 					: key
@@ -80,13 +79,6 @@ export class Me {
 			(self.key = model.userwidgets.User.Key.unpack(client.key).then(key =>
 				key ? (self.options = { applicationId: key?.audience, user: key?.email }) && key : false
 			))
-		client.onUnauthorized = () => {
-			client.key &&
-				(self.key = model.userwidgets.User.Key.unpack(client.key).then(key =>
-					key ? (self.options = { applicationId: key?.audience, user: key?.email }) && key : false
-				))
-			return client.key ? new Promise(resolve => resolve(true)) : new Promise(resolve => resolve(false))
-		}
 		return self
 	}
 }
