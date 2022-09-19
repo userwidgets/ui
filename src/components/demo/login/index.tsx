@@ -1,5 +1,6 @@
-import { Component, h } from "@stencil/core"
-import { client } from "../../../client"
+import { Component, h, Prop } from "@stencil/core"
+import { Listenable } from "../../../State/Listenable"
+import { Users } from "../../../State/Users"
 
 @Component({
 	tag: "userwidgets-login-trigger",
@@ -7,9 +8,11 @@ import { client } from "../../../client"
 	scoped: true,
 })
 export class UserwidgetsLoginTrigger {
+	@Prop() state: { users: Listenable<Users> & Users }
 	componentWillLoad() {
-		client.user.list()
+		this.state.users.listen("users", () => undefined)
 	}
+
 	render() {
 		return <p>Attempting to change name to trigger login</p>
 	}
