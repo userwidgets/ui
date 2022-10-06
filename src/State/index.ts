@@ -36,4 +36,14 @@ export class State {
 }
 
 export const state = new State(client)
+
+const appUrl = new URL(window.location.href)
+let applicationId: string | undefined
+try {
+	applicationId = appUrl.searchParams.get("applicationId") ?? process.env.applicationId ?? window.origin
+} catch (e) {
+	applicationId = undefined
+}
+state.options = { applicationId: applicationId }
+
 export { Me, Users, Version }
