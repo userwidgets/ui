@@ -1,5 +1,6 @@
-import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
+import { Component, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
+import { redirect } from "smoothly"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
 import { Me } from "../../State"
@@ -17,12 +18,12 @@ export class UserwidgetsRegister {
 		me: Me & Listenable<Me>
 		options: Options
 	}
-	@Event() click: EventEmitter<void>
+
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
 		this.tag = await model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
 		if (!this.tag)
-			window.location.href = window.origin
+			redirect(window.origin)
 		else {
 			this.state.options = { applicationId: this.tag.audience }
 			if (this.tag.active)
@@ -47,7 +48,7 @@ export class UserwidgetsRegister {
 				},
 			})) &&
 			(this.state.options = { user: this.tag.email }) &&
-			(window.location.href = window.origin)
+			redirect(window.origin)
 	}
 
 	render() {
@@ -92,7 +93,7 @@ export class UserwidgetsRegister {
 								this.tag &&
 									(await this.state.me.join(this.tag).then(p => p)) &&
 									(await this.state.me.join(this.tag)) &&
-									(window.location.href = window.origin)
+									redirect(window.origin)
 							}}>
 							Login
 						</a>
