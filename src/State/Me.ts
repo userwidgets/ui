@@ -56,10 +56,10 @@ export class Me {
 		return response ? response : false
 	}
 	logout(): void {
-		this.#self.options = { organizationId: undefined, user: undefined }
-		this.key = undefined
-		this.#client.key = undefined
 		window.sessionStorage.clear()
+		this.#client.key = undefined
+		this.key = undefined
+		this.#self.options = { organizationId: undefined, user: undefined }
 	}
 	async register(
 		tag: model.userwidgets.User.Tag,
