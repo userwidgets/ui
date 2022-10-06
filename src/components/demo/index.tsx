@@ -8,11 +8,6 @@ import { state } from "../../State"
 	scoped: true,
 })
 export class Demo {
-	componentWillLoad() {
-		state.options = {
-			applicationId: "r7zH",
-		}
-	}
 	render() {
 		return (
 			<userwidgets-login state={state}>
