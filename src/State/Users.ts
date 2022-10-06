@@ -8,7 +8,7 @@ export class Users {
 	#options: Options = {}
 	set options(options: Options) {
 		options.organizationId != this.#options?.organizationId && (this.#users = undefined)
-		this.#options = options
+		this.#options = { ...options }
 	}
 	#users?: Promise<model.userwidgets.User[] | false>
 	get users() {
