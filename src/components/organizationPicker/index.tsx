@@ -1,5 +1,5 @@
 import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
-import { OptionType } from "smoothly"
+import { Option } from "smoothly"
 import { model } from "../../model"
 import { Me } from "../../State"
 import { Application } from "../../State/Application"
@@ -52,7 +52,7 @@ export class UserwidgetsOrganizationPicker {
 	}
 
 	@Listen("menuClose")
-	handleMenuClose(event: CustomEvent<OptionType[]>) {
+	handleMenuClose(event: CustomEvent<Option[]>) {
 		this.state.options = { organizationId: event.detail[0].value }
 		event.stopPropagation()
 	}
