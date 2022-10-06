@@ -79,10 +79,6 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
 }
-export interface UserwidgetsRegisterCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsRegisterElement;
-}
 export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsSetPasswordElement;
@@ -226,7 +222,6 @@ declare namespace LocalJSX {
 	};
     }
     interface UserwidgetsRegister {
-        "onClick"?: (event: UserwidgetsRegisterCustomEvent<void>) => void;
         "state"?: {
 		me: Me & Listenable<Me>
 		options: Options

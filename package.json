@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "@userwidgets/model": "^0.0.22",
-    "cloudly-http": "^0.0.52",
+    "cloudly-http": "^0.0.50",
     "cloudly-rest": "^0.0.15",
     "gracely": "^2.0.3",
     "isoly": "^2.0.12",
