@@ -30,7 +30,7 @@ export class State {
 		this.users = Users.create(client)
 		this.application = Application.create(client, this.me)
 		this.version = new Version(client)
-		this.me.listen("options", options => (this.#options = options) && (this.users.options = this.#options))
+		this.me.listen("options", options => (this.#options = { ...options }) && (this.users.options = this.#options))
 		this.#client = client
 	}
 }
