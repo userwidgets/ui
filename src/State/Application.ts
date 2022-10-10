@@ -9,7 +9,7 @@ export class Application {
 	#options: Options = {}
 	set options(options: Options) {
 		options.applicationId != this.#options?.applicationId && (this.#application = undefined)
-		this.#options = { ...options}
+		this.#options = { ...options }
 	}
 	#application?: Promise<model.userwidgets.Application | false>
 	get application() {
