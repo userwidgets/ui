@@ -16,7 +16,7 @@ export class UserwidgetsMenu {
 		return (
 			<div>
 				<smoothly-button fill="solid" color="primary" onClick={() => this.handleClick()}>
-					<smoothly-icon name="menu"></smoothly-icon>
+					<smoothly-icon name="person-sharp"></smoothly-icon>
 				</smoothly-button>
 				<div class="menu">
 					<div>
