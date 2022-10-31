@@ -36,6 +36,7 @@ export class UserwidgetsRegister {
 		event.stopPropagation()
 
 		this.tag &&
+			event.detail.new == event.detail.repeat && // should we give an error message to the user?
 			(await this.state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
