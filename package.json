@@ -65,11 +65,11 @@
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "eslint": "^8.24.0",
-    "eslint-plugin-prettierx": "github:utily/eslint-plugin-prettierx#utily-20220323",
+    "eslint-plugin-prettierx": "github:utily/eslint-plugin-prettierx#utily-20221021",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "jest": "^29.1.2",
     "jest-cli": "^29.1.2",
-    "prettierx": "github:utily/prettierx#utily-20220323",
+    "prettierx": "github:utily/prettierx#utily-20221021",
     "puppeteer": "^18.2.0",
     "rimraf": "^3.0.2",
     "rollup-plugin-dotenv": "^0.4.0",
@@ -77,7 +77,7 @@
     "tslib": "^2.4.0"
   },
   "dependencies": {
-    "@userwidgets/model": "^0.0.22",
+    "@userwidgets/model": "^0.0.23",
     "cloudly-http": "^0.0.50",
     "cloudly-rest": "^0.0.15",
     "gracely": "^2.0.3",
