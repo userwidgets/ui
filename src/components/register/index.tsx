@@ -34,9 +34,8 @@ export class UserwidgetsRegister {
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
 		event.preventDefault()
 		event.stopPropagation()
-
 		this.tag &&
-			event.detail.new == event.detail.repeat && // should we give an error message to the user?
+			model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat }) &&
 			(await this.state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
