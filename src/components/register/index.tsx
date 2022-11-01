@@ -1,6 +1,6 @@
-import { Component, h, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
-import { redirect } from "smoothly"
+import { Notice, redirect } from "smoothly"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
 import { Me } from "../../State"
@@ -18,6 +18,7 @@ export class UserwidgetsRegister {
 		me: Me & Listenable<Me>
 		options: Options
 	}
+	@Event() notice: EventEmitter<Notice>
 
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
@@ -35,7 +36,11 @@ export class UserwidgetsRegister {
 		event.preventDefault()
 		event.stopPropagation()
 		this.tag &&
-			model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat }) &&
+			(!model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
+				? this.notice.emit(
+						Notice.warn("Password and Repeat password must be identical and at least 6 characters long.")
+				  )
+				: true) &&
 			(await this.state.me.register(this.tag, {
 				user: this.tag.email,
 				name: {
