@@ -35,25 +35,21 @@ export class UserwidgetsRegister {
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
 		event.preventDefault()
 		event.stopPropagation()
-		this.tag &&
-			(!model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
-				? this.notice.emit(
-						Notice.warn("Password and Repeat password must be identical and at least 6 characters long.")
-				  )
-				: true) &&
-			(await this.state.me.register(this.tag, {
-				user: this.tag.email,
-				name: {
-					first: event.detail.first,
-					last: event.detail.last,
-				},
-				password: {
-					new: event.detail.new,
-					repeat: event.detail.repeat,
-				},
-			})) &&
-			(this.state.options = { user: this.tag.email }) &&
-			redirect(window.origin)
+		!this.tag || !model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
+			? this.notice.emit(Notice.warn("Password and Repeat password must be identical and at least 6 characters long."))
+			: (await this.state.me.register(this.tag, {
+					user: this.tag.email,
+					name: {
+						first: event.detail.first,
+						last: event.detail.last,
+					},
+					password: {
+						new: event.detail.new,
+						repeat: event.detail.repeat,
+					},
+			  })) &&
+			  (this.state.options = { user: this.tag.email }) &&
+			  redirect(window.origin)
 	}
 
 	render() {
