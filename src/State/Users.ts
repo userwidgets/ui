@@ -10,14 +10,14 @@ export class Users {
 		options.organizationId != this.#options?.organizationId && (this.#users = undefined)
 		this.#options = { ...options }
 	}
-	#users?: Promise<model.userwidgets.User[] | false>
+	#users?: Promise<model.userwidgets.User.Readable[] | false>
 	get users() {
 		return (
 			this.#users ??
 			(this.#self.users = this.#client.user.list().then(response => (gracely.Error.is(response) ? false : response)))
 		)
 	}
-	set users(users: Promise<model.userwidgets.User[] | false>) {
+	set users(users: Promise<model.userwidgets.User.Readable[] | false>) {
 		this.#users = users
 	}
 	#client: Client
