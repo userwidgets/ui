@@ -32,22 +32,24 @@ export class UserwidgetsOrganizationPicker {
 	@Watch("application")
 	handelApplicationChange() {
 		this.application?.organizations &&
-			(this.organizations = Object.values(this.application.organizations).map(({ name, id }) => ({
-				name: name,
-				value: id,
-			})))
+			(this.organizations = Object.values(this.application.organizations)
+				.sort(({ permissions: a }, { permissions: b }) => Object.keys(b).length - Object.keys(a).length)
+				.map(({ name, id }) => ({
+					name: name,
+					value: id,
+				})))
 		this.organizations?.length && (this.state.options = { organizationId: this.organizations[0].value })
 	}
 	componentWillLoad() {
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
-		})
 		new Promise(resolve => (this.receivedKey = resolve)).then(() => {
 			this.state.application.listen("application", async promise => {
 				const application = await promise
 				this.application = application ? application : undefined
 			})
+		})
+		this.state.me.listen("key", async promise => {
+			const key = await promise
+			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
 		})
 	}
 
