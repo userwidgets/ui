@@ -1,0 +1,13 @@
+:host > form {
+	display: contents;
+}
+
+:host {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.inputs {
+	display: flex;
+}
