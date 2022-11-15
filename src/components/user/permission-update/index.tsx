@@ -23,13 +23,13 @@ function nest<T extends Record<string, any>>(target: T, [head, ...tail]: string[
 	)
 }
 
-interface CustomOption {
+export interface CustomOption {
 	name: string
 	value: string[]
 }
 
 @Component({
-	tag: "userwidgets-permissions-update",
+	tag: "userwidgets-user-permissions-update",
 	styleUrl: "style.css",
 	scoped: true,
 })
@@ -42,7 +42,7 @@ export class UserwidgetsPermissionUpdate {
 	@State() selectedOptions?: model.userwidgets.User.Permissions.Readable
 	@State() key?: model.userwidgets.User.Key
 	@State() organizationId?: string
-	@Event() onUserPermissionUpdated: EventEmitter<model.userwidgets.User.Permissions.Readable>
+	@Event() userPermissionUpdated: EventEmitter<model.userwidgets.User.Permissions.Readable>
 
 	@Watch("key")
 	@Watch("organizationId")

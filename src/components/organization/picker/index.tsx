@@ -1,10 +1,10 @@
 import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
 import { Option } from "smoothly"
-import { model } from "../../model"
-import { Me } from "../../State"
-import { Application } from "../../State/Application"
-import { Listenable } from "../../State/Listenable"
-import { Options } from "../../State/Options"
+import { model } from "../../../model"
+import { Me } from "../../../State"
+import { Application } from "../../../State/Application"
+import { Listenable } from "../../../State/Listenable"
+import { Options } from "../../../State/Options"
 @Component({
 	tag: "userwidgets-organization-picker",
 	styleUrl: "style.css",
