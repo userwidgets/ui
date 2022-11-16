@@ -29,7 +29,7 @@ export class Application {
 	#client: Client
 	#self: Application & Listenable<Application>
 	#me: Me & Listenable<Me>
-	constructor(listenable: Application & Listenable<Application>, client: Client, me: Me & Listenable<Me>) {
+	private constructor(listenable: Application & Listenable<Application>, client: Client, me: Me & Listenable<Me>) {
 		this.#client = client
 		this.#self = listenable
 		this.#me = me

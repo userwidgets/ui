@@ -13,8 +13,10 @@ import { Application } from "./State/Application";
 import { Options } from "./State/Options";
 import { User } from "./State/User";
 import { Me as Me1 } from "./State/Me";
-import { StateType } from "./components/user/list/index";
+import { StateType } from "./components/organization/user-remove/index";
+import { StateType as StateType1 } from "./components/user/list/index";
 import { CustomOption } from "./components/user/permission-update/index";
+import { StateType as StateType2 } from "./components/user/status/index";
 export namespace Components {
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
@@ -53,7 +55,9 @@ export namespace Components {
 		options: Options
 	};
     }
-    interface UserwidgetsOrganizationUserDelete {
+    interface UserwidgetsOrganizationUserRemove {
+        "state": StateType;
+        "user": model.userwidgets.User;
     }
     interface UserwidgetsRegister {
         "state": {
@@ -63,8 +67,6 @@ export namespace Components {
     }
     interface UserwidgetsSetPassword {
         "user": model.userwidgets.User;
-    }
-    interface UserwidgetsUserDelete {
     }
     interface UserwidgetsUserList {
         "state": StateType;
@@ -76,6 +78,8 @@ export namespace Components {
         "user": model.userwidgets.User.Readable;
     }
     interface UserwidgetsUserStatus {
+        "state": StateType;
+        "user": model.userwidgets.User.Readable;
     }
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
@@ -167,11 +171,11 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationPickerElement;
         new (): HTMLUserwidgetsOrganizationPickerElement;
     };
-    interface HTMLUserwidgetsOrganizationUserDeleteElement extends Components.UserwidgetsOrganizationUserDelete, HTMLStencilElement {
+    interface HTMLUserwidgetsOrganizationUserRemoveElement extends Components.UserwidgetsOrganizationUserRemove, HTMLStencilElement {
     }
-    var HTMLUserwidgetsOrganizationUserDeleteElement: {
-        prototype: HTMLUserwidgetsOrganizationUserDeleteElement;
-        new (): HTMLUserwidgetsOrganizationUserDeleteElement;
+    var HTMLUserwidgetsOrganizationUserRemoveElement: {
+        prototype: HTMLUserwidgetsOrganizationUserRemoveElement;
+        new (): HTMLUserwidgetsOrganizationUserRemoveElement;
     };
     interface HTMLUserwidgetsRegisterElement extends Components.UserwidgetsRegister, HTMLStencilElement {
     }
@@ -184,12 +188,6 @@ declare global {
     var HTMLUserwidgetsSetPasswordElement: {
         prototype: HTMLUserwidgetsSetPasswordElement;
         new (): HTMLUserwidgetsSetPasswordElement;
-    };
-    interface HTMLUserwidgetsUserDeleteElement extends Components.UserwidgetsUserDelete, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsUserDeleteElement: {
-        prototype: HTMLUserwidgetsUserDeleteElement;
-        new (): HTMLUserwidgetsUserDeleteElement;
     };
     interface HTMLUserwidgetsUserListElement extends Components.UserwidgetsUserList, HTMLStencilElement {
     }
@@ -220,10 +218,9 @@ declare global {
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-menu": HTMLUserwidgetsMenuElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
-        "userwidgets-organization-user-delete": HTMLUserwidgetsOrganizationUserDeleteElement;
+        "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
         "userwidgets-register": HTMLUserwidgetsRegisterElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
-        "userwidgets-user-delete": HTMLUserwidgetsUserDeleteElement;
         "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
         "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
@@ -272,7 +269,9 @@ declare namespace LocalJSX {
 		options: Options
 	};
     }
-    interface UserwidgetsOrganizationUserDelete {
+    interface UserwidgetsOrganizationUserRemove {
+        "state"?: StateType;
+        "user"?: model.userwidgets.User;
     }
     interface UserwidgetsRegister {
         "onNotice"?: (event: UserwidgetsRegisterCustomEvent<Notice>) => void;
@@ -285,8 +284,6 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
         "user"?: model.userwidgets.User;
     }
-    interface UserwidgetsUserDelete {
-    }
     interface UserwidgetsUserList {
         "state"?: StateType;
     }
@@ -298,6 +295,8 @@ declare namespace LocalJSX {
         "user"?: model.userwidgets.User.Readable;
     }
     interface UserwidgetsUserStatus {
+        "state"?: StateType;
+        "user"?: model.userwidgets.User.Readable;
     }
     interface IntrinsicElements {
         "userwidgets-change-name": UserwidgetsChangeName;
@@ -310,10 +309,9 @@ declare namespace LocalJSX {
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-menu": UserwidgetsMenu;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
-        "userwidgets-organization-user-delete": UserwidgetsOrganizationUserDelete;
+        "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
         "userwidgets-register": UserwidgetsRegister;
         "userwidgets-set-password": UserwidgetsSetPassword;
-        "userwidgets-user-delete": UserwidgetsUserDelete;
         "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
         "userwidgets-user-status": UserwidgetsUserStatus;
@@ -333,10 +331,9 @@ declare module "@stencil/core" {
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-menu": LocalJSX.UserwidgetsMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMenuElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
-            "userwidgets-organization-user-delete": LocalJSX.UserwidgetsOrganizationUserDelete & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserDeleteElement>;
+            "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
             "userwidgets-register": LocalJSX.UserwidgetsRegister & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
-            "userwidgets-user-delete": LocalJSX.UserwidgetsUserDelete & JSXBase.HTMLAttributes<HTMLUserwidgetsUserDeleteElement>;
             "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
             "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;

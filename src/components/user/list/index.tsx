@@ -44,7 +44,7 @@ export class UserwidgetsUserList {
 							<div class={"table"}>
 								<userwidgets-user-status></userwidgets-user-status>
 								<userwidgets-user-permissions-update></userwidgets-user-permissions-update>
-								<userwidgets-user-delete></userwidgets-user-delete>
+								<userwidgets-organization-user-remove></userwidgets-organization-user-remove>
 							</div>
 						</div>
 					</smoothly-table-expandable-row>

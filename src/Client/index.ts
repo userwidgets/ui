@@ -1,5 +1,4 @@
 import * as gracely from "gracely"
-import * as isoly from "isoly"
 import * as model from "@userwidgets/model"
 import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
@@ -9,19 +8,6 @@ import { Organization } from "./Organization"
 import { Seed } from "./Seed"
 import { User } from "./User"
 import { Version } from "./Version"
-
-class HttpClient<Error> extends http.Client<Error> {
-	private entityTag: isoly.DateTime
-	protected async preProcess(request: http.Request): Promise<http.Request> {
-		return ["PUT", "PATCH"].includes(request.method)
-			? { ...request, header: { ...request.header, ifMatch: [this.entityTag] } }
-			: request
-	}
-	protected async postProcess(response: http.Response): Promise<http.Response> {
-		this.entityTag = isoly.DateTime.now()
-		return response
-	}
-}
 
 export class Client extends rest.Client<gracely.Error> {
 	readonly version = new Version(this.client)
@@ -35,7 +21,7 @@ export class Client extends rest.Client<gracely.Error> {
 		key?: string,
 		load?: (connection: http.Client) => T
 	): Client & T {
-		const client = new HttpClient<Error>(url, key)
+		const client = new http.Client<Error>(url, key)
 		const result = new this(client)
 		if (load)
 			Object.assign(result, load(client))

@@ -18,17 +18,15 @@ export class User {
 	}
 	#client: Client
 	#self: User & Listenable<User>
-	constructor(listenable: User & Listenable<User>, client: Client) {
+	private constructor(listenable: User & Listenable<User>, client: Client) {
 		this.#client = client
 		this.#self = listenable
 	}
-
 	async fetch(): Promise<model.userwidgets.User.Readable[] | false> {
 		return (this.#self.users = this.#client.user
 			.list()
 			.then(response => (gracely.Error.is(response) ? false : response)))
 	}
-
 	async updatePermissions(
 		permissions: model.userwidgets.User.Permissions.Readable
 	): Promise<model.userwidgets.User.Readable | false> {
