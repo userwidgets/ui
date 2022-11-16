@@ -9,7 +9,8 @@ export class Organization {
 		return this.#options
 	}
 	set options(options: Options) {
-		this.#options.applicationId != options.applicationId && ((this.options = { ...options }), this.fetch())
+		this.#options.organizationId != options.organizationId &&
+			((this.#options = { ...options }), this.#organizations && this.fetch())
 	}
 	#organizations?: Promise<model.userwidgets.Organization[] | false>
 	get organizations(): Promise<model.userwidgets.Organization[] | false> | undefined {

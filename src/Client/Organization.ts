@@ -23,7 +23,7 @@ export class Organization extends rest.Collection<gracely.Error> {
 		return result
 	}
 	async list(): Promise<model.Organization[] | gracely.Error> {
-		const result = await this.client.get<model.Organization[]>(`organization/`)
+		const result = await this.client.get<model.Organization[]>(`organization`)
 		!gracely.Error.is(result) &&
 			result.reduce(
 				(entityTags, organization) => ((entityTags[organization.id] = isoly.DateTime.now()), entityTags),

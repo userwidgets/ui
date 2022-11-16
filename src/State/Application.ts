@@ -7,20 +7,20 @@ import { Options } from "./Options"
 
 export class Application {
 	#options: Options = {}
+	get options(): Options {
+		return this.#options
+	}
 	set options(options: Options) {
-		options.applicationId != this.#options?.applicationId && (this.#application = undefined)
-		this.#options = { ...options }
+		options.applicationId != this.#options?.applicationId &&
+			((this.#options = { ...options }),
+			this.#application && this.#options.applicationId && this.fetch(),
+			(this.#application = undefined))
 	}
 	#application?: Promise<model.userwidgets.Application | false>
-	get application() {
-		return (
-			this.#application ??
-			(this.#self.application = this.#client.application
-				.fetch()
-				.then(response => (gracely.Error.is(response) ? false : response)))
-		)
+	get application(): Promise<model.userwidgets.Application | false> | undefined {
+		return this.#application ?? this.fetch()
 	}
-	set application(application: Promise<model.userwidgets.Application | false>) {
+	set application(application: Promise<model.userwidgets.Application | false> | undefined) {
 		this.#application = application
 	}
 	get me(): Me & Listenable<Me> {
@@ -33,6 +33,11 @@ export class Application {
 		this.#client = client
 		this.#self = listenable
 		this.#me = me
+	}
+	fetch(): Promise<model.userwidgets.Application | false> | undefined {
+		return (this.#self.application = this.#client.application
+			.fetch()
+			.then(response => (gracely.Error.is(response) ? false : response)))
 	}
 	static create(client: Client, me: Me & Listenable<Me>): Application & Listenable<Application> {
 		const self = new Listenable<Application>() as Application & Listenable<Application>

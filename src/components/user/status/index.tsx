@@ -1,13 +1,11 @@
 import { Component, ComponentWillLoad, h, Prop, State } from "@stencil/core"
 import { model } from "../../../model"
-import { Me, Organization, User } from "../../../State"
+import { Organization } from "../../../State"
 import { Listenable } from "../../../State/Listenable"
 import { Options } from "../../../State/Options"
 
 interface StateInterface {
-	user: User & Listenable<User>
 	options: Options
-	me: Me & Listenable<Me>
 	organization: Organization & Listenable<Organization>
 }
 
@@ -24,6 +22,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() organizationId?: string
 	componentWillLoad(): void | Promise<void> {
+		console.log("status loaded?")
 		this.state.organization.listen("organizations", async promise => {
 			const organizations = await promise
 			this.organizations = !organizations ? undefined : organizations

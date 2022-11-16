@@ -25,6 +25,10 @@ export class UserwidgetsOrganizationUserRemove {
 	}
 
 	render() {
-		return <smoothly-button onClick={() => this.handleClick()}>Delete</smoothly-button>
+		return (
+			<form>
+				<smoothly-button onClick={() => this.handleClick()}>Delete</smoothly-button>
+			</form>
+		)
 	}
 }
