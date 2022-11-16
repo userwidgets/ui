@@ -77,8 +77,6 @@ export namespace Components {
     }
     interface UserwidgetsUserStatus {
     }
-    interface UserwidgetsVersion {
-    }
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -211,12 +209,6 @@ declare global {
         prototype: HTMLUserwidgetsUserStatusElement;
         new (): HTMLUserwidgetsUserStatusElement;
     };
-    interface HTMLUserwidgetsVersionElement extends Components.UserwidgetsVersion, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsVersionElement: {
-        prototype: HTMLUserwidgetsVersionElement;
-        new (): HTMLUserwidgetsVersionElement;
-    };
     interface HTMLElementTagNameMap {
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
         "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
@@ -235,7 +227,6 @@ declare global {
         "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
         "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
-        "userwidgets-version": HTMLUserwidgetsVersionElement;
     }
 }
 declare namespace LocalJSX {
@@ -308,8 +299,6 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsUserStatus {
     }
-    interface UserwidgetsVersion {
-    }
     interface IntrinsicElements {
         "userwidgets-change-name": UserwidgetsChangeName;
         "userwidgets-change-password": UserwidgetsChangePassword;
@@ -328,7 +317,6 @@ declare namespace LocalJSX {
         "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
         "userwidgets-user-status": UserwidgetsUserStatus;
-        "userwidgets-version": UserwidgetsVersion;
     }
 }
 export { LocalJSX as JSX };
@@ -352,7 +340,6 @@ declare module "@stencil/core" {
             "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
             "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;
-            "userwidgets-version": LocalJSX.UserwidgetsVersion & JSXBase.HTMLAttributes<HTMLUserwidgetsVersionElement>;
         }
     }
 }
