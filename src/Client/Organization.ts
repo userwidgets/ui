@@ -1,56 +1,67 @@
 import * as gracely from "gracely"
 import * as isoly from "isoly"
-import * as model from "@userwidgets/model"
+import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
+import { model } from "../model"
 
 export class Organization extends rest.Collection<gracely.Error> {
-	entityTags: Record<string, isoly.DateTime | undefined> = {}
+	constructor(client: http.Client, private readonly entityTags: model.EntityTags) {
+		super(client)
+	}
 	async create(
-		organization: model.Organization.Creatable,
+		organization: model.userwidgets.Organization.Creatable,
 		applicationId: string
-	): Promise<model.Organization | gracely.Error> {
-		const result = await this.client.post<model.Organization>("organization", organization, {
+	): Promise<model.userwidgets.Organization | gracely.Error> {
+		const result = await this.client.post<model.userwidgets.Organization>("organization", organization, {
 			application: applicationId,
 		})
-		!gracely.Error.is(result) && (this.entityTags[result.id] = isoly.DateTime.now())
+		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
-	async fetch(organizationId: string, applicationId: string): Promise<model.Organization | gracely.Error> {
-		const result = await this.client.get<model.Organization>(`organization/${organizationId}`, {
+	async fetch(organizationId: string, applicationId: string): Promise<model.userwidgets.Organization | gracely.Error> {
+		const result = await this.client.get<model.userwidgets.Organization>(`organization/${organizationId}`, {
 			application: applicationId,
 		})
-		!gracely.Error.is(result) && (this.entityTags[result.id] = isoly.DateTime.now())
+		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
-	async list(): Promise<model.Organization[] | gracely.Error> {
-		const result = await this.client.get<model.Organization[]>(`organization`)
+	async list(): Promise<model.userwidgets.Organization[] | gracely.Error> {
+		const result = await this.client.get<model.userwidgets.Organization[]>(`organization`)
 		!gracely.Error.is(result) &&
 			result.reduce(
-				(entityTags, organization) => ((entityTags[organization.id] = isoly.DateTime.now()), entityTags),
+				(entityTags, organization) => ((entityTags.organization[organization.id] = isoly.DateTime.now()), entityTags),
 				this.entityTags
 			)
 		return result
 	}
 	async changeName(
 		organizationId: string,
-		organization: model.Organization.Creatable,
+		organization: model.userwidgets.Organization.Creatable,
 		applicationId: string
-	): Promise<model.Organization | gracely.Error> {
-		const entityTag = this.entityTags[organizationId]
-		const result = await this.client.put<model.Organization>(`organization/${organizationId}/name`, organization, {
-			...(entityTag && { ifMatch: [entityTag] }),
-			application: applicationId,
-		})
-		!gracely.Error.is(result) && (this.entityTags[result.id] = isoly.DateTime.now())
+	): Promise<model.userwidgets.Organization | gracely.Error> {
+		const entityTag = this.entityTags.organization[organizationId]
+		const result = await this.client.put<model.userwidgets.Organization>(
+			`organization/${organizationId}/name`,
+			organization,
+			{
+				...(entityTag && { ifMatch: [entityTag] }),
+				application: applicationId,
+			}
+		)
+		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
 	async removeUser(organizationId: string, email: string) {
-		const entityTag = this.entityTags[organizationId]
-		const result = await this.client.delete<model.Organization>(`organization/${organizationId}/user/${email}`, {
-			...(entityTag && { ifMatch: [entityTag] }),
-		})
-		!gracely.Error.is(result) &&
-			(this.entityTags = (({ [organizationId]: _, ...entityTags }) => entityTags)(this.entityTags))
+		const entityTag = this.entityTags.organization[organizationId]
+		console.log("used entityTag:", entityTag)
+		const result = await this.client.delete<model.userwidgets.Organization>(
+			`organization/${organizationId}/user/${email}`,
+			{
+				...(entityTag && { ifMatch: [entityTag] }),
+			}
+		)
+		!gracely.Error.is(result) && (this.entityTags.organization[organizationId] = isoly.DateTime.now())
+		console.log(this.entityTags)
 		return result
 	}
 }

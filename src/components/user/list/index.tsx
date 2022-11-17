@@ -22,11 +22,16 @@ export type StateType = StateInterface & Listenable<StateInterface>
 export class UserwidgetsUserList {
 	@Prop() state: StateType
 	@State() users?: model.userwidgets.User.Readable[]
+	@State() key?: model.userwidgets.User.Key
 
 	componentWillLoad() {
 		this.state.user.listen("users", async promise => {
 			const users = await promise
-			this.users = users ? users : undefined
+			this.users = !users ? undefined : users
+		})
+		this.state.me.listen("key", async promise => {
+			const key = await promise
+			this.key = !key ? undefined : key
 		})
 	}
 	render() {
@@ -38,15 +43,20 @@ export class UserwidgetsUserList {
 					<smoothly-table-header></smoothly-table-header>
 				</smoothly-table-row>
 				{this.users?.map(user => (
-					<smoothly-table-expandable-row>
+					/*user.email == this.key?.email ? null :*/ <smoothly-table-expandable-row>
 						<smoothly-table-cell>{[user.name.first, user.name.last].join(" ")}</smoothly-table-cell>
 						<smoothly-table-cell>{user.email}</smoothly-table-cell>
 						<div class={"detail"} slot="detail">
 							<slot name={user.email}></slot>
 							<div class={"table"}>
 								<userwidgets-user-status state={this.state} user={user}></userwidgets-user-status>
-								<userwidgets-user-permissions-update></userwidgets-user-permissions-update>
-								<userwidgets-organization-user-remove class={"right"}></userwidgets-organization-user-remove>
+								<userwidgets-user-permissions-update
+									state={this.state}
+									user={user}></userwidgets-user-permissions-update>
+								<userwidgets-organization-user-remove
+									state={this.state}
+									user={user}
+									class={"right"}></userwidgets-organization-user-remove>
 							</div>
 						</div>
 					</smoothly-table-expandable-row>

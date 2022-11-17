@@ -2,6 +2,7 @@ import { Client } from "../Client"
 import { model } from "../model"
 import { Listenable } from "./Listenable"
 import { Options } from "./Options"
+import { User } from "./User"
 
 export class Organization {
 	#options: Options = {}
@@ -21,9 +22,15 @@ export class Organization {
 	}
 	#client: Client
 	#self: Organization & Listenable<Organization>
-	private constructor(listenable: Organization & Listenable<Organization>, client: Client) {
+	#user: User & Listenable<User>
+	private constructor(
+		listenable: Organization & Listenable<Organization>,
+		client: Client,
+		user: User & Listenable<User>
+	) {
 		this.#self = listenable
 		this.#client = client
+		this.#user = user
 	}
 	fetch(): Promise<model.userwidgets.Organization[] | false> | undefined {
 		return (this.#self.organizations = !this.#options.applicationId
@@ -32,16 +39,19 @@ export class Organization {
 	}
 
 	async removeUser(email: string): Promise<model.userwidgets.Organization | false | undefined> {
-		return !this.#options.organizationId
+		const result = !this.#options.organizationId
 			? undefined
 			: this.#client.organization
 					.removeUser(this.#options.organizationId, email)
 					.then(response => (!model.userwidgets.Organization.is(response) ? false : response))
+		const response = await result
+		response && this.#user.fetch()
+		return result
 	}
 
-	static create(client: Client): Organization & Listenable<Organization> {
+	static create(client: Client, user: User & Listenable<User>): Organization & Listenable<Organization> {
 		const self = new Listenable<Organization>() as Organization & Listenable<Organization>
-		return Listenable.load(new this(self, client), self)
+		return Listenable.load(new this(self, client, user), self)
 	}
 }
 

@@ -31,10 +31,10 @@ export class User {
 		permissions: model.userwidgets.User.Permissions.Readable
 	): Promise<model.userwidgets.User.Readable | false> {
 		const response =
-			!this.options.user || !this.#options.organizationId
+			!this.#options.user || !this.#options.organizationId
 				? false
 				: await this.#client.user
-						.updatePermissions(this.options.user, this.#options.organizationId, permissions)
+						.updatePermissions(this.#options.user, this.#options.organizationId, permissions)
 						.then(response => (model.userwidgets.User.Readable.is(response) ? response : false))
 		response && this.fetch()
 		return response

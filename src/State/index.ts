@@ -33,7 +33,7 @@ export class State {
 	private constructor(listenable: State & Listenable<State>, client: Client) {
 		this.me = Me.create(client)
 		this.user = User.create(client)
-		this.organization = Organization.create(client)
+		this.organization = Organization.create(client, this.user)
 		this.application = Application.create(client, this.me)
 		this.version = new Version(client)
 		this.#self = listenable

@@ -18,15 +18,16 @@ export type StateType = StateInterface & Listenable<StateInterface>
 })
 export class UserwidgetsOrganizationUserRemove {
 	@Prop() state: StateType
-	@Prop() user: model.userwidgets.User
+	@Prop() user: model.userwidgets.User.Readable
 
 	handleClick() {
+		console.log("remove user")
 		this.state.organization.removeUser(this.user.email)
 	}
 
 	render() {
 		return (
-			<form>
+			<form onSubmit={event => event.preventDefault()}>
 				<smoothly-button onClick={() => this.handleClick()}>Delete</smoothly-button>
 			</form>
 		)

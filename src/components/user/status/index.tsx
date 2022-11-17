@@ -22,7 +22,6 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() organizationId?: string
 	componentWillLoad(): void | Promise<void> {
-		console.log("status loaded?")
 		this.state.organization.listen("organizations", async promise => {
 			const organizations = await promise
 			this.organizations = !organizations ? undefined : organizations

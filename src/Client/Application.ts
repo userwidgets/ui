@@ -1,12 +1,23 @@
 import * as gracely from "gracely"
-import * as model from "@userwidgets/model"
+import * as isoly from "isoly"
+import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
+import { model } from "../model"
 
 export class Application extends rest.Collection<gracely.Error> {
-	async create(application: model.Application.Creatable): Promise<model.Application | gracely.Error> {
-		return await this.client.post<model.Application>("application", application)
+	constructor(client: http.Client, private readonly entityTags: model.EntityTags) {
+		super(client)
 	}
-	async fetch(): Promise<model.Application | gracely.Error> {
-		return await this.client.get<model.Application>(`application`)
+	async create(
+		application: model.userwidgets.Application.Creatable
+	): Promise<model.userwidgets.Application | gracely.Error> {
+		const result = await this.client.post<model.userwidgets.Application>("application", application)
+		!gracely.Error.is(result) && (this.entityTags.application[result.id] = isoly.DateTime.now())
+		return result
+	}
+	async fetch(): Promise<model.userwidgets.Application | gracely.Error> {
+		const result = await this.client.get<model.userwidgets.Application>(`application`)
+		!gracely.Error.is(result) && (this.entityTags.application[result.id] = isoly.DateTime.now())
+		return result
 	}
 }

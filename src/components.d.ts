@@ -57,7 +57,7 @@ export namespace Components {
     }
     interface UserwidgetsOrganizationUserRemove {
         "state": StateType;
-        "user": model.userwidgets.User;
+        "user": model.userwidgets.User.Readable;
     }
     interface UserwidgetsRegister {
         "state": {
@@ -74,6 +74,7 @@ export namespace Components {
     interface UserwidgetsUserPermissionsUpdate {
         "label": string;
         "options"?: CustomOption[];
+        "preventDefault": boolean;
         "state": StateType;
         "user": model.userwidgets.User.Readable;
     }
@@ -271,7 +272,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsOrganizationUserRemove {
         "state"?: StateType;
-        "user"?: model.userwidgets.User;
+        "user"?: model.userwidgets.User.Readable;
     }
     interface UserwidgetsRegister {
         "onNotice"?: (event: UserwidgetsRegisterCustomEvent<Notice>) => void;
@@ -291,6 +292,7 @@ declare namespace LocalJSX {
         "label"?: string;
         "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<model.userwidgets.User.Permissions.Readable>) => void;
         "options"?: CustomOption[];
+        "preventDefault"?: boolean;
         "state"?: StateType;
         "user"?: model.userwidgets.User.Readable;
     }
