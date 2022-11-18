@@ -10,8 +10,9 @@ export class Organization {
 		return this.#options
 	}
 	set options(options: Options) {
-		this.#options = { ...options }
-		this.#organizations != undefined && this.#options.key ? this.fetch() : (this.#self.organizations = undefined)
+		options = { ...this.#options, ...options }
+		!this.#organizations && (this.#options.key != options.key ? this.fetch() : (this.#self.organizations = undefined))
+		this.#options = options
 	}
 	#organizations?: Promise<model.userwidgets.Organization[] | false>
 	get organizations(): Promise<model.userwidgets.Organization[] | false> | undefined {

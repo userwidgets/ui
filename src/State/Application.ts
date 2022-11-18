@@ -10,8 +10,12 @@ export class Application {
 		return this.#options
 	}
 	set options(options: Options) {
-		this.#options = { ...options }
-		this.#application != undefined && this.#options.key ? this.fetch() : (this.#self.application = undefined)
+		options = { ...this.options, ...options }
+		!this.#application &&
+			(this.#options.key != options.key || this.#options.applicationId != options.applicationId
+				? this.fetch()
+				: (this.#self.application = undefined))
+		this.#options = options
 	}
 	#application?: Promise<model.userwidgets.Application | false>
 	get application(): Promise<model.userwidgets.Application | false> | undefined {

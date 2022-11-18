@@ -10,8 +10,9 @@ export class User {
 		return this.#options
 	}
 	set options(options: Options) {
-		this.#options = { ...options }
-		this.#users != undefined && this.#options.key ? this.fetch() : (this.#self.users = undefined)
+		options = { ...this.#options, ...options }
+		!this.#users && (this.#options.key != options.key ? this.fetch() : (this.#self.users = undefined))
+		this.#options = options
 	}
 	#users?: Promise<model.userwidgets.User.Readable[] | false>
 	get users(): Promise<model.userwidgets.User.Readable[] | false> | undefined {

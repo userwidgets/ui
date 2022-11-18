@@ -14,10 +14,18 @@ export class State {
 	}
 	set options(options: Options) {
 		options = { ...this.#self.options, ...options }
-		this.#options = { ...this.#options, ...options }
-		this.user.options = this.options
-		this.me.options = this.options
-		this.application.options = this.options
+		this.user.options = options
+		this.me.options = options
+		this.organization.options = options
+		this.application.options = options
+		this.#options = options
+	}
+	private optionHandler(options: Options) {
+		options = { ...this.#options, ...options }
+		this.application.options = options
+		this.organization.options = options
+		this.user.options = options
+		this.#options = options
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
 		this.client.onUnauthorized = value
@@ -38,14 +46,7 @@ export class State {
 	static create(client: Client): State & Listenable<State> {
 		const self = new Listenable() as State & Listenable<State>
 		Listenable.load(new this(self, client), self)
-		self.me.listen(
-			"options",
-			options =>
-				Object.assign(self.options, options) &&
-				(self.application.options = options) &&
-				(self.organization.options = options) &&
-				(self.user.options = options)
-		)
+		self.me.listen("options", options => self.optionHandler(options))
 		return self
 	}
 }

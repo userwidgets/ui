@@ -11,7 +11,6 @@ export class UserwidgetsOrganizationUserRemove {
 	@Prop() user: model.userwidgets.User.Readable
 
 	handleClick() {
-		console.log("remove user")
 		this.state.organization.removeUser(this.user.email)
 	}
 
