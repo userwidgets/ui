@@ -3,10 +3,7 @@ import * as gracely from "gracely"
 import { Notice } from "smoothly"
 import { client } from "../../../client"
 import { model } from "../../../model"
-import { Me } from "../../../State"
-import { Application } from "../../../State/Application"
-import { Listenable } from "../../../State/Listenable"
-import { Options } from "../../../State/Options"
+
 @Component({
 	tag: "userwidgets-change-password",
 	styleUrl: "style.css",
@@ -15,11 +12,7 @@ import { Options } from "../../../State/Options"
 export class ChangePassword {
 	@State() key?: model.userwidgets.User.Key
 	@Event() notice: EventEmitter<Notice>
-	@Prop() state: {
-		me: Me & Listenable<Me>
-		application: Application & Listenable<Application>
-		options: Options
-	}
+	@Prop() state: model.State
 	async componentWillLoad(): Promise<void> {
 		this.state.me.listen("key", async promise => {
 			const key = await promise

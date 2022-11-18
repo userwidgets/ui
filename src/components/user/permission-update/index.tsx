@@ -1,27 +1,6 @@
 import { Component, Event, EventEmitter, h, Prop, State, Watch } from "@stencil/core"
 import { Option } from "smoothly"
 import { model } from "../../../model"
-import { Me } from "../../../State"
-import { User } from "../../../State"
-import { Listenable } from "../../../State/Listenable"
-import { Options } from "../../../State/Options"
-
-interface StateInterface {
-	user: User & Listenable<User>
-	options: Options
-	me: Me & Listenable<Me>
-}
-
-type StateType = StateInterface & Listenable<StateInterface>
-
-function nest<T extends Record<string, any>>(target: T, [head, ...tail]: string[], value: any): T {
-	return (
-		(target[head as keyof T] = tail.length
-			? nest(target[head] != undefined ? target[head] : (target[head as keyof T] = {} as T[keyof T]), tail, value)
-			: value),
-		target as T
-	)
-}
 
 export interface CustomOption {
 	name: string
@@ -35,7 +14,7 @@ export interface CustomOption {
 	scoped: true,
 })
 export class UserwidgetsPermissionUpdate {
-	@Prop() state: StateType
+	@Prop() state: model.State
 	@Prop() user: model.userwidgets.User.Readable
 	@Prop() label = "Permissions:"
 	@Prop() options?: CustomOption[]
@@ -92,7 +71,7 @@ export class UserwidgetsPermissionUpdate {
 				Array.isArray(values) &&
 					values.forEach(value =>
 						(([match, organizationId, resource, action]) =>
-							match && nest(target, [organizationId, resource, action], true))(
+							match && model.nest(target, [organizationId, resource, action], true))(
 							(typeof value != "string" ? undefined : value.match(/^organization\|([^|]+)\|([^|]+)\|([^|]+)$/)) ?? []
 						)
 					),
@@ -103,7 +82,9 @@ export class UserwidgetsPermissionUpdate {
 	}
 
 	handleClick() {
-		!this.preventDefault && this.selectedOptions && this.state.user.updatePermissions(this.selectedOptions)
+		!this.preventDefault &&
+			this.selectedOptions &&
+			this.state.user.updatePermissions(this.user.email, this.selectedOptions)
 	}
 
 	render() {

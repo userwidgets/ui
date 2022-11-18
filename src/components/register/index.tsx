@@ -3,9 +3,7 @@ import * as isoly from "isoly"
 import { Notice, redirect } from "smoothly"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
-import { Me } from "../../State"
-import { Listenable } from "../../State/Listenable"
-import { Options } from "../../State/Options"
+
 @Component({
 	tag: "userwidgets-register",
 	styleUrl: "style.css",
@@ -14,22 +12,14 @@ import { Options } from "../../State/Options"
 export class UserwidgetsRegister {
 	@State() tag?: model.userwidgets.User.Tag
 	@State() key?: model.userwidgets.User.Key
-	@Prop() state: {
-		me: Me & Listenable<Me>
-		options: Options
-	}
+	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
-		this.tag = await model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
-		if (!this.tag)
-			redirect(window.origin)
-		else {
-			this.state.options = { applicationId: this.tag.audience }
-			if (this.tag.active)
-				this.state.me.join(this.tag)
-		}
+		model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
+			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
+		})
 	}
 
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
@@ -47,9 +37,7 @@ export class UserwidgetsRegister {
 						new: event.detail.new,
 						repeat: event.detail.repeat,
 					},
-			  })) &&
-			  (this.state.options = { user: this.tag.email }) &&
-			  redirect(window.origin)
+			  })) && redirect(window.origin)
 	}
 
 	render() {
@@ -86,7 +74,7 @@ export class UserwidgetsRegister {
 						Register
 					</smoothly-submit>
 					<p>
-						Already have an account?{" "}
+						Already have an account?
 						<a
 							href={window.origin}
 							onClick={async e => {

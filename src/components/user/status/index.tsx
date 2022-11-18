@@ -1,15 +1,5 @@
 import { Component, ComponentWillLoad, h, Prop, State } from "@stencil/core"
 import { model } from "../../../model"
-import { Organization } from "../../../State"
-import { Listenable } from "../../../State/Listenable"
-import { Options } from "../../../State/Options"
-
-interface StateInterface {
-	options: Options
-	organization: Organization & Listenable<Organization>
-}
-
-export type StateType = StateInterface & Listenable<StateInterface>
 
 @Component({
 	tag: "userwidgets-user-status",
@@ -17,7 +7,7 @@ export type StateType = StateInterface & Listenable<StateInterface>
 	scoped: true,
 })
 export class UserwidgetsUserStatus implements ComponentWillLoad {
-	@Prop() state: StateType
+	@Prop() state: model.State
 	@Prop() user: model.userwidgets.User.Readable
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() organizationId?: string

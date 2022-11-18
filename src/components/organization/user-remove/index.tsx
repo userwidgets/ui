@@ -1,15 +1,5 @@
 import { Component, h, Prop } from "@stencil/core"
 import { model } from "../../../model"
-import { Organization } from "../../../State"
-import { Listenable } from "../../../State/Listenable"
-import { Options } from "../../../State/Options"
-
-interface StateInterface {
-	organization: Organization & Listenable<Organization>
-	options: Options
-}
-
-export type StateType = StateInterface & Listenable<StateInterface>
 
 @Component({
 	tag: "userwidgets-organization-user-remove",
@@ -17,7 +7,7 @@ export type StateType = StateInterface & Listenable<StateInterface>
 	scoped: true,
 })
 export class UserwidgetsOrganizationUserRemove {
-	@Prop() state: StateType
+	@Prop() state: model.State
 	@Prop() user: model.userwidgets.User.Readable
 
 	handleClick() {

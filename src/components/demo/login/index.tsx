@@ -1,6 +1,5 @@
 import { Component, h, Prop } from "@stencil/core"
-import { Listenable } from "../../../State/Listenable"
-import { User } from "../../../State/User"
+import { model } from "../../../model"
 
 @Component({
 	tag: "userwidgets-login-trigger",
@@ -8,7 +7,7 @@ import { User } from "../../../State/User"
 	scoped: true,
 })
 export class UserwidgetsLoginTrigger {
-	@Prop() state: { user: Listenable<User> & User }
+	@Prop() state: model.State
 	componentWillLoad() {
 		this.state.user.listen("users", () => undefined)
 	}

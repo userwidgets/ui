@@ -1,17 +1,14 @@
 import { Component, h, Prop, State } from "@stencil/core"
 import { redirect } from "smoothly"
 import { model } from "../../../model"
-import { Listenable } from "../../../State/Listenable"
-import { Me } from "../../../State/Me"
+
 @Component({
 	tag: "userwidgets-logout",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class Logout {
-	@Prop() state: {
-		me: Me & Listenable<Me>
-	}
+	@Prop() state: model.State
 	@State() key?: model.userwidgets.User.Key
 	componentWillLoad() {
 		this.state.me.listen("key", async promise => {

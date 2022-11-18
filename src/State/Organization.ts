@@ -10,8 +10,8 @@ export class Organization {
 		return this.#options
 	}
 	set options(options: Options) {
-		this.#options.organizationId != options.organizationId &&
-			((this.#options = { ...options }), this.#organizations && this.fetch())
+		this.#options = { ...options }
+		this.#organizations != undefined && this.#options.key ? this.fetch() : (this.#self.organizations = undefined)
 	}
 	#organizations?: Promise<model.userwidgets.Organization[] | false>
 	get organizations(): Promise<model.userwidgets.Organization[] | false> | undefined {
@@ -20,35 +20,29 @@ export class Organization {
 	set organizations(organizations: Promise<model.userwidgets.Organization[] | false> | undefined) {
 		this.#organizations = organizations
 	}
-	#client: Client
 	#self: Organization & Listenable<Organization>
-	#user: User & Listenable<User>
 	private constructor(
 		listenable: Organization & Listenable<Organization>,
-		client: Client,
-		user: User & Listenable<User>
+		private client: Client,
+		private user: User & Listenable<User>
 	) {
 		this.#self = listenable
-		this.#client = client
-		this.#user = user
 	}
 	fetch(): Promise<model.userwidgets.Organization[] | false> | undefined {
-		return (this.#self.organizations = !this.#options.applicationId
-			? undefined
-			: this.#client.organization.list().then(response => (!isOrganizations(response) ? false : response)))
+		return (this.#self.organizations = this.client.organization
+			.list()
+			.then(response => (!isOrganizations(response) ? false : response)))
 	}
-
-	async removeUser(email: string): Promise<model.userwidgets.Organization | false | undefined> {
+	async removeUser(email: string): Promise<model.userwidgets.Organization | false> {
 		const result = !this.#options.organizationId
-			? undefined
-			: this.#client.organization
+			? false
+			: this.client.organization
 					.removeUser(this.#options.organizationId, email)
 					.then(response => (!model.userwidgets.Organization.is(response) ? false : response))
 		const response = await result
-		response && this.#user.fetch()
+		response && this.user.fetch()
 		return result
 	}
-
 	static create(client: Client, user: User & Listenable<User>): Organization & Listenable<Organization> {
 		const self = new Listenable<Organization>() as Organization & Listenable<Organization>
 		return Listenable.load(new this(self, client, user), self)

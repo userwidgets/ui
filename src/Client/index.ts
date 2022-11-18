@@ -28,11 +28,6 @@ export class Client extends rest.Client<gracely.Error> {
 			Object.assign(result, load(client))
 		return result as Client & T
 	}
-	get fullKey(): Promise<model.userwidgets.User.Key | undefined> {
-		return new Promise<model.userwidgets.User.Key | undefined>(resolve =>
-			this.key ? resolve(model.userwidgets.User.Key.unpack(this.key)) : resolve(undefined)
-		)
-	}
 	onUnauthorized?: (client: rest.Client<never>) => Promise<boolean>
 }
 

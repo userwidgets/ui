@@ -53,7 +53,6 @@ export class Organization extends rest.Collection<gracely.Error> {
 	}
 	async removeUser(organizationId: string, email: string) {
 		const entityTag = this.entityTags.organization[organizationId]
-		console.log("used entityTag:", entityTag)
 		const result = await this.client.delete<model.userwidgets.Organization>(
 			`organization/${organizationId}/user/${email}`,
 			{
@@ -61,7 +60,6 @@ export class Organization extends rest.Collection<gracely.Error> {
 			}
 		)
 		!gracely.Error.is(result) && (this.entityTags.organization[organizationId] = isoly.DateTime.now())
-		console.log(this.entityTags)
 		return result
 	}
 }

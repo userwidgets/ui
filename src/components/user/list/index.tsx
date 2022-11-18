@@ -1,18 +1,5 @@
 import { Component, h, Prop, State } from "@stencil/core"
 import { model } from "../../../model"
-import { Me, Organization } from "../../../State"
-import { User } from "../../../State"
-import { Listenable } from "../../../State/Listenable"
-import { Options } from "../../../State/Options"
-
-interface StateInterface {
-	user: User & Listenable<User>
-	options: Options
-	me: Me & Listenable<Me>
-	organization: Organization & Listenable<Organization>
-}
-
-export type StateType = StateInterface & Listenable<StateInterface>
 
 @Component({
 	tag: "userwidgets-user-list",
@@ -20,7 +7,7 @@ export type StateType = StateInterface & Listenable<StateInterface>
 	scoped: true,
 })
 export class UserwidgetsUserList {
-	@Prop() state: StateType
+	@Prop() state: model.State
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() key?: model.userwidgets.User.Key
 

@@ -6,7 +6,6 @@ import { Me } from "./Me"
 import { Options } from "./Options"
 import { Organization } from "./Organization"
 import { User } from "./User"
-import { Version } from "./Version"
 
 export class State {
 	#options: Options = {}
@@ -21,23 +20,20 @@ export class State {
 		this.application.options = this.options
 	}
 	set onUnauthorized(value: () => Promise<boolean>) {
-		this.#client.onUnauthorized = value
+		this.client.onUnauthorized = value
+		this.me.loginTrigger = value
 	}
 	readonly me: Listenable<Me> & Me
 	readonly user: Listenable<User> & User
 	readonly application: Listenable<Application> & Application
 	readonly organization: Listenable<Organization> & Organization
-	readonly version: Version
 	#self: State & Listenable<State>
-	#client: Client
-	private constructor(listenable: State & Listenable<State>, client: Client) {
+	private constructor(listenable: State & Listenable<State>, private client: Client) {
 		this.me = Me.create(client)
 		this.user = User.create(client)
 		this.organization = Organization.create(client, this.user)
-		this.application = Application.create(client, this.me)
-		this.version = new Version(client)
+		this.application = Application.create(client)
 		this.#self = listenable
-		this.#client = client
 	}
 	static create(client: Client): State & Listenable<State> {
 		const self = new Listenable() as State & Listenable<State>
@@ -65,4 +61,4 @@ try {
 }
 state.options = { applicationId: applicationId }
 
-export { Me, User, Organization, Application, Version }
+export { Me, User, Organization, Application }

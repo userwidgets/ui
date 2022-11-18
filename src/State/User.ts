@@ -6,36 +6,38 @@ import { Options } from "./Options"
 
 export class User {
 	#options: Options = {}
+	get options(): Options {
+		return this.#options
+	}
 	set options(options: Options) {
 		this.#options = { ...options }
+		this.#users != undefined && this.#options.key ? this.fetch() : (this.#self.users = undefined)
 	}
 	#users?: Promise<model.userwidgets.User.Readable[] | false>
-	get users() {
+	get users(): Promise<model.userwidgets.User.Readable[] | false> | undefined {
 		return this.#users ?? this.fetch()
 	}
-	set users(users: Promise<model.userwidgets.User.Readable[] | false>) {
+	set users(users: Promise<model.userwidgets.User.Readable[] | false> | undefined) {
 		this.#users = users
 	}
-	#client: Client
 	#self: User & Listenable<User>
-	private constructor(listenable: User & Listenable<User>, client: Client) {
-		this.#client = client
+	private constructor(listenable: User & Listenable<User>, private client: Client) {
 		this.#self = listenable
 	}
-	async fetch(): Promise<model.userwidgets.User.Readable[] | false> {
-		return (this.#self.users = this.#client.user
+	fetch(): Promise<model.userwidgets.User.Readable[] | false> {
+		return (this.#self.users = this.client.user
 			.list()
 			.then(response => (gracely.Error.is(response) ? false : response)))
 	}
 	async updatePermissions(
+		email: string,
 		permissions: model.userwidgets.User.Permissions.Readable
 	): Promise<model.userwidgets.User.Readable | false> {
-		const response =
-			!this.#options.user || !this.#options.organizationId
-				? false
-				: await this.#client.user
-						.updatePermissions(this.#options.user, this.#options.organizationId, permissions)
-						.then(response => (model.userwidgets.User.Readable.is(response) ? response : false))
+		const response = !this.#options.organizationId
+			? false
+			: await this.client.user
+					.updatePermissions(email, this.#options.organizationId, permissions)
+					.then(response => (model.userwidgets.User.Readable.is(response) ? response : false))
 		response && this.fetch()
 		return response
 	}
