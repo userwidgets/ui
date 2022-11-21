@@ -34,7 +34,7 @@ export class ChangeName {
 		else if (!(this.name.first == this.initialName.first && this.name.last == this.initialName.last))
 			this.notice.emit(Notice.warn("Names are not changed."))
 		else {
-			const response = await client.user.changeName("", name, "*")
+			const response = await client.user.changeName("", name)
 			if (gracely.Error.is(response))
 				this.notice.emit(Notice.warn(response.body))
 		}

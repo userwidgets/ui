@@ -1,7 +1,5 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import { model } from "../../model"
-import { Me } from "../../State"
-import { Listenable } from "../../State/Listenable"
 
 @Component({
 	tag: "userwidgets-login",
@@ -9,8 +7,8 @@ import { Listenable } from "../../State/Listenable"
 	scoped: true,
 })
 export class UserwidgetsLogin {
-	@State() resolve?: (result: boolean | PromiseLike<boolean>) => void
-	@Prop() state: { me: Me & Listenable<Me>; onUnauthorized: () => Promise<boolean> }
+	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
+	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
@@ -19,17 +17,17 @@ export class UserwidgetsLogin {
 			user: event.detail.user,
 			password: event.detail.password,
 		})
-		if (this.resolve != undefined && response) {
-			this.resolve(true)
-			this.resolve = undefined
+		if (this.resolves != undefined && response) {
+			this.resolves.forEach(resolve => resolve(true))
+			this.resolves = undefined
 			this.loggedIn.emit()
 		}
 	}
 	async componentWillLoad(): Promise<void> {
-		this.state.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolve = resolve))
+		this.state.onUnauthorized = () =>
+			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
 	}
-
 	render() {
-		return [this.resolve ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
+		return [this.resolves ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
 	}
 }

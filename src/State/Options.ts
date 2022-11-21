@@ -1,5 +1,7 @@
+import { model } from "../model"
+
 export interface Options {
-	user?: string
+	key?: model.userwidgets.User.Key
 	organizationId?: string
 	applicationId?: string
 }

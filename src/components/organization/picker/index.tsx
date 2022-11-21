@@ -1,21 +1,14 @@
 import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
 import { Option } from "smoothly"
-import { model } from "../../model"
-import { Me } from "../../State"
-import { Application } from "../../State/Application"
-import { Listenable } from "../../State/Listenable"
-import { Options } from "../../State/Options"
+import { model } from "../../../model"
+
 @Component({
 	tag: "userwidgets-organization-picker",
 	styleUrl: "style.css",
 	scoped: true,
 })
 export class UserwidgetsOrganizationPicker {
-	@Prop() state: {
-		me: Me & Listenable<Me>
-		application: Application & Listenable<Application>
-		options: Options
-	}
+	@Prop() state: model.State
 	@State() key?: model.userwidgets.User.Key
 	@State() application?: model.userwidgets.Application
 	@State() organizations?: { name: string; value: string }[]

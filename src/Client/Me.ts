@@ -33,17 +33,12 @@ export class Me extends rest.Collection<gracely.Error> {
 		!gracely.Error.is(result) && (this.client.key = result.token) && sessionStorage.setItem("token", result.token)
 		return result
 	}
-	async join(tag: model.User.Tag): Promise<model.User.Key | gracely.Result | gracely.Error> {
+	async join(tag: model.User.Tag): Promise<model.User.Key | gracely.Error> {
 		const response = await this.client.patch<string>(`me/${tag.token}`, undefined)
 		const result = gracely.Error.is(response)
 			? response
-			: response == ""
-			? gracely.success.noContent()
 			: (await model.User.Key.unpack(response)) ?? gracely.client.unauthorized("Failed to verify token.")
-		!gracely.Error.is(result) &&
-			!gracely.Result.is(result) &&
-			(this.client.key = result.token) &&
-			sessionStorage.setItem("token", result.token)
+		!gracely.Error.is(result) && (this.client.key = result.token) && sessionStorage.setItem("token", result.token)
 		return result
 	}
 }
