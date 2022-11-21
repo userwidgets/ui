@@ -42,6 +42,7 @@ export class UserwidgetsOrganizationPicker {
 		})
 		this.state.me.listen("key", async promise => {
 			const key = await promise
+			this.key && key == undefined && this.state.me.key
 			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
 		})
 	}

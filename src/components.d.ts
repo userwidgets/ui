@@ -209,6 +209,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
+        "onUserwidgetsLoginLoaded"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
