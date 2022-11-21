@@ -10,6 +10,7 @@ export class UserwidgetsLogin {
 	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
+	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Listen("login")
 	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
 		event.preventDefault()
@@ -26,6 +27,9 @@ export class UserwidgetsLogin {
 	async componentWillLoad(): Promise<void> {
 		this.state.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
+	}
+	componentDidLoad() {
+		this.userwidgetsLoginLoaded.emit()
 	}
 	render() {
 		return [this.resolves ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
