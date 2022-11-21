@@ -11,7 +11,13 @@ export class User {
 	}
 	set options(options: Options) {
 		options = { ...this.#options, ...options }
-		!this.#users && (this.#options.key != options.key ? this.fetch() : (this.#self.users = undefined))
+		options.applicationId == undefined
+			? (this.#users = undefined)
+			: !this.#options.key == undefined
+			? ((this.#users = undefined), this.fetch())
+			: options.key == undefined
+			? (this.#users = undefined)
+			: this.#options.key != options.key && this.fetch()
 		this.#options = options
 	}
 	#users?: Promise<model.userwidgets.User.Readable[] | false>

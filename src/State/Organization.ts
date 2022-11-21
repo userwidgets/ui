@@ -11,7 +11,13 @@ export class Organization {
 	}
 	set options(options: Options) {
 		options = { ...this.#options, ...options }
-		!this.#organizations && (this.#options.key != options.key ? this.fetch() : (this.#self.organizations = undefined))
+		options.applicationId == undefined
+			? (this.#organizations = undefined)
+			: this.#options.key == undefined
+			? ((this.#organizations = undefined), this.fetch())
+			: options.key == undefined
+			? (this.#organizations = undefined)
+			: this.#options.key != options.key && this.fetch()
 		this.#options = options
 	}
 	#organizations?: Promise<model.userwidgets.Organization[] | false>
