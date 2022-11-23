@@ -13,10 +13,15 @@ export class Organization {
 		options = { ...this.#options, ...options }
 
 		if (this.#organizations)
-			if (options.applicationId == undefined || options.key == undefined)
+			if (
+				(this.#options.applicationId != undefined && options.applicationId == undefined) ||
+				(this.#options.key != undefined && options.key == undefined)
+			)
 				this.#self.organizations = undefined
+			else if (options.applicationId == undefined || options.key == undefined)
+				this.#self.organizations = Promise.resolve(false)
 			else if (this.#options.key != options.key)
-				this.fetch()
+				(this.#options = options), this.fetch()
 
 		this.#options = options
 	}
