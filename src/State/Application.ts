@@ -13,10 +13,15 @@ export class Application {
 		options = { ...this.options, ...options }
 
 		if (this.#application)
-			if (options.applicationId == undefined || options.key == undefined)
+			if (
+				(this.#options.applicationId != undefined && options.applicationId == undefined) ||
+				(this.#options.key != undefined && options.key == undefined)
+			)
 				this.#self.application = undefined
+			else if (options.applicationId == undefined || options.key == undefined)
+				this.#self.application = Promise.resolve(false)
 			else if (this.#options.key != options.key)
-				this.fetch()
+				(this.#options = options), this.fetch()
 
 		this.#options = options
 	}
