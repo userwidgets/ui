@@ -8,6 +8,10 @@ smoothly-table {
 	gap: 1rem;
 }
 
+.detail {
+	margin: 0.5rem 0;
+}
+
 .table > * {
 	display: flex;
 	justify-content: space-between;
@@ -18,3 +22,13 @@ smoothly-table {
 .table .right {
 	justify-content: flex-end;
 }
+
+.userwidgets-detail {
+	display: flex;
+	gap: 1.5rem;
+}
+
+userwidgets-user-permissions-update {
+	width: 100%;
+}
+

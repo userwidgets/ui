@@ -1,0 +1,23 @@
+.user > smoothly-table-cell {
+	vertical-align: middle;
+}
+
+.buttons-cell {
+	width: fit-content;
+}
+
+.inputs {
+	display: flex;
+	justify-content: right;
+	margin-right: 1rem;
+	gap: 1rem;
+}
+
+.input {
+	border: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+}

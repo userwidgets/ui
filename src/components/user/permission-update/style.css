@@ -9,6 +9,25 @@
 }
 
 .inputs {
+	width: 100%;
 	display: flex;
 	align-items: center;
+	gap: 0.5rem;
+}
+
+.button {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+smoothly-picker::part(search) {
+	display: none;
+}
+:host .button {
+	opacity: 50%;
+}
+
+:host[changed] .button {
+	opacity: 100%;
 }

@@ -22,7 +22,8 @@ export class Demo {
 						<userwidgets-register state={state}></userwidgets-register>
 					</smoothly-room>
 					<smoothly-room path={"/user-list"} label={"User list"}>
-						<userwidgets-user-list state={state}></userwidgets-user-list>
+						<userwidgets-user-list-member state={state}></userwidgets-user-list-member>
+						<userwidgets-user-list-invited state={state}></userwidgets-user-list-invited>
 					</smoothly-room>
 					<userwidgets-menu slot="header">
 						<userwidgets-organization-picker state={state}></userwidgets-organization-picker>

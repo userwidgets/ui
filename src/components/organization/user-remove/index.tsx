@@ -17,7 +17,9 @@ export class UserwidgetsOrganizationUserRemove {
 	render() {
 		return (
 			<form onSubmit={event => event.preventDefault()}>
-				<smoothly-button onClick={() => this.handleClick()}>Delete</smoothly-button>
+				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
+					<slot></slot>
+				</smoothly-button>
 			</form>
 		)
 	}

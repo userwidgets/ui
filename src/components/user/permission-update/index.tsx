@@ -14,6 +14,7 @@ export interface CustomOption {
 	scoped: true,
 })
 export class UserwidgetsPermissionUpdate {
+	@Prop({ mutable: true, reflect: true }) changed = false
 	@Prop() state: model.State
 	@Prop() user: model.userwidgets.User.Readable
 	@Prop() label = "Permissions:"
@@ -79,6 +80,14 @@ export class UserwidgetsPermissionUpdate {
 			),
 			model.userwidgets.User.Permissions.Readable.copy(this.key?.permissions ?? {}, false)
 		)
+		this.changed = !event.detail.every(detail =>
+			detail.value?.every((value: any) =>
+				(([_, id, resource, access]: (string | undefined)[]) =>
+					!id || !resource || !access ? false : this.user.permissions[id]?.[resource]?.[access as "read" | "write"])(
+					value?.split("|") ?? []
+				)
+			)
+		)
 	}
 
 	handleClick() {
@@ -90,7 +99,6 @@ export class UserwidgetsPermissionUpdate {
 	render() {
 		return (
 			<form onSubmit={event => event.preventDefault()}>
-				<span>{this.label}</span>
 				<div class={"inputs"}>
 					<smoothly-picker
 						label={this.label}
@@ -98,7 +106,9 @@ export class UserwidgetsPermissionUpdate {
 						multiple={true}
 						options={this.pickerOptions}
 						selections={this.pickerOptions?.filter(option => option.checked) ?? []}></smoothly-picker>
-					<smoothly-button onClick={() => this.handleClick()}>Update</smoothly-button>
+					<smoothly-button disabled={!this.changed} class={"button"} onClick={() => this.handleClick()}>
+						<slot></slot>
+					</smoothly-button>
 				</div>
 			</form>
 		)
