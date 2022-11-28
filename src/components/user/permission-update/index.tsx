@@ -88,7 +88,6 @@ export class UserwidgetsPermissionUpdate {
 				)
 			)
 		)
-		console.log("changed", this.changed)
 	}
 
 	handleClick() {
