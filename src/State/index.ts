@@ -1,3 +1,4 @@
+import * as isoly from "isoly"
 import { Client } from "../Client"
 import { client } from "../client"
 import { Application } from "./Application"
@@ -6,7 +7,6 @@ import { Me } from "./Me"
 import { Options } from "./Options"
 import { Organization } from "./Organization"
 import { User } from "./User"
-
 export class State {
 	#options: Options = {}
 	get options() {
@@ -31,6 +31,7 @@ export class State {
 		this.client.onUnauthorized = value
 		this.me.loginTrigger = value
 	}
+	language: isoly.Language
 	readonly me: Listenable<Me> & Me
 	readonly user: Listenable<User> & User
 	readonly application: Listenable<Application> & Application
@@ -42,6 +43,10 @@ export class State {
 		this.organization = Organization.create(client, this.user)
 		this.application = Application.create(client)
 		this.#self = listenable
+		isoly.Locale.is(navigator.language) &&
+			((this.language = isoly.Locale.toLanguage(navigator.language) ?? "en"),
+			!["sv", "en"].includes(this.language) && (this.language = "en"))
+		this.language != "en" && document.documentElement.setAttribute("lang", this.language)
 	}
 	static create(client: Client): State & Listenable<State> {
 		const self = new Listenable() as State & Listenable<State>
