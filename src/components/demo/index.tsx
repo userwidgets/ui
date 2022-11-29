@@ -25,10 +25,12 @@ export class Demo {
 						<userwidgets-user-list-member state={state}></userwidgets-user-list-member>
 						<userwidgets-user-list-invited state={state}></userwidgets-user-list-invited>
 					</smoothly-room>
-					<userwidgets-menu slot="header">
-						<userwidgets-organization-picker state={state}></userwidgets-organization-picker>
-						<userwidgets-logout state={state}></userwidgets-logout>
-					</userwidgets-menu>
+					{state.me.key ? (
+						<userwidgets-menu slot="header">
+							<userwidgets-organization-picker state={state}></userwidgets-organization-picker>
+							<userwidgets-logout state={state}></userwidgets-logout>
+						</userwidgets-menu>
+					) : null}
 				</App>
 			</userwidgets-login>
 		)
