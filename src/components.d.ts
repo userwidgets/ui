@@ -11,6 +11,7 @@ import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsChangeName {
         "name": model.userwidgets.User.Name;
+        "state": model.State;
     }
     interface UserwidgetsChangePassword {
         "state": model.State;
@@ -221,6 +222,7 @@ declare namespace LocalJSX {
     interface UserwidgetsChangeName {
         "name"?: model.userwidgets.User.Name;
         "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<Notice>) => void;
+        "state"?: model.State;
     }
     interface UserwidgetsChangePassword {
         "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<Notice>) => void;

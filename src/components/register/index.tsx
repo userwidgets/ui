@@ -15,7 +15,6 @@ export class UserwidgetsRegister {
 	@State() key?: model.userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
-	@State() language?: isoly.Language
 	@State() t: langly.Translate
 
 	async componentWillLoad() {
@@ -23,9 +22,7 @@ export class UserwidgetsRegister {
 		model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
 			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
 		})
-		console.log(this.state.language)
 		this.state.listen("language", language => (this.t = translation.create(language)))
-		console.log(this.state.language)
 	}
 
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
