@@ -31,7 +31,7 @@ export class State {
 		this.client.onUnauthorized = value
 		this.me.loginTrigger = value
 	}
-	language: isoly.Language
+	language: isoly.Language = "sv"
 	readonly me: Listenable<Me> & Me
 	readonly user: Listenable<User> & User
 	readonly application: Listenable<Application> & Application
@@ -43,10 +43,12 @@ export class State {
 		this.organization = Organization.create(client, this.user)
 		this.application = Application.create(client)
 		this.#self = listenable
-		isoly.Locale.is(navigator.language) &&
-			((this.language = isoly.Locale.toLanguage(navigator.language) ?? "en"),
-			!["sv", "en"].includes(this.language) && (this.language = "en"))
-		this.language != "en" && document.documentElement.setAttribute("lang", this.language)
+		// copy code over from issuefab/app
+		
+		// isoly.Locale.is(navigator.language) &&
+		// 	((this.language = isoly.Locale.toLanguage(navigator.language) ?? "en"),
+		// 	!["sv", "en"].includes(this.language) && (this.language = "en"))
+		// this.language != "en" && document.documentElement.setAttribute("lang", this.language)
 	}
 	static create(client: Client): State & Listenable<State> {
 		const self = new Listenable() as State & Listenable<State>
