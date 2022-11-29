@@ -46,6 +46,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsSetPassword {
+        "state": model.State;
         "user": model.userwidgets.User;
     }
     interface UserwidgetsUserListInvited {
@@ -264,6 +265,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsSetPassword {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
+        "state"?: model.State;
         "user"?: model.userwidgets.User;
     }
     interface UserwidgetsUserListInvited {
