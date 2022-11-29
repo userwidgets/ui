@@ -1,9 +1,8 @@
-import { Component, Event, EventEmitter, h, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { model } from "../../../model"
-import { state } from "../../../State"
 import * as translation from "./translation"
 @Component({
 	tag: "userwidgets-login-dialog",
@@ -11,13 +10,14 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsLoginDialog {
+	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
 	@State() language?: isoly.Language
 	@State() t: langly.Translate
 
 	componentWillLoad() {
-		state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.t = translation.create(language)))
 	}
 	handleSubmit(event: CustomEvent<Record<string, string>>) {
 		if (!model.userwidgets.User.Credentials.is(event.detail))

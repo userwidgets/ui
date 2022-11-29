@@ -17,6 +17,7 @@ export interface States {
 	organization: Organization & Listenable<Organization>
 	application: Application & Listenable<Application>
 	options: Options
+	language: isoly.Language
 	onUnauthorized: () => Promise<boolean>
 }
 export type State = States & Listenable<States>

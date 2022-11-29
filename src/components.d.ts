@@ -21,6 +21,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsLoginDialog {
+        "state": model.State;
     }
     interface UserwidgetsLoginTrigger {
         "state": model.State;
@@ -235,6 +236,7 @@ declare namespace LocalJSX {
     interface UserwidgetsLoginDialog {
         "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
+        "state"?: model.State;
     }
     interface UserwidgetsLoginTrigger {
         "state"?: model.State;
