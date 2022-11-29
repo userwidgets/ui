@@ -1,7 +1,10 @@
-import { Component, Event, EventEmitter, h } from "@stencil/core"
+import { Component, Event, EventEmitter, h, State } from "@stencil/core"
+import * as isoly from "isoly"
+import * as langly from "langly"
 import { Notice } from "smoothly"
 import { model } from "../../../model"
-
+import { state } from "../../../State"
+import * as translation from "./translation"
 @Component({
 	tag: "userwidgets-login-dialog",
 	styleUrl: "style.css",
@@ -10,12 +13,17 @@ import { model } from "../../../model"
 export class UserwidgetsLoginDialog {
 	@Event() notice: EventEmitter<Notice>
 	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
+	@State() language?: isoly.Language
+	@State() t: langly.Translate
 
+	componentWillLoad() {
+		state.listen("language", language => (this.t = translation.create(language)))
+	}
 	handleSubmit(event: CustomEvent<Record<string, string>>) {
 		if (!model.userwidgets.User.Credentials.is(event.detail))
-			this.notice.emit(Notice.warn("Both email and password is required to login."))
+			this.notice.emit(Notice.warn(this.t("Both email and password is required to login.")))
 		else if (!event.detail.user.match(/^\S+@\S+$/))
-			this.notice.emit(Notice.warn("Provided email is not an email."))
+			this.notice.emit(Notice.warn(this.t("Provided email is not an email.")))
 		else
 			this.login.emit(event.detail)
 	}
@@ -26,13 +34,13 @@ export class UserwidgetsLoginDialog {
 				<div class="viewport background">
 					<form>
 						<smoothly-input type="email" name="user">
-							Email
+							{this.t("Email")}
 						</smoothly-input>
 						<smoothly-input type="password" name="password">
-							Password
+							{this.t("Password")}
 						</smoothly-input>
 						<smoothly-submit prevent={true} onSubmit={this.handleSubmit.bind(this) as any}>
-							Login
+							{this.t("Login")}
 						</smoothly-submit>
 					</form>
 				</div>
