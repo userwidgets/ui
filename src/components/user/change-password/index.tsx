@@ -46,7 +46,8 @@ export class ChangePassword {
 	render() {
 		return (
 			<form>
-				{this.t("Change password for user ")}<code>{this.key?.email}</code>
+				{this.t("Change password for user ")}
+				<code>{this.key?.email}</code>
 				<smoothly-input name="old" type="password">
 					{this.t("Old password")}
 				</smoothly-input>
