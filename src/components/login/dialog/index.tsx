@@ -17,7 +17,7 @@ export class UserwidgetsLoginDialog {
 	@State() translate: langly.Translate
 
 	componentWillLoad() {
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 	handleSubmit(event: CustomEvent<Record<string, string>>) {
 		if (!model.userwidgets.User.Credentials.is(event.detail))

@@ -50,7 +50,7 @@ export class UserwidgetsOrganizationPicker {
 			this.key && key == undefined && this.state.me.key
 			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
 		})
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	@Listen("menuClose")
