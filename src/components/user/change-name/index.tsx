@@ -1,8 +1,10 @@
-import { Component, Event, EventEmitter, h, Listen, Prop } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
+import * as langly from "langly"
 import { Notice } from "smoothly"
 import { client } from "../../../client"
 import { model } from "../../../model"
+import * as translation from "./translation"
 
 @Component({
 	tag: "userwidgets-change-name",
@@ -13,10 +15,13 @@ export class ChangeName {
 	private changed = false
 	private initialName: model.userwidgets.User.Name
 	@Event() notice: EventEmitter<Notice>
+	@Prop() state: model.State
 	@Prop() name: model.userwidgets.User.Name
+	@State() translate: langly.Translate
 
 	componentWillLoad() {
 		this.initialName = this.name
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	@Listen("smoothlyInput")
@@ -30,9 +35,9 @@ export class ChangeName {
 		event.stopPropagation()
 		const name = Object.fromEntries(new FormData(event.target as HTMLFormElement))
 		if (!model.userwidgets.User.Name.is(name))
-			this.notice.emit(Notice.warn("Missing fields."))
+			this.notice.emit(Notice.warn(this.translate("Missing fields.")))
 		else if (!(this.name.first == this.initialName.first && this.name.last == this.initialName.last))
-			this.notice.emit(Notice.warn("Names are not changed."))
+			this.notice.emit(Notice.warn(this.translate("Names are not changed.")))
 		else {
 			const response = await client.user.changeName("", name)
 			if (gracely.Error.is(response))
@@ -49,7 +54,7 @@ export class ChangeName {
 				<smoothly-input name="last" type="text">
 					{this.name.last}
 				</smoothly-input>
-				<smoothly-submit disabled={!this.changed}>Change name</smoothly-submit>
+				<smoothly-submit disabled={!this.changed}>{this.translate("Change name")}</smoothly-submit>
 			</form>
 		)
 	}

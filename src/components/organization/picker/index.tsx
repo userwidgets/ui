@@ -1,7 +1,9 @@
 import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
+import * as isoly from "isoly"
+import * as langly from "langly"
 import { Option } from "smoothly"
 import { model } from "../../../model"
-
+import * as translation from "./translation"
 @Component({
 	tag: "userwidgets-organization-picker",
 	styleUrl: "style.css",
@@ -13,6 +15,9 @@ export class UserwidgetsOrganizationPicker {
 	@State() application?: model.userwidgets.Application
 	@State() organizations?: { name: string; value: string }[]
 	@State() receivedKey?: (value: boolean) => void
+	@State() language?: isoly.Language
+	@State() translate: langly.Translate
+
 	@Watch("key")
 	handleKeyChange() {
 		;(!this.key || !this.application) &&
@@ -45,6 +50,7 @@ export class UserwidgetsOrganizationPicker {
 			this.key && key == undefined && this.state.me.key
 			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
 		})
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	@Listen("menuClose")
@@ -60,7 +66,7 @@ export class UserwidgetsOrganizationPicker {
 				options={this.organizations}
 				selections={
 					!this.organizations?.length
-						? [{ name: "You are not a member of any organization", value: "" }]
+						? [{ name: this.translate("You are not a member of any organization"), value: "" }]
 						: [this.organizations[0]]
 				}></smoothly-picker>
 		) : null

@@ -1,6 +1,8 @@
 import { Component, h, Prop, State } from "@stencil/core"
+import * as langly from "langly"
 import { model } from "../../../../model"
 import { Options } from "../../../../State/Options"
+import * as translation from "./translation"
 
 @Component({
 	tag: "userwidgets-user-list-member",
@@ -12,6 +14,7 @@ export class UserwidgetsUserListMember {
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() key?: model.userwidgets.User.Key
 	@State() options?: Options
+	@State() translate: langly.Translate
 	componentWillLoad() {
 		this.state.user.listen("users", async promise => {
 			const users = await promise
@@ -22,13 +25,14 @@ export class UserwidgetsUserListMember {
 			this.key = !key ? undefined : key
 		})
 		this.state.listen("options", options => (this.options = options))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 	render() {
 		return (
 			<smoothly-table>
 				<smoothly-table-row>
-					<smoothly-table-header>Name</smoothly-table-header>
-					<smoothly-table-header>Email</smoothly-table-header>
+					<smoothly-table-header>{this.translate("Name")}</smoothly-table-header>
+					<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
 					<smoothly-table-header></smoothly-table-header>
 				</smoothly-table-row>
 				{this.key?.permissions[this.options?.organizationId ?? ""]?.organization?.write
