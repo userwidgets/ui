@@ -15,14 +15,14 @@ export class UserwidgetsRegister {
 	@State() key?: model.userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
-	@State() t: langly.Translate
+	@State() translate: langly.Translate
 
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
 		model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
 			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
 		})
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
@@ -30,7 +30,7 @@ export class UserwidgetsRegister {
 		event.stopPropagation()
 		!this.tag || !model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
 			? this.notice.emit(
-					Notice.warn(this.t("Password and Repeat password must be identical and at least 6 characters long."))
+					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
 			: (await this.state.me.register(this.tag, {
 					user: this.tag.email,
@@ -49,9 +49,9 @@ export class UserwidgetsRegister {
 		return !this.tag ? null : this.tag.expires < isoly.DateTime.now() ? (
 			<div>
 				<p>
-					{this.t("This invitation is expired. Back to ")}
+					{this.translate("This invitation is expired. Back to ")}
 					<a {...href(window.origin)} onClick={e => e.preventDefault()}>
-						{this.t("home")}
+						{this.translate("home")}
 					</a>
 					.
 				</p>
@@ -60,26 +60,26 @@ export class UserwidgetsRegister {
 			<form onSubmit={e => e.preventDefault()}>
 				<div class="inputs">
 					<smoothly-input type="text" name="first">
-						{this.t("First name")}
+						{this.translate("First name")}
 					</smoothly-input>
 					<smoothly-input type="text" name="last">
-						{this.t("Last name")}
+						{this.translate("Last name")}
 					</smoothly-input>
 				</div>
 				<div class="inputs">
 					<smoothly-input type="password" name="new">
-						{this.t("Password")}
+						{this.translate("Password")}
 					</smoothly-input>
 					<smoothly-input type="password" name="repeat">
-						{this.t("Repeat password")}
+						{this.translate("Repeat password")}
 					</smoothly-input>
 				</div>
 				<div class="buttons">
 					<smoothly-submit onSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
-						{this.t("Register")}
+						{this.translate("Register")}
 					</smoothly-submit>
 					<p>
-						{this.t("Already have an account? ")}
+						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
 							onClick={async e => {
@@ -89,7 +89,7 @@ export class UserwidgetsRegister {
 									(await this.state.me.join(this.tag)) &&
 									redirect(window.origin)
 							}}>
-							{this.t("Login")}
+							{this.translate("Login")}
 						</a>
 					</p>
 				</div>

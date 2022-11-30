@@ -16,7 +16,7 @@ export class UserwidgetsOrganizationPicker {
 	@State() organizations?: { name: string; value: string }[]
 	@State() receivedKey?: (value: boolean) => void
 	@State() language?: isoly.Language
-	@State() t: langly.Translate
+	@State() translate: langly.Translate
 
 	@Watch("key")
 	handleKeyChange() {
@@ -66,7 +66,7 @@ export class UserwidgetsOrganizationPicker {
 				options={this.organizations}
 				selections={
 					!this.organizations?.length
-						? [{ name: this.t("You are not a member of any organization"), value: "" }]
+						? [{ name: this.translate("You are not a member of any organization"), value: "" }]
 						: [this.organizations[0]]
 				}></smoothly-picker>
 		) : null

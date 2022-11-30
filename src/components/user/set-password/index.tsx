@@ -16,9 +16,9 @@ export class SetPassword {
 	@Event() notice: EventEmitter<Notice>
 	@State() new: string
 	@State() repeat: string
-	@State() t: langly.Translate
+	@State() translate: langly.Translate
 	componentWillLoad() {
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	@Listen("smoothlyInput")
@@ -31,9 +31,9 @@ export class SetPassword {
 		event.stopPropagation()
 		const passwords = Object.fromEntries(new FormData(event.target as HTMLFormElement))
 		if (!model.userwidgets.User.Password.Change.is(passwords))
-			this.notice.emit(Notice.warn(this.t("Missing fields.")))
+			this.notice.emit(Notice.warn(this.translate("Missing fields.")))
 		else if (passwords.new != passwords.repeat)
-			this.notice.emit(Notice.warn(this.t("New password was not repeated correctly.")))
+			this.notice.emit(Notice.warn(this.translate("New password was not repeated correctly.")))
 		else {
 			const response = await client.user.changePassword(this.user.email, passwords)
 			if (gracely.Error.is(response)) {

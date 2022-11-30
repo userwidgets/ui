@@ -14,7 +14,7 @@ export class UserwidgetsUserListInvited {
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() options?: Options
-	@State() t: langly.Translate
+	@State() translate: langly.Translate
 	private invited: string[]
 
 	componentWillLoad() {
@@ -33,7 +33,7 @@ export class UserwidgetsUserListInvited {
 			const users = await promise
 			this.users = users ? users : undefined
 		})
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 	componentWillRender() {
 		this.invited =
@@ -47,7 +47,7 @@ export class UserwidgetsUserListInvited {
 		return !this.invited.length ? null : (
 			<smoothly-table>
 				<smoothly-table-row>
-					<smoothly-table-header>{this.t("Pending invites")}</smoothly-table-header>
+					<smoothly-table-header>{this.translate("Pending invites")}</smoothly-table-header>
 					<smoothly-table-header></smoothly-table-header>
 				</smoothly-table-row>
 				{this.invited.map(user => (

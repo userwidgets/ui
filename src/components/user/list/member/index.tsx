@@ -14,7 +14,7 @@ export class UserwidgetsUserListMember {
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() key?: model.userwidgets.User.Key
 	@State() options?: Options
-	@State() t: langly.Translate
+	@State() translate: langly.Translate
 	componentWillLoad() {
 		this.state.user.listen("users", async promise => {
 			const users = await promise
@@ -25,14 +25,14 @@ export class UserwidgetsUserListMember {
 			this.key = !key ? undefined : key
 		})
 		this.state.listen("options", options => (this.options = options))
-		this.state.listen("language", language => (this.t = translation.create(language)))
+		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}
 	render() {
 		return (
 			<smoothly-table>
 				<smoothly-table-row>
-					<smoothly-table-header>{this.t("Name")}</smoothly-table-header>
-					<smoothly-table-header>{this.t("Email")}</smoothly-table-header>
+					<smoothly-table-header>{this.translate("Name")}</smoothly-table-header>
+					<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
 					<smoothly-table-header></smoothly-table-header>
 				</smoothly-table-row>
 				{this.key?.permissions[this.options?.organizationId ?? ""]?.organization?.write
