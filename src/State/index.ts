@@ -43,12 +43,15 @@ export class State {
 		this.organization = Organization.create(client, this.user)
 		this.application = Application.create(client)
 		this.#self = listenable
-		// copy code over from issuefab/app
-		
-		// isoly.Locale.is(navigator.language) &&
-		// 	((this.language = isoly.Locale.toLanguage(navigator.language) ?? "en"),
-		// 	!["sv", "en"].includes(this.language) && (this.language = "en"))
-		// this.language != "en" && document.documentElement.setAttribute("lang", this.language)
+
+		this.language = isoly.Language.is(navigator.language)
+			? navigator.language
+			: isoly.Locale.is(navigator.language)
+			? isoly.Locale.toLanguage(navigator.language) ?? "en"
+			: "en"
+
+		!["sv", "en"].includes(this.language) && (this.language = "en")
+		this.language != "en" && document.documentElement.setAttribute("lang", this.language)
 	}
 	static create(client: Client): State & Listenable<State> {
 		const self = new Listenable() as State & Listenable<State>
