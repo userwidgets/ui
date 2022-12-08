@@ -17,7 +17,7 @@ export class ChangeName {
 	@Event() notice: EventEmitter<Notice>
 	@Prop() state: model.State
 	@Prop() name: model.userwidgets.User.Name
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
 		this.initialName = this.name

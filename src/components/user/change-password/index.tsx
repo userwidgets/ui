@@ -14,7 +14,7 @@ export class ChangePassword {
 	@State() key?: model.userwidgets.User.Key
 	@Event() notice: EventEmitter<Notice>
 	@Prop() state: model.State
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 	async componentWillLoad(): Promise<void> {
 		this.state.me.listen("key", async promise => {
 			const key = await promise

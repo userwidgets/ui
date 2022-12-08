@@ -14,7 +14,7 @@ export class UserwidgetsUserListInvited {
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() options?: Options
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 	private invited: string[]
 
 	componentWillLoad() {
