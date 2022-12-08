@@ -1,5 +1,4 @@
 import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
-import * as isoly from "isoly"
 import * as langly from "langly"
 import { Option } from "smoothly"
 import { model } from "../../../model"
@@ -15,8 +14,7 @@ export class UserwidgetsOrganizationPicker {
 	@State() application?: model.userwidgets.Application
 	@State() organizations?: { name: string; value: string }[]
 	@State() receivedKey?: (value: boolean) => void
-	@State() language?: isoly.Language
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 
 	@Watch("key")
 	handleKeyChange() {

@@ -16,7 +16,7 @@ export class SetPassword {
 	@Event() notice: EventEmitter<Notice>
 	@State() new: string
 	@State() repeat: string
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
 		this.state.listen("language", language => (this.translate = translation.create(language)))
 	}

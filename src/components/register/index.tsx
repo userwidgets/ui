@@ -15,7 +15,7 @@ export class UserwidgetsRegister {
 	@State() key?: model.userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")

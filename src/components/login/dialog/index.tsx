@@ -1,5 +1,4 @@
 import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
-import * as isoly from "isoly"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { model } from "../../../model"
@@ -13,8 +12,7 @@ export class UserwidgetsLoginDialog {
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 	@Event() login: EventEmitter<model.userwidgets.User.Credentials>
-	@State() language?: isoly.Language
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
 		this.state.listen("language", language => (this.translate = translation.create(language)))

@@ -14,7 +14,7 @@ export class UserwidgetsUserListMember {
 	@State() users?: model.userwidgets.User.Readable[]
 	@State() key?: model.userwidgets.User.Key
 	@State() options?: Options
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
 		this.state.user.listen("users", async promise => {
 			const users = await promise

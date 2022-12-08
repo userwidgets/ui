@@ -12,7 +12,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@Prop() user: model.userwidgets.User.Readable
 	@State() organizations?: model.userwidgets.Organization[]
 	@State() organizationId?: string
-	@State() translate: langly.Translate
+	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad(): void | Promise<void> {
 		this.state.organization.listen("organizations", async promise => {
 			const organizations = await promise
