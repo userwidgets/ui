@@ -32,6 +32,6 @@ export class UserwidgetsLogin {
 		this.userwidgetsLoginLoaded.emit()
 	}
 	render() {
-		return [this.resolves ? <userwidgets-login-dialog></userwidgets-login-dialog> : null, <slot></slot>]
+		return [this.resolves ? <userwidgets-login-dialog state={this.state} /> : null, <slot />]
 	}
 }
