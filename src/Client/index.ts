@@ -5,7 +5,6 @@ import { model } from "../model"
 import { Application } from "./Application"
 import { Me } from "./Me"
 import { Organization } from "./Organization"
-import { Seed } from "./Seed"
 import { User } from "./User"
 import { Version } from "./Version"
 
@@ -16,7 +15,6 @@ export class Client extends rest.Client<gracely.Error> {
 	readonly me = new Me(this.client)
 	readonly organization = new Organization(this.client, this.entityTags)
 	readonly application = new Application(this.client, this.entityTags)
-	readonly seed = new Seed(this.client)
 	static create<T = Record<string, any>, Error = never>(
 		url?: string,
 		key?: string,
@@ -31,4 +29,4 @@ export class Client extends rest.Client<gracely.Error> {
 	onUnauthorized?: (client: rest.Client<never>) => Promise<boolean>
 }
 
-export { Application, Organization, Me, Seed, User, Version }
+export { Application, Organization, Me, User, Version }
