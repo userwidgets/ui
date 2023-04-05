@@ -1,16 +1,8 @@
 import * as isoly from "isoly"
 import { Application, Me, Organization, User } from "../State"
-import { Listenable } from "../State/Listenable"
 import { Options } from "../State/Options"
 export * as userwidgets from "@userwidgets/model"
-export interface ResourceEntityTags {
-	[entityTag: string]: isoly.DateTime | undefined
-}
-export interface EntityTags {
-	application: ResourceEntityTags
-	organization: ResourceEntityTags
-	user: ResourceEntityTags
-}
+
 export interface States {
 	me: Me & Listenable<Me>
 	user: User & Listenable<User>

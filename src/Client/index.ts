@@ -1,15 +1,27 @@
 import * as gracely from "gracely"
+import { isoly } from "isoly"
 import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
-import { model } from "../model"
 import { Application } from "./Application"
 import { Me } from "./Me"
 import { Organization } from "./Organization"
 import { User } from "./User"
 import { Version } from "./Version"
 
+export interface EntityTags {
+	application: Record<string, isoly.DateTime | undefined>
+	organization: Record<string, isoly.DateTime | undefined>
+	user: Record<string, isoly.DateTime | undefined>
+}
+
+const url = new URL(window.location.href)
+const backend =
+	url.searchParams.get("backend") ??
+	(url.hostname == "localhost" || url.hostname == "127.0.0.1" ? "http://localhost:8788" : "https://api.userwidgets.com")
+const token = window.sessionStorage.getItem("token") ?? undefined
+
 export class Client extends rest.Client<gracely.Error> {
-	private entityTags: model.EntityTags = { application: {}, organization: {}, user: {} }
+	private entityTags: EntityTags = { application: {}, organization: {}, user: {} }
 	readonly version = new Version(this.client)
 	readonly user = new User(this.client, this.entityTags)
 	readonly me = new Me(this.client)
@@ -28,5 +40,4 @@ export class Client extends rest.Client<gracely.Error> {
 	}
 	onUnauthorized?: (client: rest.Client<never>) => Promise<boolean>
 }
-
-export { Application, Organization, Me, User, Version }
+export const client = Client.create(backend, token)
