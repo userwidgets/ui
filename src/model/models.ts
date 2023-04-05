@@ -1,18 +1,20 @@
-import * as isoly from "isoly"
-import { Application, Me, Organization, User } from "../State"
+import { WithListenable } from "smoothly"
+import { Applications } from "../State/Applications"
+import { Languages } from "../State/Languages"
+import { Me } from "../State/Me"
 import { Options } from "../State/Options"
-export * as userwidgets from "@userwidgets/model"
+import { Organizations } from "../State/Organizations"
+import { Users } from "../State/Users"
 
 export interface States {
-	me: Me & Listenable<Me>
-	user: User & Listenable<User>
-	organization: Organization & Listenable<Organization>
-	application: Application & Listenable<Application>
-	options: Options
-	language: isoly.Language
-	onUnauthorized: () => Promise<boolean>
+	me: WithListenable<Me>
+	user: WithListenable<Users>
+	organization: WithListenable<Organizations>
+	application: WithListenable<Applications>
+	options: WithListenable<Options>
+	language: WithListenable<Languages>
 }
-export type State = States & Listenable<States>
+export type State = WithListenable<States>
 
 export function createIsArrayOf<T>(is: (value: any | T) => value is T): (value: any | T[]) => value is T[] {
 	return (value): value is T[] => Array.isArray(value) && value.every(is)

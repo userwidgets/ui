@@ -1,6 +1,11 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
+import "smoothly"
+import { userwidgets } from "@userwidgets/model"
+import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
 
+if (!("URLPattern" in globalThis))
+	(globalThis as any).URLPattern = URLPattern
 @Component({
 	tag: "userwidgets-login",
 	styleUrl: "style.css",
@@ -12,7 +17,7 @@ export class UserwidgetsLogin {
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Listen("login")
-	async handleLogin(event: CustomEvent<model.userwidgets.User.Credentials>) {
+	async handleLogin(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await this.state.me.login({
 			user: event.detail.user,
@@ -25,7 +30,7 @@ export class UserwidgetsLogin {
 		}
 	}
 	async componentWillLoad(): Promise<void> {
-		this.state.onUnauthorized = () =>
+		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
 	}
 	componentDidLoad() {

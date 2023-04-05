@@ -59,7 +59,7 @@
     "start": "stencil build --dev --serve --watch"
   },
   "devDependencies": {
-    "@stencil/core": "^3.2.0",
+    "@stencil/core": "^2.20.0",
     "@stencil/router": "^1.0.1",
     "@types/jest": "^29.5.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
