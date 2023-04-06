@@ -9,7 +9,7 @@ import { model } from "../../../model"
 export class UserwidgetsLoginTrigger {
 	@Prop() state: model.State
 	componentWillLoad() {
-		this.state.user.listen("users", () => undefined)
+		this.state.users.listen("value", () => undefined)
 	}
 
 	render() {
