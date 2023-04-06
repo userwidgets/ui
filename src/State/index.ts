@@ -13,7 +13,7 @@ export class State extends Base<State, Client> {
 	readonly me = Me.create(this.client)
 	readonly users = Users.create(this.client)
 	readonly options = Options.create(this.me)
-	readonly applications = Applications.create(this.client, this.options)
+	readonly applications = Applications.create(this.client)
 	readonly organizations = Organizations.create(this.client, this.users, this.options)
 	static create(client: Client): WithListenable<State> {
 		return Listenable.load(new this(client))

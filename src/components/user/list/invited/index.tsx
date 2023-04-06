@@ -19,10 +19,10 @@ export class UserwidgetsUserListInvited {
 	private invited: string[]
 
 	componentWillLoad() {
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			this.key = key ? key : undefined
-		})
+		// this.state.me.listen("key", async promise => {
+		// 	const key = await promise
+		// 	this.key = key ? key : undefined
+		// })
 		this.state.organizations.listen("value", async promise => {
 			const organizations = await promise
 			this.organizations = organizations ? organizations : undefined

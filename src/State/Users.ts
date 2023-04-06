@@ -21,7 +21,7 @@ export class Users extends Base<Users, Client> {
 	}
 	#value?: Users["value"]
 	get value(): Promise<userwidgets.User.Readable[] | false> | undefined {
-		return this.#value
+		return this.#value ?? this.fetch()
 	}
 	set value(value: Users["value"]) {
 		this.#value = value
