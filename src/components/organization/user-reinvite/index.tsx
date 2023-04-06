@@ -11,11 +11,11 @@ export class UserwidgetsOrganizationUserReinvite {
 	}
 	render() {
 		return (
-			<form>
+			<smoothly-form>
 				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
 					<slot></slot>
 				</smoothly-button>
-			</form>
+			</smoothly-form>
 		)
 	}
 }
