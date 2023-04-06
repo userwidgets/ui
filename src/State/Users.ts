@@ -3,49 +3,69 @@ import { userwidgets } from "@userwidgets/model"
 import { Client } from "../Client"
 import { model } from "../model"
 import { Base } from "./Base"
-import { Options } from "./Options"
+import { Me } from "./Me"
+import { Organizations } from "./Organizations"
 
 export class Users extends Base<Users, Client> {
-	#options: Users["options"] = {}
-	private get options(): Options["value"] {
-		return this.#options
+	#key?: Users["key"]
+	private get key(): Me["key"] {
+		return this.#key
 	}
-	private set options(options: Users["options"]) {
-		options = { ...this.#options, ...options }
-		if (this.value)
-			if ((this.#options.key && !options.key) || (this.#options.organization && !options.organization))
-				this.listenable.value = undefined
-			else if (this.#options.key != options.key)
-				this.fetch()
-		this.#options = options
+	private set key(key: Me["key"]) {
+		const old = this.#key
+		this.#key = key
+		if (old && !key)
+			this.listenable.value = undefined
+		else
+			this.fetch()
+	}
+	#organization: Users["organization"]
+	private get organization(): Organizations["current"] {
+		return this.#organization
+	}
+	private set organization(organization: Organizations["current"]) {
+		this.#organization = organization
+		this.fetch()
 	}
 	#value?: Users["value"]
-	get value(): Promise<userwidgets.User.Readable[] | false> | undefined {
-		return this.#value ?? this.fetch()
+	get value(): userwidgets.User.Readable[] | false | undefined {
+		return this.#value ?? (this.fetch(), this.#value)
 	}
 	set value(value: Users["value"]) {
 		this.#value = value
 	}
-	fetch(): Promise<userwidgets.User.Readable[] | false> {
-		return (this.listenable.value = this.client.user.list().then(response => (!isUsers(response) ? false : response)))
+	async fetch(): Promise<Users["value"]> {
+		return (
+			this.key &&
+			this.client.user
+				.list()
+				.then(response => (!isUsers(response) ? false : response))
+				.then(result => (this.listenable.value = result))
+		)
 	}
 	async updatePermissions(
 		email: string,
 		permissions: userwidgets.User.Permissions.Readable
 	): Promise<userwidgets.User.Readable | false> {
-		const promise = !this.options.organization
-			? Promise.resolve(false as const)
+		const promise = !this.organization
+			? false
 			: this.client.user
-					.updatePermissions(email, this.options.organization, permissions)
+					.updatePermissions(email, this.organization.id, permissions)
 					.then(response => (!userwidgets.User.Readable.is(response) ? false : response))
 		const result = await promise
 		if (result)
 			this.fetch()
 		return result
 	}
-	static create(client: Client): WithListenable<Users> {
+	static create(
+		client: Client,
+		me: WithListenable<Me>,
+		organizations: WithListenable<Organizations>
+	): WithListenable<Users> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
+		me.listen("key", key => (backend.key = key))
+		organizations.listen("current", organization => (backend.organization = organization))
 		return listenable
 	}
 }

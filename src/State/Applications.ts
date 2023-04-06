@@ -5,16 +5,17 @@ import { Base } from "./Base"
 
 export class Applications extends Base<Applications, Client> {
 	#current?: Applications["current"]
-	get current(): Promise<userwidgets.Application | false> | undefined {
-		return this.#current ?? this.fetch()
+	get current(): userwidgets.Application | false | undefined {
+		return this.#current ?? (this.fetch(), undefined)
 	}
 	set current(current: Applications["current"]) {
 		this.#current = current
 	}
-	fetch(): Promise<userwidgets.Application | false> {
-		return (this.listenable.current = this.client.application
+	async fetch(): Promise<Applications["current"]> {
+		return this.client.application
 			.fetch()
-			.then(response => (!userwidgets.Application.is(response) ? false : response)))
+			.then(response => (!userwidgets.Application.is(response) ? false : response))
+			.then(result => (this.listenable.current = result))
 	}
 	static create(client: Client): WithListenable<Applications> {
 		const backend = new this(client)

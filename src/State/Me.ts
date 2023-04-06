@@ -5,7 +5,7 @@ import { Base } from "./Base"
 
 export class Me extends Base<Me, Client> {
 	#key?: Me["key"]
-	get key(): Promise<userwidgets.User.Key | false> | undefined {
+	get key(): userwidgets.User.Key | false | undefined {
 		return this.#key ?? (this.#onUnauthorized && this.#onUnauthorized(), undefined)
 	}
 	set key(key: Me["key"]) {
@@ -16,33 +16,31 @@ export class Me extends Base<Me, Client> {
 		this.#onUnauthorized = onUnauthorized
 		this.client.onUnauthorized = onUnauthorized
 	}
-	private constructor(client: Client) {
-		super(client)
-	}
 	async login(user: userwidgets.User.Credentials): Promise<userwidgets.User.Key | false> {
-		const promise = this.client.me.login(user).then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		const result = await promise
+		const result = await this.client.me
+			.login(user)
+			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
 		if (result)
-			this.listenable.key = promise
-		return promise
+			this.listenable.key = result
+		return result
 	}
 	async register(
 		tag: userwidgets.User.Tag,
 		credentials: userwidgets.User.Credentials.Register
 	): Promise<userwidgets.User.Key | false> {
-		const promise = this.client.me
+		const result = await this.client.me
 			.register(tag, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		const result = await promise
 		if (result)
-			this.listenable.key = promise
+			this.listenable.key = result
 		return result
 	}
 	async join(tag: userwidgets.User.Tag) {
-		const promise = this.client.me.join(tag).then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		const result = await promise
+		const result = await this.client.me
+			.join(tag)
+			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
 		if (result)
-			this.listenable.key = promise
+			this.listenable.key = result
 		return result
 	}
 	logout(): void {
@@ -53,7 +51,7 @@ export class Me extends Base<Me, Client> {
 		const listenable = Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")
 		if (key)
-			listenable.key = userwidgets.User.Key.unpack(key).then(key => key || false)
+			userwidgets.User.Key.unpack(key).then(key => (listenable.key = key || false))
 		return listenable
 	}
 }
