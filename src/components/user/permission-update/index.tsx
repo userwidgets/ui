@@ -94,7 +94,7 @@ export class UserwidgetsPermissionUpdate {
 	handleClick() {
 		!this.preventDefault &&
 			this.selectedOptions &&
-			this.state.user.updatePermissions(this.user.email, this.selectedOptions)
+			this.state.users.updatePermissions(this.user.email, this.selectedOptions)
 	}
 
 	render() {
