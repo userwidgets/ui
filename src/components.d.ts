@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { Notice } from "smoothly";
+import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsChangeName {
@@ -237,7 +238,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
-        "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
+        "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
         "state"?: model.State;
     }
