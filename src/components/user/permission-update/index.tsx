@@ -28,7 +28,7 @@ export class UserwidgetsPermissionUpdate {
 	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions.Readable>
 
 	@Watch("key")
-	@Watch("organizationId")
+	@Watch("organization")
 	updateOptions() {
 		this.pickerOptions =
 			!this.organization || !this.key
