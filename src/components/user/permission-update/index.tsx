@@ -64,7 +64,7 @@ export class UserwidgetsPermissionUpdate {
 				const key = await promise
 				this.key = !key ? undefined : key
 			}),
-			this.state.listen("options", options => (this.organizationId = options.organizationId))
+			this.state.options.listen("organization", organization => (this.organizationId = organization))
 	}
 
 	handleMenuClosed(event: CustomEvent<Option[]>) {
