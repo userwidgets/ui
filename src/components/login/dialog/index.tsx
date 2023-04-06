@@ -32,7 +32,7 @@ export class UserwidgetsLoginDialog {
 		return (
 			<div class="page background">
 				<div class="viewport background">
-					<smoothly-form onSmoothlyFormSubmit={(e: CustomEvent) => this.handleSubmit(e)}>
+					<smoothly-form looks="line" onSmoothlyFormSubmit={(e: CustomEvent) => this.handleSubmit(e)}>
 						<smoothly-input type="email" name="user">
 							{this.translate("Email")}
 						</smoothly-input>

@@ -46,7 +46,7 @@ export class ChangePassword {
 	}
 	render() {
 		return (
-			<smoothly-form onSmoothlyFormSubmit={(e: CustomEvent) => this.handleSubmit(e)}>
+			<smoothly-form looks="line" onSmoothlyFormSubmit={(e: CustomEvent) => this.handleSubmit(e)}>
 				{this.translate("Change password for user ")}
 				<code>{this.key?.email}</code>
 				<smoothly-input name="old" type="password">

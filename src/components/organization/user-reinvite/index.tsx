@@ -11,7 +11,7 @@ export class UserwidgetsOrganizationUserReinvite {
 	}
 	render() {
 		return (
-			<smoothly-form>
+			<smoothly-form looks="line">
 				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
 					<slot></slot>
 				</smoothly-button>
