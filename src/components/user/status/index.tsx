@@ -20,8 +20,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 			this.organizations = !organizations ? undefined : organizations
 		})
 		this.state.listen("options", options => (this.organizationId = options.organizationId))
-		this.state.listen("language", language => (this.translate = translation.create(language)))
-		this.state
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	render() {
