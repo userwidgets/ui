@@ -1,7 +1,8 @@
 import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import * as langly from "langly"
-import { Notice, redirect } from "smoothly"
+import { Notice } from "smoothly"
+import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
 import * as translation from "./translation"
@@ -11,24 +12,24 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsRegister {
-	@State() tag?: model.userwidgets.User.Tag
-	@State() key?: model.userwidgets.User.Key
+	@State() tag?: userwidgets.User.Tag
+	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
-		model.userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
+		userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
 			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
 		})
-		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
 		event.preventDefault()
 		event.stopPropagation()
-		!this.tag || !model.userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
+		!this.tag || !userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
 			? this.notice.emit(
 					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
@@ -57,7 +58,7 @@ export class UserwidgetsRegister {
 				</p>
 			</div>
 		) : this.tag.active ? null : (
-			<form onSubmit={e => e.preventDefault()}>
+			<smoothly-form onSmoothlyFormSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
 				<div class="inputs">
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
@@ -75,9 +76,7 @@ export class UserwidgetsRegister {
 					</smoothly-input>
 				</div>
 				<div class="buttons">
-					<smoothly-submit onSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
-						{this.translate("Register")}
-					</smoothly-submit>
+					<smoothly-submit>{this.translate("Register")}</smoothly-submit>
 					<p>
 						{this.translate("Already have an account? ")}
 						<a
@@ -93,7 +92,7 @@ export class UserwidgetsRegister {
 						</a>
 					</p>
 				</div>
-			</form>
+			</smoothly-form>
 		)
 	}
 }
