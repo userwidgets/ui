@@ -17,10 +17,7 @@ export class ChangePassword {
 	@Prop() state: model.State
 	@State() translate: langly.Translate = translation.create("en")
 	async componentWillLoad(): Promise<void> {
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			this.key = key ? key : undefined
-		})
+		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 

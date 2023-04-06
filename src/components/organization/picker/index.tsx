@@ -20,10 +20,7 @@ export class UserwidgetsOrganizationPicker {
 	@Watch("key")
 	handleKeyChange() {
 		;(!this.key || !this.application) &&
-			this.state.applications.listen("current", async promise => {
-				const application = await promise
-				this.application = application ? application : undefined
-			})
+			this.state.applications.listen("current", application => (this.application = application || undefined))
 	}
 
 	@Watch("application")
@@ -35,7 +32,7 @@ export class UserwidgetsOrganizationPicker {
 					name: name,
 					value: id,
 				})))
-		this.organizations?.length && (this.state.options.value = { organization: this.organizations[0].value })
+		this.organizations?.length && (this.state.organizations.current = { organization: this.organizations[0].value })
 	}
 	componentWillLoad() {
 		new Promise(resolve => (this.receivedKey = resolve)).then(() => {
@@ -59,7 +56,7 @@ export class UserwidgetsOrganizationPicker {
 	}
 	render() {
 		return this.key ? (
-			<smoothly-picker
+			<smoothly-old-picker
 				label="Organization"
 				multiple={false}
 				options={this.organizations}
@@ -67,7 +64,7 @@ export class UserwidgetsOrganizationPicker {
 					!this.organizations?.length
 						? [{ name: this.translate("You are not a member of any organization"), value: "" }]
 						: [this.organizations[0]]
-				}></smoothly-picker>
+				}></smoothly-old-picker>
 		) : null
 	}
 }

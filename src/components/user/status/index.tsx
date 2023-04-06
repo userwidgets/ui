@@ -12,14 +12,11 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User.Readable
 	@State() organizations?: userwidgets.Organization[]
-	@State() organization?: string
+	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad(): void | Promise<void> {
-		this.state.organizations.listen("value", async promise => {
-			const organizations = await promise
-			this.organizations = organizations || undefined
-		})
-		this.state.options.listen("organization", organization => (this.organization = organization))
+		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
+		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
@@ -27,7 +24,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 		return [
 			<span>{this.translate("Status:")}</span>,
 			this.organizations
-				?.find(organization => organization.id == this.organization)
+				?.find(organization => organization.id == this.organization?.id)
 				?.users.includes(this.user.email) ? (
 				<span>{this.translate("Active")}</span>
 			) : (

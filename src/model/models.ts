@@ -2,7 +2,6 @@ import { WithListenable } from "smoothly"
 import { Applications } from "../State/Applications"
 import { Locales } from "../State/Locales"
 import { Me } from "../State/Me"
-import { Options } from "../State/Options"
 import { Organizations } from "../State/Organizations"
 import { Users } from "../State/Users"
 
@@ -11,7 +10,6 @@ export interface States {
 	users: WithListenable<Users>
 	organizations: WithListenable<Organizations>
 	applications: WithListenable<Applications>
-	options: WithListenable<Options>
 	locales: WithListenable<Locales>
 }
 export type State = WithListenable<States>

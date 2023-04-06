@@ -24,7 +24,7 @@ export class UserwidgetsPermissionUpdate {
 	@State() pickerOptions?: (Option & { checked: boolean })[]
 	@State() selectedOptions?: userwidgets.User.Permissions.Readable
 	@State() key?: userwidgets.User.Key
-	@State() organization?: string
+	@State() organization?: userwidgets.Organization
 	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions.Readable>
 
 	@Watch("key")
@@ -37,7 +37,7 @@ export class UserwidgetsPermissionUpdate {
 						userwidgets.User.Permissions.Readable.assign(
 							userwidgets.User.Permissions.Readable.copy(this.key.permissions, false),
 							this.user.permissions
-						)[this.organization] ?? {}
+						)[this.organization.id] ?? {}
 				  )
 						.map(
 							([resource, permission]) =>
@@ -47,7 +47,7 @@ export class UserwidgetsPermissionUpdate {
 										name: `${resource} ${access}`,
 										value: [`organization|${this.organization}|${resource}|${access}`],
 										checked:
-											!!this.user.permissions[this.organization ?? ""]?.[resource]?.[
+											!!this.user.permissions[this.organization?.id ?? ""]?.[resource]?.[
 												access as keyof userwidgets.User.Permissions.Permission
 											],
 									}))
@@ -59,12 +59,8 @@ export class UserwidgetsPermissionUpdate {
 
 	componentWillLoad() {
 		this.options && (this.pickerOptions = this.options)
-		!this.options &&
-			this.state.me.listen("key", async promise => {
-				const key = await promise
-				this.key = !key ? undefined : key
-			}),
-			this.state.options.listen("organization", organization => (this.organization = organization))
+		!this.options && this.state.me.listen("key", key => (this.key = key || undefined)),
+			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
 	handleMenuClosed(event: CustomEvent<Option[]>) {

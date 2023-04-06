@@ -2,7 +2,6 @@ import { Component, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
-import { Options } from "../../../../State/Options"
 import * as translation from "./translation"
 
 @Component({
@@ -14,19 +13,13 @@ export class UserwidgetsUserListMember {
 	@Prop() state: model.State
 	@State() users?: userwidgets.User.Readable[]
 	@State() key?: userwidgets.User.Key
-	@State() options?: Options
+	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
-		this.state.users.listen("value", async promise => {
-			const users = await promise
-			this.users = !users ? undefined : users
-		})
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			this.key = !key ? undefined : key
-		})
-		this.state.listen("options", options => (this.options = options))
+		this.state.users.listen("value", users => (this.users = users || undefined))
+		this.state.me.listen("key", async key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 	render() {
 		return (
@@ -36,7 +29,7 @@ export class UserwidgetsUserListMember {
 					<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
 					<smoothly-table-header></smoothly-table-header>
 				</smoothly-table-row>
-				{this.key?.permissions[this.options?.organization ?? ""]?.organization?.write
+				{this.key?.permissions[this.organization?.id ?? ""]?.organization?.write
 					? this.users?.map(user =>
 							user.email == this.key?.email ? null : (
 								<smoothly-table-expandable-row>
