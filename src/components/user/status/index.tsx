@@ -19,7 +19,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 			const organizations = await promise
 			this.organizations = !organizations ? undefined : organizations
 		})
-		this.state.listen("options", options => (this.organizationId = options.organizationId))
+		this.state.options.listen("organization", organization => (this.organizationId = organization))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
