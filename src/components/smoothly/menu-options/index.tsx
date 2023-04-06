@@ -116,7 +116,7 @@ export class SmoothlyMenuOptions {
 					this.filteredOptions.map((option, index) => (
 						<smoothly-old-option
 							style={this.optionStyle}
-							toggle={option.toggle ?? this.toggle}
+							toggle={option.checked ?? this.toggle}
 							ref={el => {
 								index == 0 && (this.firstOptionsElement = el ?? this.firstOptionsElement)
 								el && (this.optionElements[index] = el)
