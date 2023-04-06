@@ -15,9 +15,9 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@State() organizationId?: string
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad(): void | Promise<void> {
-		this.state.organization.listen("organizations", async promise => {
+		this.state.organizations.listen("value", async promise => {
 			const organizations = await promise
-			this.organizations = !organizations ? undefined : organizations
+			this.organizations = organizations || undefined
 		})
 		this.state.options.listen("organization", organization => (this.organizationId = organization))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
