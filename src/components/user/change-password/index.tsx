@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import * as langly from "langly"
 import { Notice } from "smoothly"

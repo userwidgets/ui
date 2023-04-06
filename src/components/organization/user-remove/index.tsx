@@ -13,7 +13,7 @@ export class UserwidgetsOrganizationUserRemove {
 	@Prop() organization: any
 
 	handleClick() {
-		this.state.organizations.removeUser(this.state.organizations.current, this.user.email)
+		this.state.organizations.removeUser(this.user.email)
 	}
 
 	render() {
