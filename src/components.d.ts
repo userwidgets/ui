@@ -57,7 +57,7 @@ export namespace Components {
         "valueValidator": (value: any) => [boolean, Notice | undefined];
     }
     interface UserwidgetsChangeName {
-        "name": model.userwidgets.User.Name;
+        "name": userwidgets.User.Name;
         "state": model.State;
     }
     interface UserwidgetsChangePassword {
@@ -351,7 +351,7 @@ declare namespace LocalJSX {
         "valueValidator"?: (value: any) => [boolean, Notice | undefined];
     }
     interface UserwidgetsChangeName {
-        "name"?: model.userwidgets.User.Name;
+        "name"?: userwidgets.User.Name;
         "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<Notice>) => void;
         "state"?: model.State;
     }

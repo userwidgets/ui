@@ -1,5 +1,6 @@
 import { Component, h, Prop, State } from "@stencil/core"
-import { redirect } from "smoothly"
+import { userwidgets } from "@userwidgets/model"
+// import { redirect } from "smoothly"
 import { model } from "../../../model"
 
 @Component({
@@ -9,7 +10,7 @@ import { model } from "../../../model"
 })
 export class Logout {
 	@Prop() state: model.State
-	@State() key?: model.userwidgets.User.Key
+	@State() key?: userwidgets.User.Key
 	componentWillLoad() {
 		this.state.me.listen("key", async promise => {
 			const key = await promise
@@ -19,7 +20,7 @@ export class Logout {
 
 	handleClick(): void | Promise<void> {
 		this.state.me.logout()
-		redirect(window.location.origin)
+		model.redirect(window.location.origin)
 	}
 	render() {
 		return this.key ? (
