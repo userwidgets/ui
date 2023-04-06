@@ -101,12 +101,13 @@ export class UserwidgetsPermissionUpdate {
 		return (
 			<form onSubmit={event => event.preventDefault()}>
 				<div class={"inputs"}>
-					<smoothly-picker
+					<smoothly-old-picker
 						label={this.label}
 						onMenuClose={event => this.handleMenuClosed(event)}
 						multiple={true}
 						options={this.pickerOptions}
-						selections={this.pickerOptions?.filter(option => option.checked) ?? []}></smoothly-picker>
+						selections={this.pickerOptions?.filter(option => option.checked) ?? []}
+					/>
 					<smoothly-button disabled={!this.changed} class={"button"} onClick={() => this.handleClick()}>
 						<slot></slot>
 					</smoothly-button>
