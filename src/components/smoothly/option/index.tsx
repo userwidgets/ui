@@ -20,10 +20,10 @@ export class SmoothlyOption {
 	@Event() optionSelect: EventEmitter<{ value: any; name: string }>
 	@Event() optionUnselect: EventEmitter<{ value: any; name: string }>
 	@Event() optionAdd: EventEmitter<{ name: string; value: string }>
-	onHover(event: MouseEvent) {
+	onHover() {
 		this.optionHover.emit({ name: this.name, value: this.value })
 	}
-	onSelect(event: UIEvent) {
+	onSelect() {
 		if (this.value) {
 			this.new
 				? this.optionAdd.emit({ name: this.name, value: this.value })
@@ -37,7 +37,7 @@ export class SmoothlyOption {
 
 	render() {
 		return (
-			<Host onMouseDown={(e: any) => this.onSelect(e)} onMouseOver={(e: MouseEvent) => this.onHover(e)}>
+			<Host onMouseDown={() => this.onSelect()} onMouseOver={() => this.onHover()}>
 				{this.toggle && <smoothly-icon name={this.checked ? "checkbox" : "square-outline"}></smoothly-icon>}
 				<div class="name">{this.name}</div>
 				<smoothly-quiet>

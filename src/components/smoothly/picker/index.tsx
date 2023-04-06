@@ -122,7 +122,7 @@ export class SmoothlyPicker {
 	filterOptions() {
 		this.menuElement?.filterOptions(this.inputElement.value, [])
 	}
-	onInput(event: Event) {
+	onInput() {
 		this.isOpen = this.inputElement.value != "" ? true : this.isOpen
 		this.highlightDefault()
 	}
@@ -205,7 +205,7 @@ export class SmoothlyPicker {
 								: this.selections.map(selection => selection.name).join(", ")
 						}
 						onKeyDown={e => this.onKeyDown(e)}
-						onInput={(e: Event) => this.onInput(e)}></input>
+						onInput={() => this.onInput()}></input>
 					<smoothly-icon part="chevron" class="down" name="chevron-down" size="tiny"></smoothly-icon>
 					<smoothly-icon part="chevron" class="up" name="chevron-up" size="tiny"></smoothly-icon>
 				</div>
