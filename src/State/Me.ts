@@ -38,10 +38,8 @@ export class Me extends Base<Me, Client> {
 			this.listenable.key = promise
 		return result
 	}
-	async join(tag: userwidgets.User.Tag, credentials: userwidgets.User.Credentials.Register) {
-		const promise = this.client.me
-			.register(tag, credentials)
-			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
+	async join(tag: userwidgets.User.Tag) {
+		const promise = this.client.me.join(tag).then(response => (!userwidgets.User.Key.is(response) ? false : response))
 		const result = await promise
 		if (result)
 			this.listenable.key = promise
