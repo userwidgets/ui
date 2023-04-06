@@ -1,5 +1,6 @@
 import { Component, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
 import { Options } from "../../../../State/Options"
 import * as translation from "./translation"
@@ -10,9 +11,9 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserListInvited {
 	@Prop() state: model.State
-	@State() key?: model.userwidgets.User.Key
-	@State() organizations?: model.userwidgets.Organization[]
-	@State() users?: model.userwidgets.User.Readable[]
+	@State() key?: userwidgets.User.Key
+	@State() organizations?: userwidgets.Organization[]
+	@State() users?: userwidgets.User.Readable[]
 	@State() options?: Options
 	@State() translate: langly.Translate = translation.create("en")
 	private invited: string[]
@@ -22,25 +23,25 @@ export class UserwidgetsUserListInvited {
 			const key = await promise
 			this.key = key ? key : undefined
 		})
-		this.state.organization.listen("organizations", async promise => {
+		this.state.organizations.listen("value", async promise => {
 			const organizations = await promise
 			this.organizations = organizations ? organizations : undefined
 		})
 		this.state.listen("options", options => {
 			this.options = options ? options : undefined
 		})
-		this.state.user.listen("users", async promise => {
+		this.state.users.listen("value", async promise => {
 			const users = await promise
 			this.users = users ? users : undefined
 		})
-		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 	componentWillRender() {
 		this.invited =
 			!this.key || !this.organizations || !this.users || !this.options
 				? []
 				: this.organizations
-						.find(organization => organization.id == this.options?.organizationId)
+						.find(organization => organization.id == this.options?.organization)
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
 	render() {
