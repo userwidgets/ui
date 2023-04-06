@@ -58,7 +58,9 @@ export class UserwidgetsRegister {
 				</p>
 			</div>
 		) : this.tag.active ? null : (
-			<smoothly-form onSmoothlyFormSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
+			<smoothly-form
+				looks="line"
+				onSmoothlyFormSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
 				<div class="inputs">
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
