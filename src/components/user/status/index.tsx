@@ -21,6 +21,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 		})
 		this.state.listen("options", options => (this.organizationId = options.organizationId))
 		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state
 	}
 
 	render() {

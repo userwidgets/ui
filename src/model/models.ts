@@ -8,11 +8,11 @@ import { Users } from "../State/Users"
 
 export interface States {
 	me: WithListenable<Me>
-	user: WithListenable<Users>
-	organization: WithListenable<Organizations>
-	application: WithListenable<Applications>
+	users: WithListenable<Users>
+	organizations: WithListenable<Organizations>
+	applications: WithListenable<Applications>
 	options: WithListenable<Options>
-	language: WithListenable<Locales>
+	locales: WithListenable<Locales>
 }
 export type State = WithListenable<States>
 
