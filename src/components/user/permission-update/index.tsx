@@ -99,7 +99,7 @@ export class UserwidgetsPermissionUpdate {
 
 	render() {
 		return (
-			<form onSubmit={event => event.preventDefault()}>
+			<smoothly-form onSmoothlyFormSubmit={event => event.preventDefault()}>
 				<div class={"inputs"}>
 					<smoothly-old-picker
 						label={this.label}
@@ -112,7 +112,7 @@ export class UserwidgetsPermissionUpdate {
 						<slot></slot>
 					</smoothly-button>
 				</div>
-			</form>
+			</smoothly-form>
 		)
 	}
 }
