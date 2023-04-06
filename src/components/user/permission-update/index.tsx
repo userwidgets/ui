@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, h, Prop, State, Watch } from "@stencil/core"
 import { Option } from "smoothly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
 export interface CustomOption {
@@ -16,15 +17,15 @@ export interface CustomOption {
 export class UserwidgetsPermissionUpdate {
 	@Prop({ mutable: true, reflect: true }) changed = false
 	@Prop() state: model.State
-	@Prop() user: model.userwidgets.User.Readable
+	@Prop() user: userwidgets.User.Readable
 	@Prop() label = "Permissions:"
 	@Prop() options?: CustomOption[]
 	@Prop() preventDefault = false
 	@State() pickerOptions?: (Option & { checked: boolean })[]
-	@State() selectedOptions?: model.userwidgets.User.Permissions.Readable
-	@State() key?: model.userwidgets.User.Key
+	@State() selectedOptions?: userwidgets.User.Permissions.Readable
+	@State() key?: userwidgets.User.Key
 	@State() organizationId?: string
-	@Event() userPermissionUpdated: EventEmitter<model.userwidgets.User.Permissions.Readable>
+	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions.Readable>
 
 	@Watch("key")
 	@Watch("organizationId")
@@ -33,8 +34,8 @@ export class UserwidgetsPermissionUpdate {
 			!this.organizationId || !this.key
 				? undefined
 				: Object.entries(
-						model.userwidgets.User.Permissions.Readable.assign(
-							model.userwidgets.User.Permissions.Readable.copy(this.key.permissions, false),
+						userwidgets.User.Permissions.Readable.assign(
+							userwidgets.User.Permissions.Readable.copy(this.key.permissions, false),
 							this.user.permissions
 						)[this.organizationId] ?? {}
 				  )
@@ -47,7 +48,7 @@ export class UserwidgetsPermissionUpdate {
 										value: [`organization|${this.organizationId}|${resource}|${access}`],
 										checked:
 											!!this.user.permissions[this.organizationId ?? ""]?.[resource]?.[
-												access as keyof model.userwidgets.User.Permissions.Permission
+												access as keyof userwidgets.User.Permissions.Permission
 											],
 									}))
 									.flat()
@@ -67,7 +68,7 @@ export class UserwidgetsPermissionUpdate {
 	}
 
 	handleMenuClosed(event: CustomEvent<Option[]>) {
-		this.selectedOptions = event.detail.reduce<model.userwidgets.User.Permissions.Readable>(
+		this.selectedOptions = event.detail.reduce<userwidgets.User.Permissions.Readable>(
 			(target, { value: values }) => (
 				Array.isArray(values) &&
 					values.forEach(value =>
@@ -78,7 +79,7 @@ export class UserwidgetsPermissionUpdate {
 					),
 				target
 			),
-			model.userwidgets.User.Permissions.Readable.copy(this.key?.permissions ?? {}, false)
+			userwidgets.User.Permissions.Readable.copy(this.key?.permissions ?? {}, false)
 		)
 		this.changed = !event.detail.every(detail =>
 			detail.value?.every((value: any) =>
