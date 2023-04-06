@@ -1,5 +1,6 @@
 import { Component, ComponentWillLoad, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 @Component({
@@ -9,8 +10,8 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@Prop() state: model.State
-	@Prop() user: model.userwidgets.User.Readable
-	@State() organizations?: model.userwidgets.Organization[]
+	@Prop() user: userwidgets.User.Readable
+	@State() organizations?: userwidgets.Organization[]
 	@State() organizationId?: string
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad(): void | Promise<void> {
