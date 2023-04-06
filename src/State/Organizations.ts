@@ -37,7 +37,7 @@ export class Organizations extends Base<Organizations, Client> {
 	set current(current: Organizations["current"]) {
 		this.#current = current
 	}
-	constructor(client: Client, private users: WithListenable<Users>) {
+	private constructor(client: Client, private users: WithListenable<Users>) {
 		super(client)
 	}
 	fetch(options?: Organizations["options"]): Organizations["value"] {
