@@ -27,7 +27,7 @@ export type Client = {
 	organization: UserwidgetsClient.Organization
 	me: UserwidgetsClient.Me
 	user: UserwidgetsClient.User
-	onUnauthorized: UserwidgetsClient.Unauthorized
+	onUnauthorized?: UserwidgetsClient.Unauthorized
 }
 
 type Value = string | number | boolean | Blob | undefined
