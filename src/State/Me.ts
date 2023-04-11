@@ -1,9 +1,9 @@
 import { Listenable, WithListenable } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { Client } from "../Client"
+import { model } from "../model"
 import { Base } from "./Base"
 
-export class Me extends Base<Me, Client> {
+export class Me extends Base<Me, model.Client> {
 	#key?: Me["key"]
 	get key(): userwidgets.User.Key | false | undefined {
 		return this.#key ?? (this.#onUnauthorized && this.#onUnauthorized(), undefined)
@@ -48,7 +48,7 @@ export class Me extends Base<Me, Client> {
 	logout(): void {
 		window.sessionStorage.clear()
 	}
-	static create(client: Client): WithListenable<Me> {
+	static create(client: model.Client): WithListenable<Me> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")

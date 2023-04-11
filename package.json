@@ -15,7 +15,7 @@
   "es2017": "dist/esm/index.js",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "types": "dist/types/components.d.ts",
+  "types": "dist/custom-elements/index.d.ts",
   "unpkg": "dist/userwidgets/userwidgets.esm.js",
   "files": [
     "dist/",

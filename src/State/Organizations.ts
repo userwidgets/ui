@@ -1,10 +1,10 @@
 import { Listenable, WithListenable } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { Client } from "../Client"
 import { model } from "../model"
 import { Base } from "./Base"
 
-export class Organizations extends Base<Organizations, Client> {
+export class Organizations extends Base<Organizations, model.Client> {
+	#request?: Promise<Organizations["value"]>
 	#value?: Organizations["value"]
 	get value(): userwidgets.Organization[] | false | undefined {
 		return this.#value ?? (this.fetch(), undefined)
@@ -37,10 +37,13 @@ export class Organizations extends Base<Organizations, Client> {
 		}
 	}
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		return this.client.organization
+		const promise = (this.#request ??= this.client.organization
 			.list()
-			.then(response => (!isOrganizations(response) ? false : response))
-			.then(result => (this.listenable.value = result))
+			.then(response => (!isOrganizations(response) ? false : response)))
+		const result = await promise
+		if (promise == this.#request)
+			this.#request = undefined
+		return (this.listenable.value = result || false)
 	}
 	async removeUser(email: string): Promise<userwidgets.Organization | false> {
 		const result = !this.current
@@ -52,7 +55,7 @@ export class Organizations extends Base<Organizations, Client> {
 			this.listenable.current = result
 		return result
 	}
-	static create(client: Client): WithListenable<Organizations> {
+	static create(client: model.Client): WithListenable<Organizations> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
 		return listenable

@@ -1,18 +1,14 @@
 import { WithListenable } from "smoothly"
-import { Applications } from "../State/Applications"
+import type { Client as UserwidgetsClient } from "../Client"
+import type { State as UserwidgetsState } from "../State"
 import { Locales } from "../State/Locales"
-import { Me } from "../State/Me"
-import { Organizations } from "../State/Organizations"
-import { Users } from "../State/Users"
-
-export interface States {
-	me: WithListenable<Me>
-	users: WithListenable<Users>
-	organizations: WithListenable<Organizations>
-	applications: WithListenable<Applications>
+export interface State {
+	me: WithListenable<UserwidgetsState.Me>
+	users: WithListenable<UserwidgetsState.Users>
+	organizations: WithListenable<UserwidgetsState.Organizations>
+	applications: WithListenable<UserwidgetsState.Applications>
 	locales: WithListenable<Locales>
 }
-export type State = WithListenable<States>
 
 export function createIsArrayOf<T>(is: (value: any | T) => value is T): (value: any | T[]) => value is T[] {
 	return (value): value is T[] => Array.isArray(value) && value.every(is)
@@ -24,6 +20,14 @@ export function nest<T extends Record<string, any>>(target: T, [head, ...tail]: 
 			: value),
 		target as T
 	)
+}
+
+export type Client = {
+	application: UserwidgetsClient.Application
+	organization: UserwidgetsClient.Organization
+	me: UserwidgetsClient.Me
+	user: UserwidgetsClient.User
+	onUnauthorized: UserwidgetsClient.Unauthorized
 }
 
 type Value = string | number | boolean | Blob | undefined

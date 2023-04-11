@@ -1,12 +1,12 @@
 import { Listenable, WithListenable } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { Client } from "../Client"
 import { model } from "../model"
 import { Base } from "./Base"
 import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
-export class Users extends Base<Users, Client> {
+export class Users extends Base<Users, model.Client> {
+	#request?: Promise<Users["value"]>
 	#key?: Users["key"]
 	private get key(): Me["key"] {
 		return this.#key
@@ -34,14 +34,14 @@ export class Users extends Base<Users, Client> {
 	set value(value: Users["value"]) {
 		this.#value = value
 	}
-	async fetch(): Promise<Users["value"]> {
-		return (
-			this.key &&
-			this.client.user
-				.list()
-				.then(response => (!isUsers(response) ? false : response))
-				.then(result => (this.listenable.value = result))
-		)
+	async fetch(): Promise<userwidgets.User.Readable[] | false> {
+		const promise = !this.key
+			? false
+			: this.client.user.list().then(response => (!isUsers(response) ? false : response))
+		const result = await promise
+		if (promise == this.#request)
+			this.#request = undefined
+		return (this.listenable.value = result) || false
 	}
 	async updatePermissions(
 		email: string,
@@ -58,7 +58,7 @@ export class Users extends Base<Users, Client> {
 		return result
 	}
 	static create(
-		client: Client,
+		client: model.Client,
 		me: WithListenable<Me>,
 		organizations: WithListenable<Organizations>
 	): WithListenable<Users> {

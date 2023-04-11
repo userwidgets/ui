@@ -29,7 +29,8 @@ export class UserwidgetsLogin {
 			this.loggedIn.emit()
 		}
 	}
-	async componentWillLoad(): Promise<void> {
+	componentWillLoad() {
+		console.log("setting unathorized")
 		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
 	}
