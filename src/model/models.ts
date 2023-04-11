@@ -25,6 +25,3 @@ export function nest<T extends Record<string, any>>(target: T, [head, ...tail]: 
 		target as T
 	)
 }
-export function redirect(_: string): void {
-	return
-}

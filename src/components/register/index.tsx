@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import * as langly from "langly"
 import { Notice } from "smoothly"
+import { redirect } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
@@ -21,7 +22,7 @@ export class UserwidgetsRegister {
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
 		userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
-			!(this.tag = tag) ? model.redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
+			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
 		})
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
@@ -43,7 +44,7 @@ export class UserwidgetsRegister {
 						new: event.detail.new,
 						repeat: event.detail.repeat,
 					},
-			  })) && model.redirect(window.origin)
+			  })) && redirect(window.origin)
 	}
 
 	render() {
@@ -88,7 +89,7 @@ export class UserwidgetsRegister {
 								this.tag &&
 									(await this.state.me.join(this.tag).then(p => p)) &&
 									(await this.state.me.join(this.tag)) &&
-									model.redirect(window.origin)
+									redirect(window.origin)
 							}}>
 							{this.translate("Login")}
 						</a>
