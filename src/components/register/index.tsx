@@ -22,15 +22,17 @@ export class UserwidgetsRegister {
 	async componentWillLoad() {
 		const token = new URL(window.location.href).searchParams.get("id")
 		userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
-			!(this.tag = tag) ? redirect(window.origin) : this.tag.active && this.state.me.join(this.tag)
+			!(this.tag = tag) ? redirect("/") : this.tag.active && this.state.me.join(this.tag)
 		})
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
-	async handleSubmit(event: CustomEvent<{ [key: string]: string }>) {
+	async handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
 		event.stopPropagation()
-		!this.tag || !userwidgets.User.Password.Set.validate({ new: event.detail.new, repeat: event.detail.repeat })
+		!this.tag ||
+		!userwidgets.User.Password.Set.is(event.detail) ||
+		!userwidgets.User.Password.Set.validate(event.detail)
 			? this.notice.emit(
 					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
@@ -44,7 +46,7 @@ export class UserwidgetsRegister {
 						new: event.detail.new,
 						repeat: event.detail.repeat,
 					},
-			  })) && redirect(window.origin)
+			  })) && redirect("/")
 	}
 
 	render() {
@@ -59,9 +61,7 @@ export class UserwidgetsRegister {
 				</p>
 			</div>
 		) : this.tag.active ? null : (
-			<smoothly-form
-				looks="line"
-				onSmoothlyFormSubmit={e => this.handleSubmit(e as CustomEvent<{ [key: string]: string }>)}>
+			<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 				<div class="inputs">
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
@@ -84,13 +84,13 @@ export class UserwidgetsRegister {
 						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
-							onClick={async e => {
-								e.preventDefault()
+							onClick={async e => (
+								e.preventDefault(),
 								this.tag &&
 									(await this.state.me.join(this.tag).then(p => p)) &&
 									(await this.state.me.join(this.tag)) &&
-									redirect(window.origin)
-							}}>
+									redirect("/")
+							)}>
 							{this.translate("Login")}
 						</a>
 					</p>

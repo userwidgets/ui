@@ -25,3 +25,6 @@ export function nest<T extends Record<string, any>>(target: T, [head, ...tail]: 
 		target as T
 	)
 }
+
+type Value = string | number | boolean | Blob | undefined
+export type Data = { [name: string]: Data | Value }

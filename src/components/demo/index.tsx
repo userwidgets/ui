@@ -12,13 +12,13 @@ export class Demo {
 		return (
 			<userwidgets-login state={state}>
 				<smoothly-app label="Userwidgets ui demo">
-					<smoothly-app-room path="/version" label="Version">
+					<smoothly-app-room path="/" label="Version">
 						<userwidgets-demo-version></userwidgets-demo-version>
 					</smoothly-app-room>
 					<smoothly-app-room path="/register">
 						<userwidgets-register state={state}></userwidgets-register>
 					</smoothly-app-room>
-					{window.location.pathname.startsWith("/register")
+					{!window.location.pathname.startsWith("/register")
 						? [
 								<smoothly-app-room path="/login" label="Login">
 									<userwidgets-login-trigger state={state}></userwidgets-login-trigger>

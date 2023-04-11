@@ -10,6 +10,8 @@ export class Me extends Base<Me, Client> {
 	}
 	set key(key: Me["key"]) {
 		this.#key = key
+		if (key)
+			localStorage.setItem("token", key.token)
 	}
 	#onUnauthorized?: () => Promise<boolean>
 	set onUnauthorized(onUnauthorized: () => Promise<boolean>) {

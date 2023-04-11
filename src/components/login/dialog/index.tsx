@@ -18,7 +18,7 @@ export class UserwidgetsLoginDialog {
 	componentWillLoad() {
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
-	handleSubmit(event: CustomEvent) {
+	handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
 		if (!userwidgets.User.Credentials.is(event.detail))
 			this.notice.emit(Notice.warn(this.translate("Both email and password is required to login.")))
@@ -32,7 +32,7 @@ export class UserwidgetsLoginDialog {
 		return (
 			<div class="page background">
 				<div class="viewport background">
-					<smoothly-form looks="line" onSmoothlyFormSubmit={(e: CustomEvent) => this.handleSubmit(e)}>
+					<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 						<smoothly-input type="email" name="user">
 							{this.translate("Email")}
 						</smoothly-input>
