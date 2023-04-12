@@ -22,7 +22,7 @@ export class UserwidgetsRegister {
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 	@Event() userwidgetsRegister: EventEmitter<registerData>
-	@Event() userwidgetsActiveAccount: EventEmitter<userwidgets.User.Tag>
+	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
@@ -89,7 +89,7 @@ export class UserwidgetsRegister {
 						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
-							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(this.tag))}>
+							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(true))}>
 							{this.translate("Login")}
 						</a>
 					</p>
