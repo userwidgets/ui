@@ -6,16 +6,12 @@ import { Me } from "./Me"
 
 export class Applications extends Base<Applications, model.Client> {
 	#request?: Promise<Applications["current"]>
-	// #key: Applications["key"]
-	// private get key(): Me["key"] {
-	// 	return this.#key
-	// }
 	private set key(key: Me["key"]) {
-		// this.#key = key
-		if (key != undefined && this.current != undefined)
-			this.fetch()
-		else if (key == undefined)
-			this.listenable.current = undefined
+		if (this.current != undefined)
+			if (key != undefined)
+				this.fetch()
+			else if (key == undefined)
+				this.listenable.current = undefined
 	}
 	#current?: Applications["current"]
 	get current(): userwidgets.Application | false | undefined {
@@ -26,7 +22,7 @@ export class Applications extends Base<Applications, model.Client> {
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
 		const promise = !this.key
-			? false
+			? undefined
 			: (this.#request ??= this.client.application
 					.fetch()
 					.then(response => (!userwidgets.Application.is(response) ? false : response)))

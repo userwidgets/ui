@@ -7,31 +7,19 @@ import { Organizations } from "./Organizations"
 
 export class Users extends Base<Users, model.Client> {
 	#request?: Promise<Users["value"]>
-	// #key?: Users["key"]
-	// private get key(): Me["key"] {
-	// 	return this.#key
-	// }
 	private set key(key: Me["key"]) {
-		// this.#key = key
-		if (key != undefined && this.value != undefined)
-			this.fetch()
-		else if (key == undefined)
-			this.listenable.value = undefined
+		if (this.value != undefined)
+			if (key != undefined)
+				this.fetch()
+			else if (key == undefined)
+				this.listenable.value = undefined
 	}
-	// #organization: Users["organization"]
-	// private get organization(): Organizations["current"] {
-	// 	return this.#organization
-	// }
 	private set organization(organization: Organizations["current"]) {
-		if (organization != undefined && this.value != undefined)
-			this.fetch()
-		else if (organization == undefined)
-			this.listenable.value = undefined
-		// this.#organization = organization
-		// if (organization != undefined && this.value != undefined)
-		// 	this.fetch()
-		// else if (organization == undefined)
-		// 	this.value = undefined
+		if (this.value != undefined)
+			if (organization != undefined)
+				this.fetch()
+			else if (organization == undefined)
+				this.listenable.value = undefined
 	}
 	#value?: Users["value"]
 	get value(): userwidgets.User.Readable[] | false | undefined {
@@ -42,7 +30,7 @@ export class Users extends Base<Users, model.Client> {
 	}
 	async fetch(): Promise<userwidgets.User.Readable[] | false> {
 		const promise = !this.key
-			? false
+			? undefined
 			: this.client.user.list().then(response => (!isUsers(response) ? false : response))
 		const result = await promise
 		if (promise == this.#request)
@@ -54,14 +42,14 @@ export class Users extends Base<Users, model.Client> {
 		permissions: userwidgets.User.Permissions.Readable
 	): Promise<userwidgets.User.Readable | false> {
 		const promise = !this.organization
-			? false
+			? undefined
 			: this.client.user
 					.updatePermissions(email, this.organization.id, permissions)
 					.then(response => (!userwidgets.User.Readable.is(response) ? false : response))
 		const result = await promise
 		if (result)
 			this.fetch()
-		return result
+		return result || false
 	}
 	static create(
 		client: model.Client,

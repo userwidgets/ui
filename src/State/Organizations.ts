@@ -7,10 +7,11 @@ import { Me } from "./Me"
 export class Organizations extends Base<Organizations, model.Client> {
 	#request?: Promise<Organizations["value"]>
 	private set key(key: Me["key"]) {
-		if (key != undefined && this.value != undefined)
-			this.fetch()
-		else if (key == undefined)
-			this.listenable.value = undefined
+		if (this.value != undefined)
+			if (key != undefined)
+				this.fetch()
+			else if (key == undefined)
+				this.listenable.value = undefined
 	}
 	#value?: Organizations["value"]
 	get value(): userwidgets.Organization[] | false | undefined {
@@ -36,25 +37,30 @@ export class Organizations extends Base<Organizations, model.Client> {
 	}
 	set current(current: Organizations["current"]) {
 		this.#current = current
-		if (this.value && current && !this.value.includes(current)) {
+		if (!current)
+			this.listenable.value = current
+		else if (this.#value && !this.#value.includes(current)) {
 			const id = current.id
-			const index = this.value.findIndex(organization => organization.id == id)
+			const index = this.#value.findIndex(organization => organization.id == id)
 			if (index != -1)
-				this.listenable.value = [...this.value.slice(0, index), current, ...this.value.slice(index + 1)]
+				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
+		} else {
+			this.listenable.value = [current]
 		}
 	}
 	private constructor(client: model.Client, private me: WithListenable<Me>) {
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		console.log("function set", this.me.onUnauthorized)
-		const promise = (this.#request ??= this.client.organization
-			.list()
-			.then(response => (!isOrganizations(response) ? false : response)))
+		const promise = !this.me.key
+			? undefined
+			: (this.#request ??= this.client.organization
+					.list()
+					.then(response => (!isOrganizations(response) ? false : response)))
 		const result = await promise
 		if (promise == this.#request)
 			this.#request = undefined
-		return (this.listenable.value = result || false)
+		return (this.listenable.value = result) || false
 	}
 	async removeUser(email: string): Promise<userwidgets.Organization | false> {
 		const result = !this.current
