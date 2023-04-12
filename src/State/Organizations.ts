@@ -19,15 +19,16 @@ export class Organizations extends Base<Organizations, model.Client> {
 	}
 	set value(value: Organizations["value"]) {
 		this.#value = value
-		if (!value)
-			this.current = value
-		else if (!this.current)
-			this.current = value && value.at(0)
+		if (!value) {
+			if (value != this.#current)
+				this.listenable.current = value
+		} else if (!this.#current)
+			this.listenable.current = value && value.at(0)
 		else {
-			const id = this.current.id
+			const id = this.#current.id
 			const index = value.findIndex(organization => organization.id == id)
 			const current = value.at(Math.max(index, 0))
-			if (current != this.current)
+			if (current != this.#current)
 				this.listenable.current = current
 		}
 	}
@@ -37,16 +38,16 @@ export class Organizations extends Base<Organizations, model.Client> {
 	}
 	set current(current: Organizations["current"]) {
 		this.#current = current
-		if (!current)
-			this.listenable.value = current
-		else if (this.#value && !this.#value.includes(current)) {
+		if (!current) {
+			if (current != this.#value)
+				this.listenable.value = current
+		} else if (this.#value && !this.#value.includes(current)) {
 			const id = current.id
 			const index = this.#value.findIndex(organization => organization.id == id)
 			if (index != -1)
 				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
-		} else {
+		} else
 			this.listenable.value = [current]
-		}
 	}
 	private constructor(client: model.Client, private me: WithListenable<Me>) {
 		super(client)
