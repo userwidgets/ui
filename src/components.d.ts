@@ -91,6 +91,7 @@ export namespace Components {
         "user": userwidgets.User.Readable;
     }
     interface UserwidgetsRegister {
+        "jwt": userwidgets.User.Tag;
         "state": model.State;
     }
     interface UserwidgetsSetPassword {
@@ -391,6 +392,7 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User.Readable;
     }
     interface UserwidgetsRegister {
+        "jwt"?: userwidgets.User.Tag;
         "onNotice"?: (event: UserwidgetsRegisterCustomEvent<Notice>) => void;
         "state"?: model.State;
     }

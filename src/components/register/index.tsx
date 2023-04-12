@@ -7,6 +7,11 @@ import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
 import * as translation from "./translation"
+
+type registerData = {
+	tag: userwidgets.User.Tag
+	credentials: userwidgets.User.Credentials.Register
+}
 @Component({
 	tag: "userwidgets-register",
 	styleUrl: "style.css",
@@ -16,7 +21,10 @@ export class UserwidgetsRegister {
 	@State() tag?: userwidgets.User.Tag
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
+	@Prop() jwt: userwidgets.User.Tag
 	@Event() notice: EventEmitter<Notice>
+	@Event() onUserwidgetsRegister: EventEmitter<registerData>
+	@Event() onUserwidgetsActiveAccount: EventEmitter<userwidgets.User.Tag>
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
@@ -36,17 +44,20 @@ export class UserwidgetsRegister {
 			? this.notice.emit(
 					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
-			: (await this.state.me.register(this.tag, {
-					user: this.tag.email,
-					name: {
-						first: event.detail.first,
-						last: event.detail.last,
+			: this.onUserwidgetsRegister.emit({
+					tag: this.tag,
+					credentials: {
+						user: this.tag.email,
+						name: {
+							first: event.detail.first,
+							last: event.detail.last,
+						},
+						password: {
+							new: event.detail.new,
+							repeat: event.detail.repeat,
+						},
 					},
-					password: {
-						new: event.detail.new,
-						repeat: event.detail.repeat,
-					},
-			  })) && redirect("/")
+			  })
 	}
 
 	render() {
@@ -84,13 +95,7 @@ export class UserwidgetsRegister {
 						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
-							onClick={async e => (
-								e.preventDefault(),
-								this.tag &&
-									(await this.state.me.join(this.tag).then(p => p)) &&
-									(await this.state.me.join(this.tag)) &&
-									redirect("/")
-							)}>
+							onClick={async e => (e.preventDefault(), this.tag && this.onUserwidgetsActiveAccount.emit(this.tag))}>
 							{this.translate("Login")}
 						</a>
 					</p>
