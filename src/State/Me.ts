@@ -4,9 +4,16 @@ import { model } from "../model"
 import { Base } from "./Base"
 
 export class Me extends Base<Me, model.Client> {
+	#jwtParameter?: Me["jwtParameter"]
+	get jwtParameter(): string | undefined {
+		return this.#jwtParameter
+	}
+	set jwtParameter(jwtParameter: Me["jwtParameter"]) {
+		this.#jwtParameter = jwtParameter
+	}
 	#key?: Me["key"]
 	get key(): userwidgets.User.Key | false | undefined {
-		return this.#key ?? (this.#onUnauthorized && this.#onUnauthorized(), undefined)
+		return this.#key ?? (this.#onUnauthorized?.(), undefined)
 	}
 	set key(key: Me["key"]) {
 		this.#key = key
@@ -17,6 +24,12 @@ export class Me extends Base<Me, model.Client> {
 	set onUnauthorized(onUnauthorized: () => Promise<boolean>) {
 		this.#onUnauthorized = onUnauthorized
 		this.client.onUnauthorized = onUnauthorized
+	}
+	get onUnauthorized(): any {
+		return this.#onUnauthorized
+	}
+	authorize(): void {
+		this.#onUnauthorized?.()
 	}
 	async login(user: userwidgets.User.Credentials): Promise<userwidgets.User.Key | false> {
 		const result = await this.client.me

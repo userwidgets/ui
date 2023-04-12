@@ -28,4 +28,5 @@ export namespace State {
 	export const Users = StateUsers
 }
 export const state = State.create(client)
-;(globalThis as any).state = state
+;(globalThis as any).userwidgets = state
+state.me.jwtParameter = "id"

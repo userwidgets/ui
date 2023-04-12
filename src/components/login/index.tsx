@@ -13,11 +13,12 @@ if (!("URLPattern" in globalThis))
 })
 export class UserwidgetsLogin {
 	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
+	@State() jwt?: string
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
-	@Listen("login")
-	async handleLogin(event: CustomEvent<userwidgets.User.Credentials>) {
+
+	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await this.state.me.login({
 			user: event.detail.user,
@@ -29,8 +30,15 @@ export class UserwidgetsLogin {
 			this.loggedIn.emit()
 		}
 	}
+	async registerHandler(event: CustomEvent<void>) {}
 	componentWillLoad() {
-		console.log("setting unathorized")
+		this.state.me.listen(
+			"jwtParameter",
+			jwtParameter =>
+				(this.jwt = !jwtParameter
+					? undefined
+					: new URL(window.location.href).searchParams.get(jwtParameter) || undefined)
+		)
 		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
 	}
@@ -38,6 +46,15 @@ export class UserwidgetsLogin {
 		this.userwidgetsLoginLoaded.emit()
 	}
 	render() {
-		return [this.resolves ? <userwidgets-login-dialog state={this.state} /> : null, <slot />]
+		return [
+			this.resolves ? (
+				this.jwt ? (
+					<userwidgets-register state={this.state} jwt={this.jwt} onRegister={}/>
+				) : (
+					<userwidgets-login-dialog state={this.state} onLogin={event => this.loginHandler(event)} />
+				)
+			) : null,
+			<slot />,
+		]
 	}
 }

@@ -3,7 +3,7 @@ import * as gracely from "gracely"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { client } from "../../../client"
+import { client } from "../../../Client"
 import { model } from "../../../model"
 import * as translation from "./translation"
 @Component({
@@ -30,7 +30,7 @@ export class ChangePassword {
 		else if (passwords.new != passwords.repeat)
 			this.notice.emit(Notice.failed(this.translate("New password was not repeated correctly.")))
 		else {
-			const key = await client.fullKey
+			const key = this.key
 			if (key) {
 				this.notice.emit(
 					Notice.execute("Changing password.", async () => {
