@@ -55,7 +55,7 @@ export class UserwidgetsLogin {
 	) {
 		const response = await this.state.me.register(event.detail.tag, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
-			this.token = undefined
+			this.tag = undefined
 			this.resolves.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
