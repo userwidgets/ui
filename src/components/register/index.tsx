@@ -2,7 +2,6 @@ import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import * as langly from "langly"
 import { Notice } from "smoothly"
-import { redirect } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
 import { model } from "../../model"
@@ -18,20 +17,15 @@ type registerData = {
 	scoped: true,
 })
 export class UserwidgetsRegister {
-	@State() tag?: userwidgets.User.Tag
+	@Prop() tag?: userwidgets.User.Tag
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
-	@Prop() jwt: userwidgets.User.Tag
 	@Event() notice: EventEmitter<Notice>
 	@Event() userwidgetsRegister: EventEmitter<registerData>
-	@Event() userwidgetsActiveAccount: EventEmitter<userwidgets.User.Tag>
+	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
-		const token = new URL(window.location.href).searchParams.get("id")
-		userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "").then(tag => {
-			!(this.tag = tag) ? redirect("/") : this.tag.active && this.state.me.join(this.tag)
-		})
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
@@ -95,7 +89,7 @@ export class UserwidgetsRegister {
 						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
-							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(this.tag))}>
+							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(true))}>
 							{this.translate("Login")}
 						</a>
 					</p>
