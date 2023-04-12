@@ -18,7 +18,9 @@ export class Me extends Base<Me, model.Client> {
 	set key(key: Me["key"]) {
 		this.#key = key
 		if (key)
-			localStorage.setItem("token", key.token)
+			sessionStorage.setItem("token", key.token)
+		else
+			sessionStorage.removeItem("token")
 	}
 	#onUnauthorized?: () => Promise<boolean>
 	set onUnauthorized(onUnauthorized: () => Promise<boolean>) {

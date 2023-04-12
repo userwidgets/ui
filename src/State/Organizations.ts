@@ -6,12 +6,11 @@ import { Me } from "./Me"
 
 export class Organizations extends Base<Organizations, model.Client> {
 	#request?: Promise<Organizations["value"]>
-	#key: Organizations["key"]
-	private get key(): Me["key"] {
-		return this.#key
-	}
-	private set key(key: Organizations["key"]) {
-		this.#key = key
+	private set key(key: Me["key"]) {
+		if (key != undefined && this.value != undefined)
+			this.fetch()
+		else if (key == undefined)
+			this.listenable.value = undefined
 	}
 	#value?: Organizations["value"]
 	get value(): userwidgets.Organization[] | false | undefined {
@@ -44,12 +43,14 @@ export class Organizations extends Base<Organizations, model.Client> {
 				this.listenable.value = [...this.value.slice(0, index), current, ...this.value.slice(index + 1)]
 		}
 	}
+	private constructor(client: model.Client, private me: WithListenable<Me>) {
+		super(client)
+	}
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		const promise = !this.key
-			? false
-			: (this.#request ??= this.client.organization
-					.list()
-					.then(response => (!isOrganizations(response) ? false : response)))
+		console.log("function set", this.me.onUnauthorized)
+		const promise = (this.#request ??= this.client.organization
+			.list()
+			.then(response => (!isOrganizations(response) ? false : response)))
 		const result = await promise
 		if (promise == this.#request)
 			this.#request = undefined
@@ -66,7 +67,7 @@ export class Organizations extends Base<Organizations, model.Client> {
 		return result
 	}
 	static create(client: model.Client, me: WithListenable<Me>): WithListenable<Organizations> {
-		const backend = new this(client)
+		const backend = new this(client, me)
 		const listenable = Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
 		return listenable

@@ -6,12 +6,16 @@ import { Me } from "./Me"
 
 export class Applications extends Base<Applications, model.Client> {
 	#request?: Promise<Applications["current"]>
-	#key: Applications["key"]
-	private get key(): Me["key"] {
-		return this.#key
-	}
-	private set key(key: Applications["key"]) {
-		this.#key = key
+	// #key: Applications["key"]
+	// private get key(): Me["key"] {
+	// 	return this.#key
+	// }
+	private set key(key: Me["key"]) {
+		// this.#key = key
+		if (key != undefined && this.current != undefined)
+			this.fetch()
+		else if (key == undefined)
+			this.listenable.current = undefined
 	}
 	#current?: Applications["current"]
 	get current(): userwidgets.Application | false | undefined {

@@ -7,25 +7,31 @@ import { Organizations } from "./Organizations"
 
 export class Users extends Base<Users, model.Client> {
 	#request?: Promise<Users["value"]>
-	#key?: Users["key"]
-	private get key(): Me["key"] {
-		return this.#key
-	}
+	// #key?: Users["key"]
+	// private get key(): Me["key"] {
+	// 	return this.#key
+	// }
 	private set key(key: Me["key"]) {
-		const old = this.#key
-		this.#key = key
-		if (old && !key)
-			this.listenable.value = undefined
-		else
+		// this.#key = key
+		if (key != undefined && this.value != undefined)
 			this.fetch()
+		else if (key == undefined)
+			this.listenable.value = undefined
 	}
-	#organization: Users["organization"]
-	private get organization(): Organizations["current"] {
-		return this.#organization
-	}
+	// #organization: Users["organization"]
+	// private get organization(): Organizations["current"] {
+	// 	return this.#organization
+	// }
 	private set organization(organization: Organizations["current"]) {
-		this.#organization = organization
-		this.fetch()
+		if (organization != undefined && this.value != undefined)
+			this.fetch()
+		else if (organization == undefined)
+			this.listenable.value = undefined
+		// this.#organization = organization
+		// if (organization != undefined && this.value != undefined)
+		// 	this.fetch()
+		// else if (organization == undefined)
+		// 	this.value = undefined
 	}
 	#value?: Users["value"]
 	get value(): userwidgets.User.Readable[] | false | undefined {
