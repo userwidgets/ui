@@ -18,19 +18,6 @@ export class UserwidgetsLogin {
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 
-	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
-		event.preventDefault()
-		const response = await this.state.me.login({
-			user: event.detail.user,
-			password: event.detail.password,
-		})
-		if (this.resolves != undefined && response) {
-			this.resolves.forEach(resolve => resolve(true))
-			this.resolves = undefined
-			this.loggedIn.emit()
-		}
-	}
-	async registerHandler(event: CustomEvent<void>) {}
 	componentWillLoad() {
 		this.state.me.listen(
 			"jwtParameter",
@@ -45,11 +32,44 @@ export class UserwidgetsLogin {
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()
 	}
+
+	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
+		event.preventDefault()
+		const response = await this.state.me.login({
+			user: event.detail.user,
+			password: event.detail.password,
+		})
+		if (userwidgets.User.Key.is(response) && this.resolves) {
+			this.resolves.forEach(resolve => resolve(true))
+			this.resolves = undefined
+			this.loggedIn.emit()
+		}
+	}
+
+	async activeAccountHandler(event: CustomEvent<userwidgets.User.Tag>) {}
+
+	async registerHandler(
+		event: CustomEvent<{ tag: userwidgets.User.Tag; credentials: userwidgets.User.Credentials.Register }>
+	) {
+		const response = await this.state.me.register(event.detail.tag, event.detail.credentials)
+		if (userwidgets.User.Key.is(response) && this.resolves) {
+			this.jwt = undefined
+			this.resolves.forEach(resolve => resolve(true))
+			this.resolves = undefined
+			this.loggedIn.emit()
+		}
+	}
+
 	render() {
 		return [
 			this.resolves ? (
 				this.jwt ? (
-					<userwidgets-register state={this.state} jwt={this.jwt} onRegister={}/>
+					<userwidgets-register
+						state={this.state}
+						jwt={this.jwt}
+						onUserwidgetsRegister={event => this.registerHandler(event)}
+						onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+					/>
 				) : (
 					<userwidgets-login-dialog state={this.state} onLogin={event => this.loginHandler(event)} />
 				)
