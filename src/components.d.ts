@@ -70,6 +70,7 @@ export namespace Components {
     }
     interface UserwidgetsLoginDialog {
         "state": model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state": model.State;
@@ -372,6 +373,7 @@ declare namespace LocalJSX {
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state"?: model.State;

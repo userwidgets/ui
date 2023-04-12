@@ -25,6 +25,7 @@ export class UserwidgetsLogin {
 				? undefined
 				: new URL(window.location.href).searchParams.get(jwtParameter) || undefined
 			this.tag = await userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
+			this.activeAccount = this.tag?.active
 		})
 		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
@@ -78,6 +79,7 @@ export class UserwidgetsLogin {
 						<userwidgets-login-dialog
 							class={"dialog"}
 							state={this.state}
+							tag={this.tag}
 							onUserwidgetsLogin={event => this.loginHandler(event)}
 							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
 						/>
