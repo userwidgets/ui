@@ -2,9 +2,17 @@ import { Listenable, WithListenable } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../model"
 import { Base } from "./Base"
+import { Me } from "./Me"
 
 export class Applications extends Base<Applications, model.Client> {
 	#request?: Promise<Applications["current"]>
+	#key: Applications["key"]
+	private get key(): Me["key"] {
+		return this.#key
+	}
+	private set key(key: Applications["key"]) {
+		this.#key = key
+	}
 	#current?: Applications["current"]
 	get current(): userwidgets.Application | false | undefined {
 		return this.#current ?? (this.fetch(), undefined)
@@ -13,17 +21,20 @@ export class Applications extends Base<Applications, model.Client> {
 		this.#current = current
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
-		const promise = (this.#request ??= this.client.application
-			.fetch()
-			.then(response => (!userwidgets.Application.is(response) ? false : response)))
+		const promise = !this.key
+			? false
+			: (this.#request ??= this.client.application
+					.fetch()
+					.then(response => (!userwidgets.Application.is(response) ? false : response)))
 		const result = await promise
 		if (promise == this.#request)
 			this.#request = undefined
 		return (this.listenable.current = result) || false
 	}
-	static create(client: model.Client): WithListenable<Applications> {
+	static create(client: model.Client, me: WithListenable<Me>): WithListenable<Applications> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
+		me.listen("key", key => (backend.key = key))
 		return listenable
 	}
 }

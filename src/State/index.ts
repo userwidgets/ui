@@ -10,8 +10,8 @@ import { Users as StateUsers } from "./Users"
 export class State extends Base<State, model.Client> {
 	readonly locales = Locales.create()
 	readonly me = State.Me.create(this.client)
-	readonly applications = State.Applications.create(this.client)
-	readonly organizations = State.Organizations.create(this.client)
+	readonly applications = State.Applications.create(this.client, this.me)
+	readonly organizations = State.Organizations.create(this.client, this.me)
 	readonly users = State.Users.create(this.client, this.me, this.organizations)
 	static create(client: model.Client): WithListenable<State> {
 		return Listenable.load(new this(client))
