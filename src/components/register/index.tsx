@@ -23,8 +23,8 @@ export class UserwidgetsRegister {
 	@Prop() state: model.State
 	@Prop() jwt: userwidgets.User.Tag
 	@Event() notice: EventEmitter<Notice>
-	@Event() onUserwidgetsRegister: EventEmitter<registerData>
-	@Event() onUserwidgetsActiveAccount: EventEmitter<userwidgets.User.Tag>
+	@Event() userwidgetsRegister: EventEmitter<registerData>
+	@Event() userwidgetsActiveAccount: EventEmitter<userwidgets.User.Tag>
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
@@ -44,7 +44,7 @@ export class UserwidgetsRegister {
 			? this.notice.emit(
 					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
-			: this.onUserwidgetsRegister.emit({
+			: this.userwidgetsRegister.emit({
 					tag: this.tag,
 					credentials: {
 						user: this.tag.email,
@@ -95,7 +95,7 @@ export class UserwidgetsRegister {
 						{this.translate("Already have an account? ")}
 						<a
 							href={window.origin}
-							onClick={async e => (e.preventDefault(), this.tag && this.onUserwidgetsActiveAccount.emit(this.tag))}>
+							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(this.tag))}>
 							{this.translate("Login")}
 						</a>
 					</p>
