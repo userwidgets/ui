@@ -13,19 +13,19 @@ if (!("URLPattern" in globalThis))
 })
 export class UserwidgetsLogin {
 	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
-	@State() jwt?: string
+	@State() tag?: userwidgets.User.Tag
+	@State() activeAccount?: boolean
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 
 	componentWillLoad() {
-		this.state.me.listen(
-			"jwtParameter",
-			jwtParameter =>
-				(this.jwt = !jwtParameter
-					? undefined
-					: new URL(window.location.href).searchParams.get(jwtParameter) || undefined)
-		)
+		this.state.me.listen("jwtParameter", async jwtParameter => {
+			const token = !jwtParameter
+				? undefined
+				: new URL(window.location.href).searchParams.get(jwtParameter) || undefined
+			this.tag = await userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
+		})
 		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
 	}
@@ -46,14 +46,16 @@ export class UserwidgetsLogin {
 		}
 	}
 
-	async activeAccountHandler(event: CustomEvent<userwidgets.User.Tag>) {}
+	async activeAccountHandler(event: CustomEvent<boolean>) {
+		this.activeAccount = event.detail
+	}
 
 	async registerHandler(
 		event: CustomEvent<{ tag: userwidgets.User.Tag; credentials: userwidgets.User.Credentials.Register }>
 	) {
 		const response = await this.state.me.register(event.detail.tag, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
-			this.jwt = undefined
+			this.token = undefined
 			this.resolves.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
@@ -63,15 +65,19 @@ export class UserwidgetsLogin {
 	render() {
 		return [
 			this.resolves ? (
-				this.jwt ? (
+				this.tag && !this.activeAccount ? (
 					<userwidgets-register
 						state={this.state}
-						jwt={this.jwt}
+						tag={this.tag}
 						onUserwidgetsRegister={event => this.registerHandler(event)}
 						onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
 					/>
 				) : (
-					<userwidgets-login-dialog state={this.state} onLogin={event => this.loginHandler(event)} />
+					<userwidgets-login-dialog
+						state={this.state}
+						onLogin={event => this.loginHandler(event)}
+						onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+					/>
 				)
 			) : null,
 			<slot />,

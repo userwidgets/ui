@@ -394,8 +394,8 @@ declare namespace LocalJSX {
     interface UserwidgetsRegister {
         "jwt"?: userwidgets.User.Tag;
         "onNotice"?: (event: UserwidgetsRegisterCustomEvent<Notice>) => void;
-        "onOnUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterCustomEvent<userwidgets.User.Tag>) => void;
-        "onOnUserwidgetsRegister"?: (event: UserwidgetsRegisterCustomEvent<registerData>) => void;
+        "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterCustomEvent<userwidgets.User.Tag>) => void;
+        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterCustomEvent<registerData>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsSetPassword {
