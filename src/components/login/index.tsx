@@ -64,36 +64,27 @@ export class UserwidgetsLogin {
 
 	render() {
 		return [
-			<div class="mask">
-				<userwidgets-register-dialog
-					class={"dialog"}
-					state={this.state}
-					tag={this.tag}
-					onUserwidgetsRegister={event => this.registerHandler(event)}
-					onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-				/>
-			</div>,
-			// this.resolves ? (
-			// 	<div class={"mask"}>
-			// 		{this.tag && !this.activeAccount ? (
-			// 			<userwidgets-register-dialog
-			// 				class={"dialog"}
-			// 				state={this.state}
-			// 				tag={this.tag}
-			// 				onUserwidgetsRegister={event => this.registerHandler(event)}
-			// 				onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-			// 			/>
-			// 		) : (
-			// 			<userwidgets-login-dialog
-			// 				class={"dialog"}
-			// 				state={this.state}
-			// 				onUserwidgetsLogin={event => this.loginHandler(event)}
-			// 				onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-			// 			/>
-			// 		)}
-			// 	</div>
-			// ) : null,
-			// <slot />,
+			this.resolves ? (
+				<div class={"mask"}>
+					{this.tag && !this.activeAccount ? (
+						<userwidgets-register-dialog
+							class={"dialog"}
+							state={this.state}
+							tag={this.tag}
+							onUserwidgetsRegister={event => this.registerHandler(event)}
+							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+						/>
+					) : (
+						<userwidgets-login-dialog
+							class={"dialog"}
+							state={this.state}
+							onUserwidgetsLogin={event => this.loginHandler(event)}
+							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+						/>
+					)}
+				</div>
+			) : null,
+			<slot />,
 		]
 	}
 }
