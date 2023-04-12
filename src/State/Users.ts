@@ -28,8 +28,15 @@ export class Users extends Base<Users, model.Client> {
 	set value(value: Users["value"]) {
 		this.#value = value
 	}
+	private constructor(
+		client: model.Client,
+		private me: WithListenable<Me>,
+		private organizations: WithListenable<Organizations>
+	) {
+		super(client)
+	}
 	async fetch(): Promise<userwidgets.User.Readable[] | false> {
-		const promise = !this.key
+		const promise = !this.me.key
 			? undefined
 			: this.client.user.list().then(response => (!isUsers(response) ? false : response))
 		const result = await promise
@@ -41,10 +48,10 @@ export class Users extends Base<Users, model.Client> {
 		email: string,
 		permissions: userwidgets.User.Permissions.Readable
 	): Promise<userwidgets.User.Readable | false> {
-		const promise = !this.organization
+		const promise = !this.organizations.current
 			? undefined
 			: this.client.user
-					.updatePermissions(email, this.organization.id, permissions)
+					.updatePermissions(email, this.organizations.current.id, permissions)
 					.then(response => (!userwidgets.User.Readable.is(response) ? false : response))
 		const result = await promise
 		if (result)
@@ -56,7 +63,7 @@ export class Users extends Base<Users, model.Client> {
 		me: WithListenable<Me>,
 		organizations: WithListenable<Organizations>
 	): WithListenable<Users> {
-		const backend = new this(client)
+		const backend = new this(client, me, organizations)
 		const listenable = Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
 		organizations.listen("current", organization => (backend.organization = organization))

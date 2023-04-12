@@ -20,8 +20,11 @@ export class Applications extends Base<Applications, model.Client> {
 	set current(current: Applications["current"]) {
 		this.#current = current
 	}
+	private constructor(client: model.Client, private me: WithListenable<Me>) {
+		super(client)
+	}
 	async fetch(): Promise<userwidgets.Application | false> {
-		const promise = !this.key
+		const promise = !this.me.key
 			? undefined
 			: (this.#request ??= this.client.application
 					.fetch()
@@ -32,7 +35,7 @@ export class Applications extends Base<Applications, model.Client> {
 		return (this.listenable.current = result) || false
 	}
 	static create(client: model.Client, me: WithListenable<Me>): WithListenable<Applications> {
-		const backend = new this(client)
+		const backend = new this(client, me)
 		const listenable = Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
 		return listenable
