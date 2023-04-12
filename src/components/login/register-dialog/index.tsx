@@ -65,35 +65,33 @@ export class UserwidgetsRegister {
 				</p>
 			</div>
 		) : this.tag.active ? null : (
-			<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-				<div class="inputs">
+			[
+				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
 					</smoothly-input>
 					<smoothly-input type="text" name="last">
 						{this.translate("Last name")}
 					</smoothly-input>
-				</div>
-				<div class="inputs">
+
 					<smoothly-input type="password" name="new">
 						{this.translate("Password")}
 					</smoothly-input>
 					<smoothly-input type="password" name="repeat">
 						{this.translate("Repeat password")}
 					</smoothly-input>
-				</div>
-				<div class="buttons">
+
 					<smoothly-submit>{this.translate("Register")}</smoothly-submit>
-					<p>
-						{this.translate("Already have an account? ")}
-						<a
-							href={window.origin}
-							onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(true))}>
-							{this.translate("Login")}
-						</a>
-					</p>
-				</div>
-			</smoothly-form>
+				</smoothly-form>,
+				<p>
+					{this.translate("Already have an account? ")}
+					<a
+						href={window.origin}
+						onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(true))}>
+						{this.translate("Login")}
+					</a>
+				</p>,
+			]
 		)
 	}
 }

@@ -30,26 +30,22 @@ export class UserwidgetsLoginDialog {
 	}
 
 	render() {
-		return (
-			<div class="page background">
-				<div class="viewport background">
-					<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-						<smoothly-input type="email" name="user">
-							{this.translate("Email")}
-						</smoothly-input>
-						<smoothly-input type="password" name="password">
-							{this.translate("Password")}
-						</smoothly-input>
-						<smoothly-submit>{this.translate("Login")}</smoothly-submit>
-					</smoothly-form>
-				</div>
-				<p>
-					{this.translate("Don't have an account? ")}
-					<a href={window.location.href} onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
-						{this.translate("Register")}
-					</a>
-				</p>
-			</div>
-		)
+		return [
+			<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<smoothly-input type="email" name="user">
+					{this.translate("Email")}
+				</smoothly-input>
+				<smoothly-input type="password" name="password">
+					{this.translate("Password")}
+				</smoothly-input>
+				<smoothly-submit>{this.translate("Login")}</smoothly-submit>
+			</smoothly-form>,
+			<p>
+				{this.translate("Don't have an account? ")}
+				<a href={window.location.href} onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
+					{this.translate("Register")}
+				</a>
+			</p>,
+		]
 	}
 }
