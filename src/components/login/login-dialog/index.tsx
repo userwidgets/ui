@@ -12,7 +12,8 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog {
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
-	@Event() login: EventEmitter<userwidgets.User.Credentials>
+	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
+	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
@@ -25,7 +26,7 @@ export class UserwidgetsLoginDialog {
 		else if (!event.detail.user.match(/^\S+@\S+$/))
 			this.notice.emit(Notice.warn(this.translate("Provided email is not an email.")))
 		else
-			this.login.emit(event.detail)
+			this.userwidgetsLogin.emit(event.detail)
 	}
 
 	render() {
@@ -42,6 +43,12 @@ export class UserwidgetsLoginDialog {
 						<smoothly-submit>{this.translate("Login")}</smoothly-submit>
 					</smoothly-form>
 				</div>
+				<p>
+					{this.translate("Don't have an account? ")}
+					<a href={window.location.href} onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
+						{this.translate("Register")}
+					</a>
+				</p>
 			</div>
 		)
 	}

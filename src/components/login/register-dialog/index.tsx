@@ -4,15 +4,11 @@ import * as langly from "langly"
 import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
-import { model } from "../../model"
+import { model } from "../../../model"
 import * as translation from "./translation"
 
-type registerData = {
-	tag: userwidgets.User.Tag
-	credentials: userwidgets.User.Credentials.Register
-}
 @Component({
-	tag: "userwidgets-register",
+	tag: "userwidgets-register-dialog",
 	styleUrl: "style.css",
 	scoped: true,
 })
@@ -21,7 +17,10 @@ export class UserwidgetsRegister {
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
-	@Event() userwidgetsRegister: EventEmitter<registerData>
+	@Event() userwidgetsRegister: EventEmitter<{
+		tag: userwidgets.User.Tag
+		credentials: userwidgets.User.Credentials.Register
+	}>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 

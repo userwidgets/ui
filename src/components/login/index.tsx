@@ -66,7 +66,7 @@ export class UserwidgetsLogin {
 		return [
 			this.resolves ? (
 				this.tag && !this.activeAccount ? (
-					<userwidgets-register
+					<userwidgets-register-dialog
 						state={this.state}
 						tag={this.tag}
 						onUserwidgetsRegister={event => this.registerHandler(event)}
@@ -75,7 +75,7 @@ export class UserwidgetsLogin {
 				) : (
 					<userwidgets-login-dialog
 						state={this.state}
-						onLogin={event => this.loginHandler(event)}
+						onUserwidgetsLogin={event => this.loginHandler(event)}
 						onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
 					/>
 				)
