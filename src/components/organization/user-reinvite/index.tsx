@@ -6,13 +6,10 @@ import { Component, h } from "@stencil/core"
 	scoped: true,
 })
 export class UserwidgetsOrganizationUserReinvite {
-	handleClick() {
-		console.log("not implemented")
-	}
 	render() {
 		return (
 			<smoothly-form looks="line">
-				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
+				<smoothly-button class={"button"}>
 					<slot></slot>
 				</smoothly-button>
 			</smoothly-form>
