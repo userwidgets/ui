@@ -5,11 +5,11 @@ import { Base } from "./Base"
 import { Me } from "./Me"
 
 export class Applications extends Base<Applications, model.Client> {
-	#request?: Promise<Applications["current"]>
+	private request?: Promise<Applications["current"]>
 	private set key(key: Me["key"]) {
 		if (this.current != undefined)
 			if (key != undefined)
-				(this.#request = undefined), this.fetch()
+				(this.request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.current = undefined
 	}
@@ -26,12 +26,12 @@ export class Applications extends Base<Applications, model.Client> {
 	async fetch(): Promise<userwidgets.Application | false> {
 		const promise = !this.me.key
 			? undefined
-			: (this.#request ??= this.client.application
+			: (this.request ??= this.client.application
 					.fetch()
 					.then(response => (!userwidgets.Application.is(response) ? false : response)))
 		const result = await promise
-		if (promise == this.#request)
-			this.#request = undefined
+		if (promise == this.request)
+			this.request = undefined
 		return (this.listenable.current = result) || false
 	}
 	static create(client: model.Client, me: WithListenable<Me>): WithListenable<Applications> {

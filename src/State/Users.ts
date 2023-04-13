@@ -6,18 +6,18 @@ import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
 export class Users extends Base<Users, model.Client> {
-	#request?: Promise<Users["value"]>
+	private request?: Promise<Users["value"]>
 	private set key(key: Me["key"]) {
 		if (this.value != undefined)
 			if (key != undefined)
-				(this.#request = undefined), this.fetch()
+				(this.request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.value = undefined
 	}
 	private set organization(organization: Organizations["current"]) {
 		if (this.value != undefined)
 			if (organization != undefined)
-				(this.#request = undefined), this.fetch()
+				(this.request = undefined), this.fetch()
 			else if (organization == undefined)
 				this.listenable.value = undefined
 	}
@@ -40,8 +40,8 @@ export class Users extends Base<Users, model.Client> {
 			? undefined
 			: this.client.user.list().then(response => (!isUsers(response) ? false : response))
 		const result = await promise
-		if (promise == this.#request)
-			this.#request = undefined
+		if (promise == this.request)
+			this.request = undefined
 		return (this.listenable.value = result) || false
 	}
 	async updatePermissions(
