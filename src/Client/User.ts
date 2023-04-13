@@ -1,36 +1,37 @@
 import * as gracely from "gracely"
 import * as isoly from "isoly"
+import { userwidgets } from "@userwidgets/model"
 import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
-import { model } from "../model"
-
+import type { EntityTags } from "./index"
 export class User extends rest.Collection<gracely.Error> {
-	constructor(client: http.Client, private readonly entityTags: model.EntityTags) {
+	constructor(client: http.Client, private readonly entityTags: EntityTags) {
 		super(client)
 	}
-	async list(): Promise<model.userwidgets.User.Readable[] | gracely.Error> {
-		const result = await this.client.get<model.userwidgets.User.Readable[]>("user")
+	async list(): Promise<userwidgets.User.Readable[] | gracely.Error> {
+		const result = await this.client.get<userwidgets.User.Readable[]>("/user")
 		!gracely.Error.is(result) &&
 			result.forEach(user => ((this.entityTags.user[user.email] = isoly.DateTime.now()), this.entityTags))
 		return result
 	}
+
 	async changePassword(
 		email: string,
-		passwords: model.userwidgets.User.Password.Change
+		passwords: userwidgets.User.Password.Change
 	): Promise<gracely.Result | gracely.Error> {
 		const entityTag = this.entityTags?.user?.[email]
 		const response = await this.client.put<"">(
-			`user/${email}/password`,
+			`/user/${email}/password`,
 			passwords,
 			!entityTag ? undefined : { ifMatch: [entityTag] }
 		)
 		!gracely.Error.is(response) && (this.entityTags.user[email] = isoly.DateTime.now())
 		return response == "" ? gracely.success.noContent() : response
 	}
-	async changeName(email: string, name: model.userwidgets.User.Name): Promise<model.userwidgets.User | gracely.Error> {
+	async changeName(email: string, name: userwidgets.User.Name): Promise<userwidgets.User | gracely.Error> {
 		const entityTag = this.entityTags.user[email]
-		const result = await this.client.put<model.userwidgets.User>(
-			`user/${email}/name`,
+		const result = await this.client.put<userwidgets.User>(
+			`/user/${email}/name`,
 			name,
 			!entityTag ? undefined : { ifMatch: [entityTag] }
 		)
@@ -40,11 +41,11 @@ export class User extends rest.Collection<gracely.Error> {
 	async updatePermissions(
 		email: string,
 		organizationId: string,
-		permissions: model.userwidgets.User.Permissions.Readable
-	): Promise<model.userwidgets.User.Readable | gracely.Error> {
+		permissions: userwidgets.User.Permissions.Readable
+	): Promise<userwidgets.User.Readable | gracely.Error> {
 		const entityTag = this.entityTags.user[email]
-		const result = await this.client.patch<model.userwidgets.User.Readable>(
-			`user/${email}/permission/${organizationId}`,
+		const result = await this.client.patch<userwidgets.User.Readable>(
+			`/user/${email}/permission/${organizationId}`,
 			permissions,
 			!entityTag ? undefined : { ifMatch: [entityTag] }
 		)

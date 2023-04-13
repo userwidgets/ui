@@ -1,4 +1,5 @@
 import { Config } from "@stencil/core"
+import { sass } from "@stencil/sass"
 import dotenv from "rollup-plugin-dotenv"
 // import typescript from "rollup-plugin-typescript"
 
@@ -29,5 +30,5 @@ export const config: Config = {
 	devServer: {
 		openBrowser: false,
 	},
-	plugins: [dotenv()],
+	plugins: [dotenv(), sass()],
 }

@@ -1,7 +1,7 @@
 import { Component, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
-import { Options } from "../../../../State/Options"
 import * as translation from "./translation"
 @Component({
 	tag: "userwidgets-user-list-invited",
@@ -10,37 +10,26 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserListInvited {
 	@Prop() state: model.State
-	@State() key?: model.userwidgets.User.Key
-	@State() organizations?: model.userwidgets.Organization[]
-	@State() users?: model.userwidgets.User.Readable[]
-	@State() options?: Options
+	@State() key?: userwidgets.User.Key
+	@State() organization?: userwidgets.Organization
+	@State() organizations?: userwidgets.Organization[]
+	@State() users?: userwidgets.User.Readable[]
 	@State() translate: langly.Translate = translation.create("en")
 	private invited: string[]
 
 	componentWillLoad() {
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			this.key = key ? key : undefined
-		})
-		this.state.organization.listen("organizations", async promise => {
-			const organizations = await promise
-			this.organizations = organizations ? organizations : undefined
-		})
-		this.state.listen("options", options => {
-			this.options = options ? options : undefined
-		})
-		this.state.user.listen("users", async promise => {
-			const users = await promise
-			this.users = users ? users : undefined
-		})
-		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state.me.listen("key", key => (this.key = key || undefined))
+		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
+		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
+		this.state.users.listen("value", users => (this.users = users || undefined))
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 	componentWillRender() {
 		this.invited =
-			!this.key || !this.organizations || !this.users || !this.options
+			!this.key || !this.organizations || !this.users
 				? []
 				: this.organizations
-						.find(organization => organization.id == this.options?.organizationId)
+						.find(organization => organization.id == this.organization?.id)
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
 	render() {

@@ -1,4 +1,5 @@
 import { Component, h, Prop } from "@stencil/core"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
 @Component({
@@ -8,19 +9,20 @@ import { model } from "../../../model"
 })
 export class UserwidgetsOrganizationUserRemove {
 	@Prop() state: model.State
-	@Prop() user: model.userwidgets.User.Readable
+	@Prop() user: userwidgets.User.Readable
+	@Prop() organization: any
 
 	handleClick() {
-		this.state.organization.removeUser(this.user.email)
+		this.state.organizations.removeUser(this.user.email)
 	}
 
 	render() {
 		return (
-			<form onSubmit={event => event.preventDefault()}>
+			<smoothly-form looks="line" onSmoothlyFormSubmit={event => event.preventDefault()}>
 				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
 					<slot></slot>
 				</smoothly-button>
-			</form>
+			</smoothly-form>
 		)
 	}
 }

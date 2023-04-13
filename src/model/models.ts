@@ -1,26 +1,14 @@
-import * as isoly from "isoly"
-import { Application, Me, Organization, User } from "../State"
-import { Listenable } from "../State/Listenable"
-import { Options } from "../State/Options"
-export * as userwidgets from "@userwidgets/model"
-export interface ResourceEntityTags {
-	[entityTag: string]: isoly.DateTime | undefined
+import { WithListenable } from "smoothly"
+import type { Client as UserwidgetsClient } from "../Client"
+import type { State as UserwidgetsState } from "../State"
+import { Locales } from "../State/Locales"
+export interface State {
+	me: WithListenable<UserwidgetsState.Me>
+	users: WithListenable<UserwidgetsState.Users>
+	organizations: WithListenable<UserwidgetsState.Organizations>
+	applications: WithListenable<UserwidgetsState.Applications>
+	locales: WithListenable<Locales>
 }
-export interface EntityTags {
-	application: ResourceEntityTags
-	organization: ResourceEntityTags
-	user: ResourceEntityTags
-}
-export interface States {
-	me: Me & Listenable<Me>
-	user: User & Listenable<User>
-	organization: Organization & Listenable<Organization>
-	application: Application & Listenable<Application>
-	options: Options
-	language: isoly.Language
-	onUnauthorized: () => Promise<boolean>
-}
-export type State = States & Listenable<States>
 
 export function createIsArrayOf<T>(is: (value: any | T) => value is T): (value: any | T[]) => value is T[] {
 	return (value): value is T[] => Array.isArray(value) && value.every(is)
@@ -33,3 +21,15 @@ export function nest<T extends Record<string, any>>(target: T, [head, ...tail]: 
 		target as T
 	)
 }
+
+export type Client = {
+	application: UserwidgetsClient.Application
+	organization: UserwidgetsClient.Organization
+	me: UserwidgetsClient.Me
+	user: UserwidgetsClient.User
+	onUnauthorized?: UserwidgetsClient.Unauthorized
+	key?: string
+}
+
+type Value = string | number | boolean | Blob | undefined
+export type Data = { [name: string]: Data | Value }

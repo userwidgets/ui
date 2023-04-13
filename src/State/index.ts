@@ -1,75 +1,28 @@
-import * as isoly from "isoly"
-import { Client } from "../Client"
-import { client } from "../client"
-import { Application } from "./Application"
-import { Listenable } from "./Listenable"
-import { Me } from "./Me"
-import { Options } from "./Options"
-import { Organization } from "./Organization"
-import { User } from "./User"
-export class State {
-	#options: Options = {}
-	get options() {
-		return this.#options
-	}
-	set options(options: Options) {
-		options = { ...this.#self.options, ...options }
-		this.user.options = options
-		this.me.options = options
-		this.organization.options = options
-		this.application.options = options
-		this.#options = options
-	}
-	private optionHandler(options: Options) {
-		options = { ...this.#options, ...options }
-		this.application.options = options
-		this.organization.options = options
-		this.user.options = options
-		this.#options = options
-	}
-	set onUnauthorized(value: () => Promise<boolean>) {
-		this.client.onUnauthorized = value
-		this.me.loginTrigger = value
-	}
-	language: isoly.Language = "sv"
-	readonly me: Listenable<Me> & Me
-	readonly user: Listenable<User> & User
-	readonly application: Listenable<Application> & Application
-	readonly organization: Listenable<Organization> & Organization
-	#self: State & Listenable<State>
-	private constructor(listenable: State & Listenable<State>, private client: Client) {
-		this.me = Me.create(client)
-		this.user = User.create(client)
-		this.organization = Organization.create(client, this.user)
-		this.application = Application.create(client)
-		this.#self = listenable
-
-		this.language = isoly.Language.is(navigator.language)
-			? navigator.language
-			: isoly.Locale.is(navigator.language)
-			? isoly.Locale.toLanguage(navigator.language) ?? "en"
-			: "en"
-
-		!["sv", "en"].includes(this.language) && (this.language = "en")
-		this.language != "en" && document.documentElement.setAttribute("lang", this.language)
-	}
-	static create(client: Client): State & Listenable<State> {
-		const self = new Listenable() as State & Listenable<State>
-		Listenable.load(new this(self, client), self)
-		self.me.listen("options", options => self.optionHandler(options))
-		return self
+import { Listenable, WithListenable } from "smoothly"
+import { model } from "../model"
+import { Applications as StateApplications } from "./Applications"
+import { Base } from "./Base"
+import { Locales } from "./Locales"
+import { Me as StateMe } from "./Me"
+import { Organizations as StateOrganizations } from "./Organizations"
+import { Users as StateUsers } from "./Users"
+export class State extends Base<State, model.Client> {
+	readonly locales = Locales.create()
+	readonly me = State.Me.create(this.client)
+	readonly applications = State.Applications.create(this.client, this.me)
+	readonly organizations = State.Organizations.create(this.client, this.me)
+	readonly users = State.Users.create(this.client, this.me, this.organizations)
+	static create(client: model.Client): WithListenable<State> {
+		return Listenable.load(new this(client))
 	}
 }
-
-export const state = State.create(client)
-
-const appUrl = new URL(window.location.href)
-let applicationId: string | undefined
-try {
-	applicationId = appUrl.searchParams.get("applicationId") ?? process.env.applicationId ?? undefined
-	applicationId && (state.options = { applicationId: applicationId })
-} catch (e) {
-	applicationId = undefined
+export namespace State {
+	export type Applications = StateApplications
+	export const Applications = StateApplications
+	export type Organizations = StateOrganizations
+	export const Organizations = StateOrganizations
+	export type Me = StateMe
+	export const Me = StateMe
+	export type Users = StateUsers
+	export const Users = StateUsers
 }
-
-export { Me, User, Organization, Application }

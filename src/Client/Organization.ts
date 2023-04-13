@@ -1,32 +1,30 @@
 import * as gracely from "gracely"
 import * as isoly from "isoly"
+import { userwidgets } from "@userwidgets/model"
 import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
-import { model } from "../model"
-
+import type { EntityTags } from "./index"
 export class Organization extends rest.Collection<gracely.Error> {
-	constructor(client: http.Client, private readonly entityTags: model.EntityTags) {
+	constructor(client: http.Client, private readonly entityTags: EntityTags) {
 		super(client)
 	}
 	async create(
-		organization: model.userwidgets.Organization.Creatable,
+		organization: userwidgets.Organization.Creatable,
 		applicationId: string
-	): Promise<model.userwidgets.Organization | gracely.Error> {
-		const result = await this.client.post<model.userwidgets.Organization>("organization", organization, {
+	): Promise<userwidgets.Organization | gracely.Error> {
+		const result = await this.client.post<userwidgets.Organization>("/organization", organization, {
 			application: applicationId,
 		})
 		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
-	async fetch(organizationId: string, applicationId: string): Promise<model.userwidgets.Organization | gracely.Error> {
-		const result = await this.client.get<model.userwidgets.Organization>(`organization/${organizationId}`, {
-			application: applicationId,
-		})
+	async fetch(organizationId: string): Promise<userwidgets.Organization | gracely.Error> {
+		const result = await this.client.get<userwidgets.Organization>(`/organization/${organizationId}`)
 		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
-	async list(): Promise<model.userwidgets.Organization[] | gracely.Error> {
-		const result = await this.client.get<model.userwidgets.Organization[]>(`organization`)
+	async list(): Promise<userwidgets.Organization[] | gracely.Error> {
+		const result = await this.client.get<userwidgets.Organization[]>(`/organization`)
 		!gracely.Error.is(result) &&
 			result.reduce(
 				(entityTags, organization) => ((entityTags.organization[organization.id] = isoly.DateTime.now()), entityTags),
@@ -36,12 +34,12 @@ export class Organization extends rest.Collection<gracely.Error> {
 	}
 	async changeName(
 		organizationId: string,
-		organization: model.userwidgets.Organization.Creatable,
+		organization: userwidgets.Organization.Creatable,
 		applicationId: string
-	): Promise<model.userwidgets.Organization | gracely.Error> {
+	): Promise<userwidgets.Organization | gracely.Error> {
 		const entityTag = this.entityTags.organization[organizationId]
-		const result = await this.client.put<model.userwidgets.Organization>(
-			`organization/${organizationId}/name`,
+		const result = await this.client.put<userwidgets.Organization>(
+			`/organization/${organizationId}/name`,
 			organization,
 			{
 				...(entityTag && { ifMatch: [entityTag] }),
@@ -53,12 +51,9 @@ export class Organization extends rest.Collection<gracely.Error> {
 	}
 	async removeUser(organizationId: string, email: string) {
 		const entityTag = this.entityTags.organization[organizationId]
-		const result = await this.client.delete<model.userwidgets.Organization>(
-			`organization/${organizationId}/user/${email}`,
-			{
-				...(entityTag && { ifMatch: [entityTag] }),
-			}
-		)
+		const result = await this.client.delete<userwidgets.Organization>(`/organization/${organizationId}/user/${email}`, {
+			...(entityTag && { ifMatch: [entityTag] }),
+		})
 		!gracely.Error.is(result) && (this.entityTags.organization[organizationId] = isoly.DateTime.now())
 		return result
 	}

@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, h, Prop, State, Watch } from "@stencil/core"
 import { Option } from "smoothly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
 export interface CustomOption {
@@ -16,27 +17,27 @@ export interface CustomOption {
 export class UserwidgetsPermissionUpdate {
 	@Prop({ mutable: true, reflect: true }) changed = false
 	@Prop() state: model.State
-	@Prop() user: model.userwidgets.User.Readable
+	@Prop() user: userwidgets.User.Readable
 	@Prop() label = "Permissions:"
 	@Prop() options?: CustomOption[]
 	@Prop() preventDefault = false
 	@State() pickerOptions?: (Option & { checked: boolean })[]
-	@State() selectedOptions?: model.userwidgets.User.Permissions.Readable
-	@State() key?: model.userwidgets.User.Key
-	@State() organizationId?: string
-	@Event() userPermissionUpdated: EventEmitter<model.userwidgets.User.Permissions.Readable>
+	@State() selectedOptions?: userwidgets.User.Permissions.Readable
+	@State() key?: userwidgets.User.Key
+	@State() organization?: userwidgets.Organization
+	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions.Readable>
 
 	@Watch("key")
-	@Watch("organizationId")
+	@Watch("organization")
 	updateOptions() {
 		this.pickerOptions =
-			!this.organizationId || !this.key
+			!this.organization || !this.key
 				? undefined
 				: Object.entries(
-						model.userwidgets.User.Permissions.Readable.assign(
-							model.userwidgets.User.Permissions.Readable.copy(this.key.permissions, false),
+						userwidgets.User.Permissions.Readable.assign(
+							userwidgets.User.Permissions.Readable.copy(this.key.permissions, false),
 							this.user.permissions
-						)[this.organizationId] ?? {}
+						)[this.organization.id] ?? {}
 				  )
 						.map(
 							([resource, permission]) =>
@@ -44,10 +45,10 @@ export class UserwidgetsPermissionUpdate {
 								Object.keys(permission)
 									.map(access => ({
 										name: `${resource} ${access}`,
-										value: [`organization|${this.organizationId}|${resource}|${access}`],
+										value: [`organization|${this.organization}|${resource}|${access}`],
 										checked:
-											!!this.user.permissions[this.organizationId ?? ""]?.[resource]?.[
-												access as keyof model.userwidgets.User.Permissions.Permission
+											!!this.user.permissions[this.organization?.id ?? ""]?.[resource]?.[
+												access as keyof userwidgets.User.Permissions.Permission
 											],
 									}))
 									.flat()
@@ -58,16 +59,12 @@ export class UserwidgetsPermissionUpdate {
 
 	componentWillLoad() {
 		this.options && (this.pickerOptions = this.options)
-		!this.options &&
-			this.state.me.listen("key", async promise => {
-				const key = await promise
-				this.key = !key ? undefined : key
-			}),
-			this.state.listen("options", options => (this.organizationId = options.organizationId))
+		!this.options && this.state.me.listen("key", key => (this.key = key || undefined)),
+			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
 	handleMenuClosed(event: CustomEvent<Option[]>) {
-		this.selectedOptions = event.detail.reduce<model.userwidgets.User.Permissions.Readable>(
+		this.selectedOptions = event.detail.reduce<userwidgets.User.Permissions.Readable>(
 			(target, { value: values }) => (
 				Array.isArray(values) &&
 					values.forEach(value =>
@@ -78,7 +75,7 @@ export class UserwidgetsPermissionUpdate {
 					),
 				target
 			),
-			model.userwidgets.User.Permissions.Readable.copy(this.key?.permissions ?? {}, false)
+			userwidgets.User.Permissions.Readable.copy(this.key?.permissions ?? {}, false)
 		)
 		this.changed = !event.detail.every(detail =>
 			detail.value?.every((value: any) =>
@@ -93,24 +90,25 @@ export class UserwidgetsPermissionUpdate {
 	handleClick() {
 		!this.preventDefault &&
 			this.selectedOptions &&
-			this.state.user.updatePermissions(this.user.email, this.selectedOptions)
+			this.state.users.updatePermissions(this.user.email, this.selectedOptions)
 	}
 
 	render() {
 		return (
-			<form onSubmit={event => event.preventDefault()}>
+			<smoothly-form looks="line" onSmoothlyFormSubmit={event => event.preventDefault()}>
 				<div class={"inputs"}>
-					<smoothly-picker
+					<smoothly-old-picker
 						label={this.label}
 						onMenuClose={event => this.handleMenuClosed(event)}
 						multiple={true}
 						options={this.pickerOptions}
-						selections={this.pickerOptions?.filter(option => option.checked) ?? []}></smoothly-picker>
+						selections={this.pickerOptions?.filter(option => option.checked) ?? []}
+					/>
 					<smoothly-button disabled={!this.changed} class={"button"} onClick={() => this.handleClick()}>
 						<slot></slot>
 					</smoothly-button>
 				</div>
-			</form>
+			</smoothly-form>
 		)
 	}
 }

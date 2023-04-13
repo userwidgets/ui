@@ -5,12 +5,59 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Notice, Option } from "smoothly";
 import { model } from "./model";
-import { Notice } from "smoothly";
+import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
+    interface SmoothlyOldMenuOptions {
+        "emptyMenuLabel": string;
+        "filterOptions": (keyword: string, excludeValues?: string[]) => Promise<void>;
+        "getHighlighted": () => Promise<Option | undefined>;
+        "maxMenuHeight": "inherit";
+        "moveHighlight": (step: number) => Promise<void>;
+        "mutable": boolean;
+        "newOptionLabel": string;
+        "optionStyle": any;
+        "options": Option[];
+        "order": boolean;
+        "resetHighlightOnOptionsChange": boolean;
+        "setHighlight": (newIndex: number | string, scrollToHighlight?: boolean) => Promise<void>;
+        "toggle": boolean;
+    }
+    interface SmoothlyOldOption {
+        "aliases": string;
+        "checkbox": boolean;
+        "checked": boolean;
+        "dataHighlight": boolean;
+        "divider"?: boolean;
+        "name": string;
+        "new"?: boolean;
+        "toggle": boolean;
+        "value": string;
+    }
+    interface SmoothlyOldPicker {
+        "disabled": boolean;
+        "emptyMenuLabel": string;
+        "label": string;
+        "labelSetting": "hide" | "default";
+        "maxHeight": string;
+        "maxMenuHeight": string;
+        "multiple": boolean;
+        "mutable": boolean;
+        "newOptionLabel": string;
+        "optionStyle": any;
+        "options": (Option & { checked?: boolean })[];
+        "readonly": boolean;
+        "selectAllEnabled": boolean;
+        "selectAllName": string;
+        "selectNoneName": string;
+        "selectionName": string;
+        "selections": Option[];
+        "valueValidator": (value: any) => [boolean, Notice | undefined];
+    }
     interface UserwidgetsChangeName {
-        "name": model.userwidgets.User.Name;
+        "name": userwidgets.User.Name;
         "state": model.State;
     }
     interface UserwidgetsChangePassword {
@@ -23,6 +70,7 @@ export namespace Components {
     }
     interface UserwidgetsLoginDialog {
         "state": model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state": model.State;
@@ -39,15 +87,17 @@ export namespace Components {
     interface UserwidgetsOrganizationUserReinvite {
     }
     interface UserwidgetsOrganizationUserRemove {
+        "organization": any;
         "state": model.State;
-        "user": model.userwidgets.User.Readable;
+        "user": userwidgets.User.Readable;
     }
-    interface UserwidgetsRegister {
+    interface UserwidgetsRegisterDialog {
         "state": model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsSetPassword {
         "state": model.State;
-        "user": model.userwidgets.User;
+        "user": userwidgets.User;
     }
     interface UserwidgetsUserListInvited {
         "state": model.State;
@@ -61,12 +111,24 @@ export namespace Components {
         "options"?: CustomOption[];
         "preventDefault": boolean;
         "state": model.State;
-        "user": model.userwidgets.User.Readable;
+        "user": userwidgets.User.Readable;
     }
     interface UserwidgetsUserStatus {
         "state": model.State;
-        "user": model.userwidgets.User.Readable;
+        "user": userwidgets.User.Readable;
     }
+}
+export interface SmoothlyOldMenuOptionsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSmoothlyOldMenuOptionsElement;
+}
+export interface SmoothlyOldOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSmoothlyOldOptionElement;
+}
+export interface SmoothlyOldPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSmoothlyOldPickerElement;
 }
 export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -84,9 +146,9 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
 }
-export interface UserwidgetsRegisterCustomEvent<T> extends CustomEvent<T> {
+export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLUserwidgetsRegisterElement;
+    target: HTMLUserwidgetsRegisterDialogElement;
 }
 export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -97,6 +159,24 @@ export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEv
     target: HTMLUserwidgetsUserPermissionsUpdateElement;
 }
 declare global {
+    interface HTMLSmoothlyOldMenuOptionsElement extends Components.SmoothlyOldMenuOptions, HTMLStencilElement {
+    }
+    var HTMLSmoothlyOldMenuOptionsElement: {
+        prototype: HTMLSmoothlyOldMenuOptionsElement;
+        new (): HTMLSmoothlyOldMenuOptionsElement;
+    };
+    interface HTMLSmoothlyOldOptionElement extends Components.SmoothlyOldOption, HTMLStencilElement {
+    }
+    var HTMLSmoothlyOldOptionElement: {
+        prototype: HTMLSmoothlyOldOptionElement;
+        new (): HTMLSmoothlyOldOptionElement;
+    };
+    interface HTMLSmoothlyOldPickerElement extends Components.SmoothlyOldPicker, HTMLStencilElement {
+    }
+    var HTMLSmoothlyOldPickerElement: {
+        prototype: HTMLSmoothlyOldPickerElement;
+        new (): HTMLSmoothlyOldPickerElement;
+    };
     interface HTMLUserwidgetsChangeNameElement extends Components.UserwidgetsChangeName, HTMLStencilElement {
     }
     var HTMLUserwidgetsChangeNameElement: {
@@ -163,11 +243,11 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationUserRemoveElement;
         new (): HTMLUserwidgetsOrganizationUserRemoveElement;
     };
-    interface HTMLUserwidgetsRegisterElement extends Components.UserwidgetsRegister, HTMLStencilElement {
+    interface HTMLUserwidgetsRegisterDialogElement extends Components.UserwidgetsRegisterDialog, HTMLStencilElement {
     }
-    var HTMLUserwidgetsRegisterElement: {
-        prototype: HTMLUserwidgetsRegisterElement;
-        new (): HTMLUserwidgetsRegisterElement;
+    var HTMLUserwidgetsRegisterDialogElement: {
+        prototype: HTMLUserwidgetsRegisterDialogElement;
+        new (): HTMLUserwidgetsRegisterDialogElement;
     };
     interface HTMLUserwidgetsSetPasswordElement extends Components.UserwidgetsSetPassword, HTMLStencilElement {
     }
@@ -200,6 +280,9 @@ declare global {
         new (): HTMLUserwidgetsUserStatusElement;
     };
     interface HTMLElementTagNameMap {
+        "smoothly-old-menu-options": HTMLSmoothlyOldMenuOptionsElement;
+        "smoothly-old-option": HTMLSmoothlyOldOptionElement;
+        "smoothly-old-picker": HTMLSmoothlyOldPickerElement;
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
         "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
@@ -211,7 +294,7 @@ declare global {
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
-        "userwidgets-register": HTMLUserwidgetsRegisterElement;
+        "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-user-list-invited": HTMLUserwidgetsUserListInvitedElement;
         "userwidgets-user-list-member": HTMLUserwidgetsUserListMemberElement;
@@ -220,8 +303,57 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface SmoothlyOldMenuOptions {
+        "emptyMenuLabel"?: string;
+        "maxMenuHeight"?: "inherit";
+        "mutable"?: boolean;
+        "newOptionLabel"?: string;
+        "onMenuEmpty"?: (event: SmoothlyOldMenuOptionsCustomEvent<boolean>) => void;
+        "optionStyle"?: any;
+        "options"?: Option[];
+        "order"?: boolean;
+        "resetHighlightOnOptionsChange"?: boolean;
+        "toggle"?: boolean;
+    }
+    interface SmoothlyOldOption {
+        "aliases"?: string;
+        "checkbox"?: boolean;
+        "checked"?: boolean;
+        "dataHighlight"?: boolean;
+        "divider"?: boolean;
+        "name"?: string;
+        "new"?: boolean;
+        "onOptionAdd"?: (event: SmoothlyOldOptionCustomEvent<{ name: string; value: string }>) => void;
+        "onOptionHover"?: (event: SmoothlyOldOptionCustomEvent<{ value: any; name: string }>) => void;
+        "onOptionSelect"?: (event: SmoothlyOldOptionCustomEvent<{ value: any; name: string }>) => void;
+        "onOptionUnselect"?: (event: SmoothlyOldOptionCustomEvent<{ value: any; name: string }>) => void;
+        "toggle"?: boolean;
+        "value"?: string;
+    }
+    interface SmoothlyOldPicker {
+        "disabled"?: boolean;
+        "emptyMenuLabel"?: string;
+        "label"?: string;
+        "labelSetting"?: "hide" | "default";
+        "maxHeight"?: string;
+        "maxMenuHeight"?: string;
+        "multiple"?: boolean;
+        "mutable"?: boolean;
+        "newOptionLabel"?: string;
+        "onMenuClose"?: (event: SmoothlyOldPickerCustomEvent<Option[]>) => void;
+        "onNotice"?: (event: SmoothlyOldPickerCustomEvent<Notice>) => void;
+        "optionStyle"?: any;
+        "options"?: (Option & { checked?: boolean })[];
+        "readonly"?: boolean;
+        "selectAllEnabled"?: boolean;
+        "selectAllName"?: string;
+        "selectNoneName"?: string;
+        "selectionName"?: string;
+        "selections"?: Option[];
+        "valueValidator"?: (value: any) => [boolean, Notice | undefined];
+    }
     interface UserwidgetsChangeName {
-        "name"?: model.userwidgets.User.Name;
+        "name"?: userwidgets.User.Name;
         "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<Notice>) => void;
         "state"?: model.State;
     }
@@ -237,9 +369,11 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
-        "onLogin"?: (event: UserwidgetsLoginDialogCustomEvent<model.userwidgets.User.Credentials>) => void;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
+        "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
+        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state"?: model.State;
@@ -256,17 +390,24 @@ declare namespace LocalJSX {
     interface UserwidgetsOrganizationUserReinvite {
     }
     interface UserwidgetsOrganizationUserRemove {
+        "organization"?: any;
         "state"?: model.State;
-        "user"?: model.userwidgets.User.Readable;
+        "user"?: userwidgets.User.Readable;
     }
-    interface UserwidgetsRegister {
-        "onNotice"?: (event: UserwidgetsRegisterCustomEvent<Notice>) => void;
+    interface UserwidgetsRegisterDialog {
+        "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<Notice>) => void;
+        "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
+        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
+		tag: userwidgets.User.Tag
+		credentials: userwidgets.User.Credentials.Register
+	}>) => void;
         "state"?: model.State;
+        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsSetPassword {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
         "state"?: model.State;
-        "user"?: model.userwidgets.User;
+        "user"?: userwidgets.User;
     }
     interface UserwidgetsUserListInvited {
         "state"?: model.State;
@@ -277,17 +418,20 @@ declare namespace LocalJSX {
     interface UserwidgetsUserPermissionsUpdate {
         "changed"?: boolean;
         "label"?: string;
-        "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<model.userwidgets.User.Permissions.Readable>) => void;
+        "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<userwidgets.User.Permissions.Readable>) => void;
         "options"?: CustomOption[];
         "preventDefault"?: boolean;
         "state"?: model.State;
-        "user"?: model.userwidgets.User.Readable;
+        "user"?: userwidgets.User.Readable;
     }
     interface UserwidgetsUserStatus {
         "state"?: model.State;
-        "user"?: model.userwidgets.User.Readable;
+        "user"?: userwidgets.User.Readable;
     }
     interface IntrinsicElements {
+        "smoothly-old-menu-options": SmoothlyOldMenuOptions;
+        "smoothly-old-option": SmoothlyOldOption;
+        "smoothly-old-picker": SmoothlyOldPicker;
         "userwidgets-change-name": UserwidgetsChangeName;
         "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
@@ -299,7 +443,7 @@ declare namespace LocalJSX {
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
-        "userwidgets-register": UserwidgetsRegister;
+        "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-user-list-invited": UserwidgetsUserListInvited;
         "userwidgets-user-list-member": UserwidgetsUserListMember;
@@ -311,6 +455,9 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "smoothly-old-menu-options": LocalJSX.SmoothlyOldMenuOptions & JSXBase.HTMLAttributes<HTMLSmoothlyOldMenuOptionsElement>;
+            "smoothly-old-option": LocalJSX.SmoothlyOldOption & JSXBase.HTMLAttributes<HTMLSmoothlyOldOptionElement>;
+            "smoothly-old-picker": LocalJSX.SmoothlyOldPicker & JSXBase.HTMLAttributes<HTMLSmoothlyOldPickerElement>;
             "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
             "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
@@ -322,7 +469,7 @@ declare module "@stencil/core" {
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
-            "userwidgets-register": LocalJSX.UserwidgetsRegister & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterElement>;
+            "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-user-list-invited": LocalJSX.UserwidgetsUserListInvited & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInvitedElement>;
             "userwidgets-user-list-member": LocalJSX.UserwidgetsUserListMember & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListMemberElement>;

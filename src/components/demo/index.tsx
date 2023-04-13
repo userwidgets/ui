@@ -1,6 +1,7 @@
 import { Component, h } from "@stencil/core"
-import { App } from "smoothly"
-import { state } from "../../State"
+import "smoothly"
+import { client } from "../../Client"
+import { State } from "../../State"
 
 @Component({
 	tag: "userwidgets-demo",
@@ -8,30 +9,29 @@ import { state } from "../../State"
 	scoped: true,
 })
 export class Demo {
+	private state = State.create(client)
 	render() {
 		return (
-			<userwidgets-login state={state}>
-				<App label="Userwidgets ui demo">
-					<smoothly-room path="/version" label="Version">
+			<userwidgets-login state={this.state}>
+				<smoothly-app label="Userwidgets ui demo">
+					<smoothly-app-room path="/" label="Version">
 						<userwidgets-demo-version></userwidgets-demo-version>
-					</smoothly-room>
-					<smoothly-room path="/login" label="Login">
-						<userwidgets-login-trigger state={state}></userwidgets-login-trigger>
-					</smoothly-room>
-					<smoothly-room path="/register">
-						<userwidgets-register state={state}></userwidgets-register>
-					</smoothly-room>
-					<smoothly-room path={"/user-list"} label={"User list"}>
-						<userwidgets-user-list-member state={state}></userwidgets-user-list-member>
-						<userwidgets-user-list-invited state={state}></userwidgets-user-list-invited>
-					</smoothly-room>
-					{state.me.key ? (
-						<userwidgets-menu slot="header">
-							<userwidgets-organization-picker state={state}></userwidgets-organization-picker>
-							<userwidgets-logout state={state}></userwidgets-logout>
-						</userwidgets-menu>
-					) : null}
-				</App>
+					</smoothly-app-room>
+					<smoothly-app-room path="/register">
+						<userwidgets-register state={this.state}></userwidgets-register>
+					</smoothly-app-room>
+					{!window.location.pathname.startsWith("/register")
+						? [
+								<smoothly-app-room path="/login" label="Login">
+									<userwidgets-login-trigger state={this.state}></userwidgets-login-trigger>
+								</smoothly-app-room>,
+								<smoothly-app-room path={"/user-list"} label={"User list"}>
+									<userwidgets-user-list-member state={this.state}></userwidgets-user-list-member>
+									<userwidgets-user-list-invited state={this.state}></userwidgets-user-list-invited>
+								</smoothly-app-room>,
+						  ]
+						: []}
+				</smoothly-app>
 			</userwidgets-login>
 		)
 	}

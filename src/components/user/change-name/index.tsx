@@ -2,7 +2,8 @@ import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil
 import * as gracely from "gracely"
 import * as langly from "langly"
 import { Notice } from "smoothly"
-import { client } from "../../../client"
+import { userwidgets } from "@userwidgets/model"
+import { client } from "../../../Client"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
@@ -13,15 +14,15 @@ import * as translation from "./translation"
 })
 export class ChangeName {
 	private changed = false
-	private initialName: model.userwidgets.User.Name
+	private initialName: userwidgets.User.Name
 	@Event() notice: EventEmitter<Notice>
 	@Prop() state: model.State
-	@Prop() name: model.userwidgets.User.Name
+	@Prop() name: userwidgets.User.Name
 	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
 		this.initialName = this.name
-		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
 	@Listen("smoothlyInput")
@@ -29,12 +30,12 @@ export class ChangeName {
 		this.name[event.detail.name] = event.detail.value
 		this.changed = this.name.first == this.initialName.first && this.name.last == this.initialName.last ? false : true
 	}
-	@Listen("submit")
+
 	async handleSubmit(event: Event) {
 		event.preventDefault()
 		event.stopPropagation()
 		const name = Object.fromEntries(new FormData(event.target as HTMLFormElement))
-		if (!model.userwidgets.User.Name.is(name))
+		if (!userwidgets.User.Name.is(name))
 			this.notice.emit(Notice.warn(this.translate("Missing fields.")))
 		else if (!(this.name.first == this.initialName.first && this.name.last == this.initialName.last))
 			this.notice.emit(Notice.warn(this.translate("Names are not changed.")))
@@ -47,7 +48,7 @@ export class ChangeName {
 
 	render() {
 		return (
-			<form>
+			<smoothly-form looks="line" onSmoothlyFormSubmit={(e: Event) => this.handleSubmit(e)}>
 				<smoothly-input name="first" type="text">
 					{this.name.first}
 				</smoothly-input>
@@ -55,7 +56,7 @@ export class ChangeName {
 					{this.name.last}
 				</smoothly-input>
 				<smoothly-submit disabled={!this.changed}>{this.translate("Change name")}</smoothly-submit>
-			</form>
+			</smoothly-form>
 		)
 	}
 }

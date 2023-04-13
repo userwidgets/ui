@@ -1,6 +1,7 @@
-import { Component, h, Listen, Prop, State, Watch } from "@stencil/core"
+import { Component, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { Option } from "smoothly"
+import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 @Component({
@@ -10,63 +11,42 @@ import * as translation from "./translation"
 })
 export class UserwidgetsOrganizationPicker {
 	@Prop() state: model.State
-	@State() key?: model.userwidgets.User.Key
-	@State() application?: model.userwidgets.Application
-	@State() organizations?: { name: string; value: string }[]
-	@State() receivedKey?: (value: boolean) => void
+	@State() key?: userwidgets.User.Key
+	@State() organizations?: userwidgets.Organization[]
+	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
 
-	@Watch("key")
-	handleKeyChange() {
-		;(!this.key || !this.application) &&
-			this.state.application.listen("application", async promise => {
-				const application = await promise
-				this.application = application ? application : undefined
-			})
-	}
-
-	@Watch("application")
-	handelApplicationChange() {
-		this.application?.organizations &&
-			(this.organizations = Object.values(this.application.organizations)
-				.sort(({ permissions: a }, { permissions: b }) => Object.keys(b).length - Object.keys(a).length)
-				.map(({ name, id }) => ({
-					name: name,
-					value: id,
-				})))
-		this.organizations?.length && (this.state.options = { organizationId: this.organizations[0].value })
-	}
 	componentWillLoad() {
-		new Promise(resolve => (this.receivedKey = resolve)).then(() => {
-			this.state.application.listen("application", async promise => {
-				const application = await promise
-				this.application = application ? application : undefined
-			})
-		})
-		this.state.me.listen("key", async promise => {
-			const key = await promise
-			this.key && key == undefined && this.state.me.key
-			;(this.key = key ? key : undefined) && this.receivedKey && this.receivedKey(true)
-		})
-		this.state.listen("language", language => (this.translate = translation.create(language)))
+		this.state.me.listen("key", key => (this.key = key || undefined))
+		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
+		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
-	@Listen("menuClose")
-	handleMenuClose(event: CustomEvent<Option[]>) {
-		this.state.options = { organizationId: event.detail[0].value }
+	menuCloseHandler(event: CustomEvent<Option[]>) {
 		event.stopPropagation()
+		const id: string | undefined = event.detail.at(0)?.value
+		const found = this.organizations?.find(organization => organization.id == id)
+		if (found)
+			this.state.organizations.current = found
 	}
 	render() {
+		const options = this.organizations?.map(organization => ({ name: organization.name, value: organization.id })) ?? []
+		const selected = [...[options.find(option => option.value == this.organization?.id) ?? []].flat()]
 		return this.key ? (
-			<smoothly-picker
+			<smoothly-old-picker
 				label="Organization"
 				multiple={false}
-				options={this.organizations}
+				options={options}
+				onMenuClose={event => this.menuCloseHandler(event)}
 				selections={
-					!this.organizations?.length
+					!selected.length
 						? [{ name: this.translate("You are not a member of any organization"), value: "" }]
-						: [this.organizations[0]]
-				}></smoothly-picker>
-		) : null
+						: selected
+				}
+			/>
+		) : (
+			[]
+		)
 	}
 }
