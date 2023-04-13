@@ -26,6 +26,11 @@ export class UserwidgetsLogin {
 				: new URL(window.location.href).searchParams.get(jwtParameter) || undefined
 			this.tag = await userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
 			this.activeAccount = this.tag?.active
+			if (this.tag?.active) {
+				const response = await this.state.me.join(this.tag)
+				if (response)
+					this.tag = undefined
+			}
 		})
 		this.state.me.onUnauthorized = () =>
 			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
@@ -36,10 +41,7 @@ export class UserwidgetsLogin {
 
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await this.state.me.login({
-			user: event.detail.user,
-			password: event.detail.password,
-		})
+		const response = await this.state.me.login(event.detail)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
 			this.resolves.forEach(resolve => resolve(true))
 			this.resolves = undefined

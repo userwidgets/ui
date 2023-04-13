@@ -5,11 +5,11 @@ import { Base } from "./Base"
 import { Me } from "./Me"
 
 export class Organizations extends Base<Organizations, model.Client> {
-	#request?: Promise<Organizations["value"]>
+	private request?: Promise<Organizations["value"]>
 	private set key(key: Me["key"]) {
 		if (this.value != undefined)
 			if (key != undefined)
-				this.fetch()
+				(this.request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.value = undefined
 	}
@@ -46,8 +46,9 @@ export class Organizations extends Base<Organizations, model.Client> {
 			const index = this.#value.findIndex(organization => organization.id == id)
 			if (index != -1)
 				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
-		} else
-			this.listenable.value = [current]
+			else
+				this.listenable.value = [...this.#value, current]
+		}
 	}
 	private constructor(client: model.Client, private me: WithListenable<Me>) {
 		super(client)
@@ -55,12 +56,12 @@ export class Organizations extends Base<Organizations, model.Client> {
 	async fetch(): Promise<userwidgets.Organization[] | false> {
 		const promise = !this.me.key
 			? undefined
-			: (this.#request ??= this.client.organization
+			: (this.request ??= this.client.organization
 					.list()
 					.then(response => (!isOrganizations(response) ? false : response)))
 		const result = await promise
-		if (promise == this.#request)
-			this.#request = undefined
+		if (promise == this.request)
+			this.request = undefined
 		return (this.listenable.value = result) || false
 	}
 	async removeUser(email: string): Promise<userwidgets.Organization | false> {

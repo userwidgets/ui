@@ -18,7 +18,7 @@ export class Me extends Base<Me, model.Client> {
 	set key(key: Me["key"]) {
 		this.#key = key
 		if (key)
-			sessionStorage.setItem("token", key.token)
+			sessionStorage.setItem("token", key.token), (this.client.key = key.token)
 		else
 			sessionStorage.removeItem("token")
 	}
@@ -30,10 +30,7 @@ export class Me extends Base<Me, model.Client> {
 	get onUnauthorized(): any {
 		return this.#onUnauthorized
 	}
-	authorize(): void {
-		this.#onUnauthorized?.()
-	}
-	async login(user: userwidgets.User.Credentials): Promise<userwidgets.User.Key | false> {
+	async login(user: userwidgets.User.Credentials): Promise<Me["key"]> {
 		const result = await this.client.me
 			.login(user)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
@@ -41,10 +38,7 @@ export class Me extends Base<Me, model.Client> {
 			this.listenable.key = result
 		return result
 	}
-	async register(
-		tag: userwidgets.User.Tag,
-		credentials: userwidgets.User.Credentials.Register
-	): Promise<userwidgets.User.Key | false> {
+	async register(tag: userwidgets.User.Tag, credentials: userwidgets.User.Credentials.Register): Promise<Me["key"]> {
 		const result = await this.client.me
 			.register(tag, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
@@ -55,7 +49,7 @@ export class Me extends Base<Me, model.Client> {
 	async join(tag: userwidgets.User.Tag) {
 		const result = await this.client.me
 			.join(tag)
-			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
+			.then(response => (userwidgets.User.Key.is(response) ? response : response.status == 410 ? this.#key : false))
 		if (result)
 			this.listenable.key = result
 		return result

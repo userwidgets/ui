@@ -10,14 +10,14 @@ export class Users extends Base<Users, model.Client> {
 	private set key(key: Me["key"]) {
 		if (this.value != undefined)
 			if (key != undefined)
-				this.fetch()
+				(this.#request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.value = undefined
 	}
 	private set organization(organization: Organizations["current"]) {
 		if (this.value != undefined)
 			if (organization != undefined)
-				this.fetch()
+				(this.#request = undefined), this.fetch()
 			else if (organization == undefined)
 				this.listenable.value = undefined
 	}

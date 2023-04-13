@@ -1,5 +1,4 @@
 import { Listenable, WithListenable } from "smoothly"
-import { client } from "../Client"
 import { model } from "../model"
 import { Applications as StateApplications } from "./Applications"
 import { Base } from "./Base"
@@ -27,6 +26,3 @@ export namespace State {
 	export type Users = StateUsers
 	export const Users = StateUsers
 }
-export const state = State.create(client)
-;(globalThis as any).userwidgets = state
-state.me.jwtParameter = "id"

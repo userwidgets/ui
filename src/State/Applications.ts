@@ -9,7 +9,7 @@ export class Applications extends Base<Applications, model.Client> {
 	private set key(key: Me["key"]) {
 		if (this.current != undefined)
 			if (key != undefined)
-				this.fetch()
+				(this.#request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.current = undefined
 	}
