@@ -85,6 +85,7 @@
     "isoly": "^2.0.16",
     "langly": "^2.0.3",
     "smoothly": "^1.0.0-alpha.29",
-    "stencil-router-v2": "^0.6.0"
+    "stencil-router-v2": "^0.6.0",
+    "urlpattern-polyfill": "^7.0.0"
   }
 }
