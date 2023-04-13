@@ -29,14 +29,6 @@ export class Demo {
 									<userwidgets-user-list-member state={this.state}></userwidgets-user-list-member>
 									<userwidgets-user-list-invited state={this.state}></userwidgets-user-list-invited>
 								</smoothly-app-room>,
-								// state.me.key ? (
-								// 	<userwidgets-menu slot="nav-end">
-								// 		<userwidgets-organization-picker state={state}></userwidgets-organization-picker>
-								// 		<userwidgets-logout state={state}></userwidgets-logout>
-								// 	</userwidgets-menu>
-								// ) : (
-								// 	[]
-								// ),
 						  ]
 						: []}
 				</smoothly-app>
