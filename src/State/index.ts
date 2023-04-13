@@ -2,12 +2,12 @@ import { Listenable, WithListenable } from "smoothly"
 import { model } from "../model"
 import { Applications as StateApplications } from "./Applications"
 import { Base } from "./Base"
-import { Locales } from "./Locales"
+import { Locales as UserwidgetsLocales } from "./Locales"
 import { Me as StateMe } from "./Me"
 import { Organizations as StateOrganizations } from "./Organizations"
 import { Users as StateUsers } from "./Users"
 export class State extends Base<State, model.Client> {
-	readonly locales = Locales.create()
+	readonly locales = State.Locales.create()
 	readonly me = State.Me.create(this.client)
 	readonly applications = State.Applications.create(this.client, this.me)
 	readonly organizations = State.Organizations.create(this.client, this.me)
@@ -25,4 +25,6 @@ export namespace State {
 	export const Me = StateMe
 	export type Users = StateUsers
 	export const Users = StateUsers
+	export type Locales = UserwidgetsLocales
+	export const Locales = UserwidgetsLocales
 }
