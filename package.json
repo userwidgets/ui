@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "@userwidgets/model": "^0.0.34",
-    "cloudly-http": "../../utily/cloudly-http",
+    "cloudly-http": "^0.1.4",
     "cloudly-rest": "../../utily/cloudly-rest",
     "gracely": "^2.0.3",
     "isoly": "^2.0.16",
