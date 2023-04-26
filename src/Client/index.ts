@@ -21,7 +21,7 @@ const backend =
 const token = window.sessionStorage.getItem("token") ?? undefined
 
 export class Client extends rest.Client<gracely.Error> {
-	private entityTags: EntityTags = { application: {}, organization: {}, user: {} }
+	entityTags: EntityTags = { application: {}, organization: {}, user: {} }
 	readonly user = new Client.User(this.client, this.entityTags)
 	readonly me = new Client.Me(this.client)
 	readonly organization = new Client.Organization(this.client, this.entityTags)
