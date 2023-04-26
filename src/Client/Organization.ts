@@ -5,7 +5,7 @@ import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
 import type { EntityTags } from "./index"
 export class Organization extends rest.Collection<gracely.Error> {
-	constructor(client: http.Client, private readonly entityTags: EntityTags) {
+	constructor(client: http.Client, readonly entityTags: EntityTags) {
 		super(client)
 	}
 	async create(
