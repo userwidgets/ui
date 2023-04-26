@@ -6,7 +6,7 @@ import * as rest from "cloudly-rest"
 import type { EntityTags } from "./index"
 
 export class Application extends rest.Collection<gracely.Error> {
-	constructor(client: http.Client, private readonly entityTags: EntityTags) {
+	constructor(client: http.Client, readonly entityTags: EntityTags) {
 		super(client)
 	}
 	async create(application: userwidgets.Application.Creatable): Promise<userwidgets.Application | gracely.Error> {
