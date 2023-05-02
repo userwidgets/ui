@@ -8,14 +8,14 @@ import { Organizations } from "./Organizations"
 export class Users extends Base<Users, model.Client> {
 	private request?: Promise<Users["value"]>
 	private set key(key: Me["key"]) {
-		if (this.value != undefined)
+		if (this.#value != undefined)
 			if (key != undefined)
 				(this.request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.value = undefined
 	}
 	private set organization(organization: Organizations["current"]) {
-		if (this.value != undefined)
+		if (this.#value != undefined)
 			if (organization != undefined)
 				(this.request = undefined), this.fetch()
 			else if (organization == undefined)
