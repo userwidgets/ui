@@ -32,8 +32,7 @@ export class UserwidgetsLogin {
 					this.tag = undefined
 			}
 		})
-		this.state.me.onUnauthorized = () =>
-			new Promise<boolean>(resolve => this.resolves?.push(resolve) ?? (this.resolves = [resolve]))
+		this.state.me.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
 	}
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()

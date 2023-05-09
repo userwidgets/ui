@@ -5,26 +5,26 @@ import * as http from "cloudly-http"
 import * as rest from "cloudly-rest"
 import type { EntityTags } from "./index"
 export class Organization extends rest.Collection<gracely.Error> {
-	constructor(client: http.Client, readonly entityTags: EntityTags) {
+	constructor(client: http.Client, readonly entityTags: EntityTags, readonly prefix: `/${string}` | "" = "") {
 		super(client)
 	}
 	async create(
 		organization: userwidgets.Organization.Creatable,
 		applicationId: string
 	): Promise<userwidgets.Organization | gracely.Error> {
-		const result = await this.client.post<userwidgets.Organization>("/organization", organization, {
+		const result = await this.client.post<userwidgets.Organization>(`${this.prefix}/organization`, organization, {
 			application: applicationId,
 		})
 		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
 	async fetch(organizationId: string): Promise<userwidgets.Organization | gracely.Error> {
-		const result = await this.client.get<userwidgets.Organization>(`/organization/${organizationId}`)
+		const result = await this.client.get<userwidgets.Organization>(`${this.prefix}/organization/${organizationId}`)
 		!gracely.Error.is(result) && (this.entityTags.organization[result.id] = isoly.DateTime.now())
 		return result
 	}
 	async list(): Promise<userwidgets.Organization[] | gracely.Error> {
-		const result = await this.client.get<userwidgets.Organization[]>(`/organization`)
+		const result = await this.client.get<userwidgets.Organization[]>(`${this.prefix}/organization`)
 		!gracely.Error.is(result) &&
 			result.reduce(
 				(entityTags, organization) => ((entityTags.organization[organization.id] = isoly.DateTime.now()), entityTags),
@@ -39,7 +39,7 @@ export class Organization extends rest.Collection<gracely.Error> {
 	): Promise<userwidgets.Organization | gracely.Error> {
 		const entityTag = this.entityTags.organization[organizationId]
 		const result = await this.client.put<userwidgets.Organization>(
-			`/organization/${organizationId}/name`,
+			`${this.prefix}/organization/${organizationId}/name`,
 			organization,
 			{
 				...(entityTag && { ifMatch: [entityTag] }),
@@ -51,9 +51,12 @@ export class Organization extends rest.Collection<gracely.Error> {
 	}
 	async removeUser(organizationId: string, email: string) {
 		const entityTag = this.entityTags.organization[organizationId]
-		const result = await this.client.delete<userwidgets.Organization>(`/organization/${organizationId}/user/${email}`, {
-			...(entityTag && { ifMatch: [entityTag] }),
-		})
+		const result = await this.client.delete<userwidgets.Organization>(
+			`${this.prefix}/organization/${organizationId}/user/${email}`,
+			{
+				...(entityTag && { ifMatch: [entityTag] }),
+			}
+		)
 		!gracely.Error.is(result) && (this.entityTags.organization[organizationId] = isoly.DateTime.now())
 		return result
 	}
