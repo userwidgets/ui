@@ -1,9 +1,8 @@
 import { Listenable, WithListenable } from "smoothly"
+import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../model"
-import { Base } from "./Base"
 
-export class Me extends Base<Me, model.Client> {
+export class Me extends StateBase<Me, userwidgets.Client> {
 	#jwtParameter?: Me["jwtParameter"]
 	get jwtParameter(): string | undefined {
 		return this.#jwtParameter
@@ -34,30 +33,36 @@ export class Me extends Base<Me, model.Client> {
 		const result = await this.client.me
 			.login(user)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result)
+		if (result) {
 			this.listenable.key = result
+			sessionStorage.setItem("token", result.token)
+		}
 		return result
 	}
 	async register(tag: userwidgets.User.Tag, credentials: userwidgets.User.Credentials.Register): Promise<Me["key"]> {
 		const result = await this.client.me
 			.register(tag, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result)
+		if (result) {
 			this.listenable.key = result
+			sessionStorage.setItem("token", result.token)
+		}
 		return result
 	}
 	async join(tag: userwidgets.User.Tag) {
 		const result = await this.client.me
 			.join(tag)
 			.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
-		if (result)
+		if (result) {
 			this.listenable.key = result
+			sessionStorage.setItem("token", result.token)
+		}
 		return result
 	}
 	logout(): void {
 		window.sessionStorage.clear()
 	}
-	static create(client: model.Client): WithListenable<Me> {
+	static create(client: userwidgets.Client): WithListenable<Me> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")

@@ -1,11 +1,11 @@
 import { Listenable, WithListenable } from "smoothly"
+import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../model"
-import { Base } from "./Base"
 import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
-export class Users extends Base<Users, model.Client> {
+export class Users extends StateBase<Users, userwidgets.Client> {
 	private request?: Promise<Users["value"]>
 	private set key(key: Me["key"]) {
 		if (this.#value != undefined)
@@ -29,7 +29,7 @@ export class Users extends Base<Users, model.Client> {
 		this.#value = value
 	}
 	private constructor(
-		client: model.Client,
+		client: userwidgets.Client,
 		private me: WithListenable<Me>,
 		private organizations: WithListenable<Organizations>
 	) {
@@ -59,7 +59,7 @@ export class Users extends Base<Users, model.Client> {
 		return result || false
 	}
 	static create(
-		client: model.Client,
+		client: userwidgets.Client,
 		me: WithListenable<Me>,
 		organizations: WithListenable<Organizations>
 	): WithListenable<Users> {

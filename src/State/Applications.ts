@@ -1,10 +1,9 @@
 import { Listenable, WithListenable } from "smoothly"
+import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../model"
-import { Base } from "./Base"
 import { Me } from "./Me"
 
-export class Applications extends Base<Applications, model.Client> {
+export class Applications extends StateBase<Applications, userwidgets.Client> {
 	private request?: Promise<Applications["current"]>
 	private set key(key: Me["key"]) {
 		if (this.#current != undefined)
@@ -20,7 +19,7 @@ export class Applications extends Base<Applications, model.Client> {
 	set current(current: Applications["current"]) {
 		this.#current = current
 	}
-	private constructor(client: model.Client, private me: WithListenable<Me>) {
+	private constructor(client: userwidgets.Client, private me: WithListenable<Me>) {
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
@@ -34,7 +33,7 @@ export class Applications extends Base<Applications, model.Client> {
 			this.request = undefined
 		return (this.listenable.current = result) || false
 	}
-	static create(client: model.Client, me: WithListenable<Me>): WithListenable<Applications> {
+	static create(client: userwidgets.Client, me: WithListenable<Me>): WithListenable<Applications> {
 		const backend = new this(client, me)
 		const listenable = Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
