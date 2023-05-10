@@ -1,8 +1,8 @@
 import { isoly } from "isoly"
 import { Listenable } from "smoothly"
-import { Base } from "./Base"
+import { StateBase } from "smoothly"
 
-export class Locales extends Base<Locales> {
+export class Locales extends StateBase<Locales> {
 	#current: Locales["current"]
 	get current(): isoly.Locale {
 		return this.#current

@@ -1,18 +1,18 @@
-import { Listenable, WithListenable } from "smoothly"
-import { model } from "../model"
+import { Listenable, StateBase, WithListenable } from "smoothly"
+import { Client } from "@userwidgets/model"
 import { Applications as StateApplications } from "./Applications"
-import { Base } from "./Base"
 import { Locales as UserwidgetsLocales } from "./Locales"
 import { Me as StateMe } from "./Me"
 import { Organizations as StateOrganizations } from "./Organizations"
 import { Users as StateUsers } from "./Users"
-export class State extends Base<State, model.Client> {
+
+export class State extends StateBase<State, Client> {
 	readonly locales = State.Locales.create()
 	readonly me = State.Me.create(this.client)
 	readonly applications = State.Applications.create(this.client, this.me)
 	readonly organizations = State.Organizations.create(this.client, this.me)
 	readonly users = State.Users.create(this.client, this.me, this.organizations)
-	static create(client: model.Client): WithListenable<State> {
+	static create(client: Client): WithListenable<State> {
 		return Listenable.load(new this(client))
 	}
 }
