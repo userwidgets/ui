@@ -1,6 +1,6 @@
 import { Component, h } from "@stencil/core"
 import "smoothly"
-import { client } from "../../Client"
+import { client } from "../../client"
 import { State } from "../../State"
 
 @Component({
