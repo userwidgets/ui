@@ -5,7 +5,7 @@ import { model } from "../model"
 import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
-export class Users extends StateBase<Users, userwidgets.Client> {
+export class Users extends StateBase<Users, userwidgets.ClientCollection> {
 	private request?: Promise<Users["value"]>
 	private set key(key: Me["key"]) {
 		if (this.#value != undefined)
@@ -29,7 +29,7 @@ export class Users extends StateBase<Users, userwidgets.Client> {
 		this.#value = value
 	}
 	private constructor(
-		client: userwidgets.Client,
+		client: userwidgets.ClientCollection,
 		private me: WithListenable<Me>,
 		private organizations: WithListenable<Organizations>
 	) {
@@ -59,7 +59,7 @@ export class Users extends StateBase<Users, userwidgets.Client> {
 		return result || false
 	}
 	static create(
-		client: userwidgets.Client,
+		client: userwidgets.ClientCollection,
 		me: WithListenable<Me>,
 		organizations: WithListenable<Organizations>
 	): WithListenable<Users> {
