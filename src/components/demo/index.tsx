@@ -1,6 +1,6 @@
 import { Component, h } from "@stencil/core"
 import "smoothly"
-import { client } from "../../client"
+import { client } from "../../Client"
 import { State } from "../../State"
 
 @Component({
@@ -9,7 +9,7 @@ import { State } from "../../State"
 	scoped: true,
 })
 export class Demo {
-	private state = State.create(client)
+	private state = State.create(client.userwidgets)
 	render() {
 		return (
 			<userwidgets-login state={this.state}>

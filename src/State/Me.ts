@@ -2,7 +2,7 @@ import { Listenable, WithListenable } from "smoothly"
 import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 
-export class Me extends StateBase<Me, userwidgets.Client> {
+export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 	#jwtParameter?: Me["jwtParameter"]
 	get jwtParameter(): string | undefined {
 		return this.#jwtParameter
@@ -16,9 +16,10 @@ export class Me extends StateBase<Me, userwidgets.Client> {
 	}
 	set key(key: Me["key"]) {
 		this.#key = key
-		if (key)
-			sessionStorage.setItem("token", key.token), (this.client.key = key.token)
-		else
+		if (key) {
+			sessionStorage.setItem("token", key.token)
+			this.client.key = key.token
+		} else
 			sessionStorage.removeItem("token")
 	}
 	#onUnauthorized?: () => Promise<boolean>
@@ -62,7 +63,7 @@ export class Me extends StateBase<Me, userwidgets.Client> {
 	logout(): void {
 		window.sessionStorage.clear()
 	}
-	static create(client: userwidgets.Client): WithListenable<Me> {
+	static create(client: userwidgets.ClientCollection): WithListenable<Me> {
 		const backend = new this(client)
 		const listenable = Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")

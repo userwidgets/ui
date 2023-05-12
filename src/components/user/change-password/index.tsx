@@ -3,7 +3,7 @@ import * as gracely from "gracely"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { client } from "../../../client"
+import { client } from "../../../Client"
 import { model } from "../../../model"
 import * as translation from "./translation"
 @Component({
