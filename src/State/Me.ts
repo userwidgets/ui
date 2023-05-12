@@ -22,13 +22,13 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		} else
 			sessionStorage.removeItem("token")
 	}
-	#onUnauthorized?: () => Promise<boolean>
-	set onUnauthorized(onUnauthorized: () => Promise<boolean>) {
+	#onUnauthorized: Me["onUnauthorized"]
+	get onUnauthorized(): (() => Promise<boolean>) | undefined {
+		return this.#onUnauthorized
+	}
+	set onUnauthorized(onUnauthorized: Me["onUnauthorized"]) {
 		this.#onUnauthorized = onUnauthorized
 		this.client.onUnauthorized = onUnauthorized
-	}
-	get onUnauthorized(): any {
-		return this.#onUnauthorized
 	}
 	async login(user: userwidgets.User.Credentials): Promise<Me["key"]> {
 		const result = await this.client.me
