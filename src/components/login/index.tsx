@@ -20,19 +20,24 @@ export class UserwidgetsLogin {
 	@Event() userwidgetsLoginLoaded: EventEmitter
 
 	componentWillLoad() {
-		this.state.me.listen("jwtParameter", async jwtParameter => {
-			const token = !jwtParameter
-				? undefined
-				: new URL(window.location.href).searchParams.get(jwtParameter) || undefined
-			this.tag = await userwidgets.User.Tag.unpack((token?.split(".").length != 3 ? `${token}.` : token) ?? "")
-			this.activeAccount = this.tag?.active
-			if (this.tag?.active) {
-				const response = await this.state.me.join(this.tag)
-				if (response)
-					this.tag = undefined
-			}
-		})
 		this.state.me.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
+
+		let inviteToken = new URL(window.location.href).searchParams.get(this.state.me.inviteParameterName) || undefined
+		inviteToken = (inviteToken?.split(".").length != 3 ? `${inviteToken}.` : inviteToken) ?? ""
+		if (inviteToken) {
+			userwidgets.User.Tag.Verifier.create()
+				.verify(inviteToken)
+				.then(tag => {
+					this.tag = tag
+					this.activeAccount = this.tag?.active
+					if (this.tag?.active) {
+						this.state.me.join(this.tag).then(response => {
+							if (response)
+								this.tag = undefined
+						})
+					}
+				})
+		}
 	}
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()
