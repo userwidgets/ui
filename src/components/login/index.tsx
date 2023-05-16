@@ -13,7 +13,7 @@ if (!("URLPattern" in globalThis))
 })
 export class UserwidgetsLogin {
 	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
-	@State() tag?: userwidgets.User.Tag
+	@State() invite?: userwidgets.User.Invite
 	@State() activeAccount?: boolean
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
@@ -25,15 +25,15 @@ export class UserwidgetsLogin {
 		let inviteToken = new URL(window.location.href).searchParams.get(this.state.me.inviteParameterName) || undefined
 		inviteToken = (inviteToken?.split(".").length != 3 ? `${inviteToken}.` : inviteToken) ?? ""
 		if (inviteToken) {
-			userwidgets.User.Tag.Verifier.create()
+			userwidgets.User.Invite.Verifier.create()
 				.verify(inviteToken)
-				.then(tag => {
-					this.tag = tag
-					this.activeAccount = this.tag?.active
-					if (this.tag?.active) {
-						this.state.me.join(this.tag).then(response => {
+				.then(invite => {
+					this.invite = invite
+					this.activeAccount = this.invite?.active
+					if (this.invite?.active) {
+						this.state.me.join(this.invite).then(response => {
 							if (response)
-								this.tag = undefined
+								this.invite = undefined
 						})
 					}
 				})
@@ -58,11 +58,11 @@ export class UserwidgetsLogin {
 	}
 
 	async registerHandler(
-		event: CustomEvent<{ tag: userwidgets.User.Tag; credentials: userwidgets.User.Credentials.Register }>
+		event: CustomEvent<{ invite: userwidgets.User.Invite; credentials: userwidgets.User.Credentials.Register }>
 	) {
-		const response = await this.state.me.register(event.detail.tag, event.detail.credentials)
+		const response = await this.state.me.register(event.detail.invite, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
-			this.tag = undefined
+			this.invite = undefined
 			this.resolves.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
@@ -73,11 +73,11 @@ export class UserwidgetsLogin {
 		return [
 			this.resolves ? (
 				<div class={"mask"}>
-					{this.tag && !this.activeAccount ? (
+					{this.invite && !this.activeAccount ? (
 						<userwidgets-register-dialog
 							class={"dialog"}
 							state={this.state}
-							tag={this.tag}
+							invite={this.invite}
 							onUserwidgetsRegister={event => this.registerHandler(event)}
 							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
 						/>
@@ -85,7 +85,7 @@ export class UserwidgetsLogin {
 						<userwidgets-login-dialog
 							class={"dialog"}
 							state={this.state}
-							tag={this.tag}
+							invite={this.invite}
 							onUserwidgetsLogin={event => this.loginHandler(event)}
 							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
 						/>

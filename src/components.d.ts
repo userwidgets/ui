@@ -69,8 +69,8 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsLoginDialog {
+        "invite"?: userwidgets.User.Invite;
         "state": model.State;
-        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state": model.State;
@@ -92,8 +92,8 @@ export namespace Components {
         "user": userwidgets.User.Readable;
     }
     interface UserwidgetsRegisterDialog {
+        "invite"?: userwidgets.User.Invite;
         "state": model.State;
-        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsSetPassword {
         "state": model.State;
@@ -369,11 +369,11 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
+        "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
-        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsLoginTrigger {
         "state"?: model.State;
@@ -395,14 +395,14 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User.Readable;
     }
     interface UserwidgetsRegisterDialog {
+        "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
         "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
-		tag: userwidgets.User.Tag
+		invite: userwidgets.User.Invite
 		credentials: userwidgets.User.Credentials.Register
 	}>) => void;
         "state"?: model.State;
-        "tag"?: userwidgets.User.Tag;
     }
     interface UserwidgetsSetPassword {
         "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
