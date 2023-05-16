@@ -13,12 +13,12 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsRegister {
-	@Prop() tag?: userwidgets.User.Tag
+	@Prop() invite?: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<Notice>
 	@Event() userwidgetsRegister: EventEmitter<{
-		tag: userwidgets.User.Tag
+		invite: userwidgets.User.Invite
 		credentials: userwidgets.User.Credentials.Register
 	}>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
@@ -31,16 +31,16 @@ export class UserwidgetsRegister {
 	async handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
 		event.stopPropagation()
-		!this.tag ||
+		!this.invite ||
 		!userwidgets.User.Password.Set.is(event.detail) ||
 		!userwidgets.User.Password.Set.validate(event.detail)
 			? this.notice.emit(
 					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
 			  )
 			: this.userwidgetsRegister.emit({
-					tag: this.tag,
+					invite: this.invite,
 					credentials: {
-						user: this.tag.email,
+						user: this.invite.email,
 						name: {
 							first: event.detail.first,
 							last: event.detail.last,
@@ -54,7 +54,7 @@ export class UserwidgetsRegister {
 	}
 
 	render() {
-		return !this.tag ? null : this.tag.expires < isoly.DateTime.now() ? (
+		return !this.invite ? null : this.invite.expires < isoly.DateTime.now() ? (
 			<div>
 				<p>
 					{this.translate("This invitation is expired. Back to ")}
@@ -64,7 +64,7 @@ export class UserwidgetsRegister {
 					.
 				</p>
 			</div>
-		) : this.tag.active ? null : (
+		) : this.invite.active ? null : (
 			[
 				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="text" name="first">
@@ -87,7 +87,7 @@ export class UserwidgetsRegister {
 					{this.translate("Already have an account? ")}
 					<a
 						href={window.origin}
-						onClick={async e => (e.preventDefault(), this.tag && this.userwidgetsActiveAccount.emit(true))}>
+						onClick={async e => (e.preventDefault(), this.invite && this.userwidgetsActiveAccount.emit(true))}>
 						{this.translate("Login")}
 					</a>
 				</p>,

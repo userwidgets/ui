@@ -11,7 +11,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsLoginDialog {
 	@Prop() state: model.State
-	@Prop() tag?: userwidgets.User.Tag
+	@Prop() invite?: userwidgets.User.Invite
 	@Event() notice: EventEmitter<Notice>
 	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
@@ -41,7 +41,7 @@ export class UserwidgetsLoginDialog {
 				</smoothly-input>
 				<smoothly-submit>{this.translate("Login")}</smoothly-submit>
 			</smoothly-form>,
-			this.tag?.active ? null : (
+			this.invite?.active ? null : (
 				<p>
 					{this.translate("Don't have an account? ")}
 					<a href={window.location.href} onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>

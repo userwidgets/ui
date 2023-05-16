@@ -41,9 +41,12 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		}
 		return result
 	}
-	async register(tag: userwidgets.User.Tag, credentials: userwidgets.User.Credentials.Register): Promise<Me["key"]> {
+	async register(
+		invite: userwidgets.User.Invite,
+		credentials: userwidgets.User.Credentials.Register
+	): Promise<Me["key"]> {
 		const result = await this.client.me
-			.register(tag, credentials)
+			.register(invite, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
 		if (result) {
 			this.listenable.key = result
@@ -51,9 +54,9 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		}
 		return result
 	}
-	async join(tag: userwidgets.User.Tag) {
+	async join(invite: userwidgets.User.Invite) {
 		const result = await this.client.me
-			.join(tag)
+			.join(invite)
 			.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
 		if (result) {
 			this.listenable.key = result
