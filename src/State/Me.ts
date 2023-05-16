@@ -3,13 +3,14 @@ import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 
 export class Me extends StateBase<Me, userwidgets.ClientCollection> {
-	#jwtParameter?: Me["jwtParameter"]
-	get jwtParameter(): string | undefined {
-		return this.#jwtParameter
+	constructor(client: userwidgets.ClientCollection) {
+		super(client)
+		client.configuration.publicKey
 	}
-	set jwtParameter(jwtParameter: Me["jwtParameter"]) {
-		this.#jwtParameter = jwtParameter
+	get inviteParameterName(): string {
+		return this.client.configuration.inviteParameterName
 	}
+
 	#key?: Me["key"]
 	get key(): userwidgets.User.Key | false | undefined {
 		return this.#key ?? (this.#onUnauthorized?.(), undefined)
@@ -68,7 +69,9 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		const listenable = Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")
 		if (key)
-			userwidgets.User.Key.unpack(key).then(key => (listenable.key = key || false))
+			userwidgets.User.Key.Verifier.create(client.configuration.publicKey)
+				.verify(key)
+				.then(key => (listenable.key = key || false))
 		return listenable
 	}
 }
