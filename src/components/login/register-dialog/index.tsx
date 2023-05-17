@@ -66,6 +66,11 @@ export class UserwidgetsRegister {
 			</div>
 		) : this.invite.active ? null : (
 			[
+				<smoothly-form looks="line">
+					<smoothly-input type="text" readonly value={this.invite.email}>
+						{this.translate("Email")}
+					</smoothly-input>
+				</smoothly-form>,
 				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
