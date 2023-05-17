@@ -12,17 +12,13 @@ import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface SmoothlyOldMenuOptions {
         "emptyMenuLabel": string;
-        "filterOptions": (keyword: string, excludeValues?: string[]) => Promise<void>;
-        "getHighlighted": () => Promise<Option | undefined>;
         "maxMenuHeight": "inherit";
-        "moveHighlight": (step: number) => Promise<void>;
         "mutable": boolean;
         "newOptionLabel": string;
         "optionStyle": any;
         "options": Option[];
         "order": boolean;
         "resetHighlightOnOptionsChange": boolean;
-        "setHighlight": (newIndex: number | string, scrollToHighlight?: boolean) => Promise<void>;
         "toggle": boolean;
     }
     interface SmoothlyOldOption {

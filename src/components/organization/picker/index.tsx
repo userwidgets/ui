@@ -1,4 +1,4 @@
-import { Component, h, Prop, State } from "@stencil/core"
+import { Component, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { Option } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -31,22 +31,22 @@ export class UserwidgetsOrganizationPicker {
 			this.state.organizations.current = found
 	}
 	render() {
-		const options = this.organizations?.map(organization => ({ name: organization.name, value: organization.id })) ?? []
-		const selected = [...[options.find(option => option.value == this.organization?.id) ?? []].flat()]
-		return this.key ? (
-			<smoothly-old-picker
-				label="Organization"
-				multiple={false}
-				options={options}
-				onMenuClose={event => this.menuCloseHandler(event)}
-				selections={
-					!selected.length
-						? [{ name: this.translate("You are not a member of any organization"), value: "" }]
-						: selected
-				}
-			/>
-		) : (
-			[]
-		)
+		// 	const options = this.organizations?.map(organization => ({ name: organization.name, value: organization.id })) ?? []
+		// 	const selected = [...[options.find(option => option.value == this.organization?.id) ?? []].flat()]
+		// 	return this.key ? (
+		// 		<smoothly-old-picker
+		// 			label="Organization"
+		// 			multiple={false}
+		// 			options={options}
+		// 			onMenuClose={event => this.menuCloseHandler(event)}
+		// 			selections={
+		// 				!selected.length
+		// 					? [{ name: this.translate("You are not a member of any organization"), value: "" }]
+		// 					: selected
+		// 			}
+		// 		/>
+		// 	) : (
+		// 		[]
+		// 	)
 	}
 }
