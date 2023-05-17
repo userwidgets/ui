@@ -35,10 +35,8 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		const result = await this.client.me
 			.login(user)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result) {
+		if (result)
 			this.listenable.key = result
-			sessionStorage.setItem("token", result.token)
-		}
 		return result
 	}
 	async register(
@@ -65,6 +63,7 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		return result
 	}
 	logout(): void {
+		this.listenable.key = undefined
 		window.sessionStorage.clear()
 	}
 	static create(client: userwidgets.ClientCollection): WithListenable<Me> {
