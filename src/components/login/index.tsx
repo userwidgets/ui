@@ -1,8 +1,10 @@
 import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
-import "smoothly"
+import * as langly from "langly"
+import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
+import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
 	(globalThis as any).URLPattern = URLPattern
@@ -18,25 +20,25 @@ export class UserwidgetsLogin {
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
-
+	@Event() notice: EventEmitter<Notice>
+	@State() translate: langly.Translate = translation.create("en")
+	onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
 	componentWillLoad() {
-		this.state.me.onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
-
-		let inviteToken = new URL(window.location.href).searchParams.get(this.state.me.inviteParameterName) || undefined
-		inviteToken = (inviteToken?.split(".").length != 3 ? `${inviteToken}.` : inviteToken) ?? ""
+		this.state.me.onUnauthorized = this.onUnauthorized
+		this.handleInvite() // No await!
+	}
+	async handleInvite() {
+		const inviteToken = new URL(window.location.href).searchParams.get(this.state.me.inviteParameterName) || undefined
 		if (inviteToken) {
-			userwidgets.User.Invite.Verifier.create()
-				.verify(inviteToken)
-				.then(invite => {
-					this.invite = invite
-					this.activeAccount = this.invite?.active
-					if (this.invite?.active) {
-						this.state.me.join(this.invite).then(response => {
-							if (response)
-								this.invite = undefined
-						})
-					}
-				})
+			this.onUnauthorized()
+			this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
+
+			if (this.invite) {
+				this.activeAccount = this.invite.active
+				if (this.invite.active && (await this.state.me.join(this.invite)))
+					this.invite = undefined
+			} else
+				this.notice.emit(Notice.warn(this.translate("Used invite is not valid.")))
 		}
 	}
 	componentDidLoad() {
