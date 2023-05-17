@@ -74,6 +74,9 @@ export namespace Components {
     interface UserwidgetsLogout {
         "state": model.State;
     }
+    interface UserwidgetsMe {
+        "state": model.State;
+    }
     interface UserwidgetsMenu {
         "menuOpen": boolean;
     }
@@ -215,6 +218,12 @@ declare global {
         prototype: HTMLUserwidgetsLogoutElement;
         new (): HTMLUserwidgetsLogoutElement;
     };
+    interface HTMLUserwidgetsMeElement extends Components.UserwidgetsMe, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsMeElement: {
+        prototype: HTMLUserwidgetsMeElement;
+        new (): HTMLUserwidgetsMeElement;
+    };
     interface HTMLUserwidgetsMenuElement extends Components.UserwidgetsMenu, HTMLStencilElement {
     }
     var HTMLUserwidgetsMenuElement: {
@@ -286,6 +295,7 @@ declare global {
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
+        "userwidgets-me": HTMLUserwidgetsMeElement;
         "userwidgets-menu": HTMLUserwidgetsMenuElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
@@ -378,6 +388,9 @@ declare namespace LocalJSX {
     interface UserwidgetsLogout {
         "state"?: model.State;
     }
+    interface UserwidgetsMe {
+        "state"?: model.State;
+    }
     interface UserwidgetsMenu {
         "menuOpen"?: boolean;
     }
@@ -436,6 +449,7 @@ declare namespace LocalJSX {
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
+        "userwidgets-me": UserwidgetsMe;
         "userwidgets-menu": UserwidgetsMenu;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
@@ -462,6 +476,7 @@ declare module "@stencil/core" {
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
+            "userwidgets-me": LocalJSX.UserwidgetsMe & JSXBase.HTMLAttributes<HTMLUserwidgetsMeElement>;
             "userwidgets-menu": LocalJSX.UserwidgetsMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMenuElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
