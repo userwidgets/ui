@@ -38,7 +38,7 @@ export class Users extends StateBase<Users, userwidgets.ClientCollection> {
 	async fetch(): Promise<userwidgets.User.Readable[] | false> {
 		const promise = !this.me.key
 			? undefined
-			: this.client.user.list().then(response => (!isUsers(response) ? false : response))
+			: (this.request ??= this.client.user.list().then(response => (!isUsers(response) ? false : response)))
 		const result = await promise
 		if (promise == this.request)
 			this.request = undefined
