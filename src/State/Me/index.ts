@@ -1,16 +1,10 @@
 import { Listenable, WithListenable } from "smoothly"
 import { StateBase } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
+import { Invite } from "./Invite"
 
 export class Me extends StateBase<Me, userwidgets.ClientCollection> {
-	constructor(client: userwidgets.ClientCollection) {
-		super(client)
-		client.configuration.publicKey
-	}
-	get inviteParameterName(): string {
-		return this.client.configuration.inviteParameterName
-	}
-
+	readonly invite = Invite.create(this.client)
 	#key?: Me["key"]
 	get key(): userwidgets.User.Key | false | undefined {
 		return this.#key ?? (this.#onUnauthorized?.(), undefined)
