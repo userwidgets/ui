@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -31,24 +31,28 @@ export class UserwidgetsLoginDialog {
 	}
 
 	render() {
-		return [
-			<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-				<smoothly-input type="email" name="user">
-					{this.translate("Email")}
-				</smoothly-input>
-				<smoothly-input type="password" name="password">
-					{this.translate("Password")}
-				</smoothly-input>
-				<smoothly-submit>{this.translate("Login")}</smoothly-submit>
-			</smoothly-form>,
-			this.invite?.active ? null : (
-				<p>
-					{this.translate("Don't have an account? ")}
-					<a href={window.location.href} onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
-						{this.translate("Register")}
-					</a>
-				</p>
-			),
-		]
+		return (
+			<Host>
+				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+					<smoothly-input type="email" name="user">
+						{this.translate("Email")}
+					</smoothly-input>
+					<smoothly-input type="password" name="password">
+						{this.translate("Password")}
+					</smoothly-input>
+					{this.invite && !this.invite.active ? (
+						<p slot="submit">
+							{this.translate("Don't have an account? ")}
+							<a
+								href={window.location.href}
+								onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
+								{this.translate("Register")}
+							</a>
+						</p>
+					) : null}
+					<smoothly-submit slot="submit">{this.translate("Login")}</smoothly-submit>
+				</smoothly-form>
+			</Host>
+		)
 	}
 }

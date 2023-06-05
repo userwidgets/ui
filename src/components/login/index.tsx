@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { Notice } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -7,7 +7,7 @@ import { model } from "../../model"
 import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
-	(globalThis as any).URLPattern = URLPattern
+	Object.assign(globalThis, { URLPattern })
 @Component({
 	tag: "userwidgets-login",
 	styleUrl: "style.css",
@@ -22,24 +22,22 @@ export class UserwidgetsLogin {
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Event() notice: EventEmitter<Notice>
 	@State() translate: langly.Translate = translation.create("en")
-	onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
+	private onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
+
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
-		this.handleInvite() // No await!
+		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
 	}
-	async handleInvite() {
-		const inviteToken = new URL(window.location.href).searchParams.get(this.state.me.inviteParameterName) || undefined
-		if (inviteToken) {
-			this.onUnauthorized()
-			this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
+	async handleInvite(inviteToken: string) {
+		this.onUnauthorized()
+		this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
 
-			if (this.invite) {
-				this.activeAccount = this.invite.active
-				if (this.invite.active && (await this.state.me.join(this.invite)))
-					this.invite = undefined
-			} else
-				this.notice.emit(Notice.warn(this.translate("Used invite is not valid.")))
-		}
+		if (this.invite) {
+			this.activeAccount = this.invite.active
+			if (this.invite.active && (await this.state.me.join(this.invite)))
+				this.invite = undefined
+		} else
+			this.notice.emit(Notice.warn(this.translate("Used invite is not valid.")))
 	}
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()
@@ -72,29 +70,31 @@ export class UserwidgetsLogin {
 	}
 
 	render() {
-		return [
-			this.resolves ? (
-				<div class={"mask"}>
-					{this.invite && !this.activeAccount ? (
-						<userwidgets-register-dialog
-							class={"dialog"}
-							state={this.state}
-							invite={this.invite}
-							onUserwidgetsRegister={event => this.registerHandler(event)}
-							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-						/>
-					) : (
-						<userwidgets-login-dialog
-							class={"dialog"}
-							state={this.state}
-							invite={this.invite}
-							onUserwidgetsLogin={event => this.loginHandler(event)}
-							onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-						/>
-					)}
-				</div>
-			) : null,
-			<slot />,
-		]
+		return (
+			<Host>
+				{this.resolves ? (
+					<div class={"mask"}>
+						{this.invite && !this.activeAccount ? (
+							<userwidgets-register-dialog
+								class={"dialog"}
+								state={this.state}
+								invite={this.invite}
+								onUserwidgetsRegister={event => this.registerHandler(event)}
+								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+							/>
+						) : (
+							<userwidgets-login-dialog
+								class={"dialog"}
+								state={this.state}
+								invite={this.invite}
+								onUserwidgetsLogin={event => this.loginHandler(event)}
+								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
+							/>
+						)}
+					</div>
+				) : null}
+				<slot />
+			</Host>
+		)
 	}
 }
