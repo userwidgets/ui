@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, Fragment, h, Host, Prop, State } from "@stencil/core"
 import * as isoly from "isoly"
 import * as langly from "langly"
-import { Notice } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { href } from "stencil-router-v2"
 import { model } from "../../../model"
@@ -16,7 +16,7 @@ export class UserwidgetsRegister {
 	@Prop() invite?: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
-	@Event() notice: EventEmitter<Notice>
+	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsRegister: EventEmitter<{
 		invite: userwidgets.User.Invite
 		credentials: userwidgets.User.Credentials.Register
@@ -35,7 +35,9 @@ export class UserwidgetsRegister {
 		!userwidgets.User.Password.Set.is(event.detail) ||
 		!userwidgets.User.Password.Set.validate(event.detail)
 			? this.notice.emit(
-					Notice.warn(this.translate("Password and Repeat password must be identical and at least 6 characters long."))
+					smoothly.Notice.warn(
+						this.translate("Password and Repeat password must be identical and at least 6 characters long.")
+					)
 			  )
 			: this.userwidgetsRegister.emit({
 					invite: this.invite,

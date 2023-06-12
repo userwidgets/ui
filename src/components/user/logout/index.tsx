@@ -1,5 +1,5 @@
 import { Component, h, Prop, State } from "@stencil/core"
-import { redirect } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
@@ -17,7 +17,7 @@ export class Logout {
 
 	handleClick(): void | Promise<void> {
 		this.state.me.logout()
-		redirect(window.location.origin)
+		smoothly.redirect(window.location.origin)
 	}
 	render() {
 		return this.key ? (

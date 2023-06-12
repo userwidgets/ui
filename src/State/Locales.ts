@@ -1,8 +1,7 @@
 import { isoly } from "isoly"
-import { Listenable } from "smoothly"
-import { StateBase } from "smoothly"
+import { smoothly } from "smoothly"
 
-export class Locales extends StateBase<Locales> {
+export class Locales extends smoothly.StateBase<Locales> {
 	#current: Locales["current"]
 	get current(): isoly.Locale {
 		return this.#current
@@ -28,6 +27,6 @@ export class Locales extends StateBase<Locales> {
 	}
 	private static supported: [isoly.Locale, ...isoly.Locale[]] = ["en-GB", "sv-SE"]
 	static create() {
-		return Listenable.load(new this())
+		return smoothly.Listenable.load(new this())
 	}
 }

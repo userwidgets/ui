@@ -1,9 +1,8 @@
-import { Listenable, WithListenable } from "smoothly"
-import { StateBase } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { Invite } from "./Invite"
 
-export class Me extends StateBase<Me, userwidgets.ClientCollection> {
+export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 	readonly invite = Invite.create(this.client)
 	#key?: Me["key"]
 	get key(): userwidgets.User.Key | false | undefined {
@@ -60,9 +59,9 @@ export class Me extends StateBase<Me, userwidgets.ClientCollection> {
 		this.listenable.key = undefined
 		window.sessionStorage.clear()
 	}
-	static create(client: userwidgets.ClientCollection): WithListenable<Me> {
+	static create(client: userwidgets.ClientCollection): smoothly.WithListenable<Me> {
 		const backend = new this(client)
-		const listenable = Listenable.load(backend)
+		const listenable = smoothly.Listenable.load(backend)
 		const key = window.sessionStorage.getItem("token")
 		if (key)
 			userwidgets.User.Key.Verifier.create(client.configuration.publicKey)

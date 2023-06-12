@@ -1,9 +1,8 @@
-import { Listenable, WithListenable } from "smoothly"
-import { StateBase } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { Me } from "./Me"
 
-export class Applications extends StateBase<Applications, userwidgets.ClientCollection> {
+export class Applications extends smoothly.StateBase<Applications, userwidgets.ClientCollection> {
 	private request?: Promise<Applications["current"]>
 	private set key(key: Me["key"]) {
 		if (this.#current != undefined)
@@ -19,7 +18,7 @@ export class Applications extends StateBase<Applications, userwidgets.ClientColl
 	set current(current: Applications["current"]) {
 		this.#current = current
 	}
-	private constructor(client: userwidgets.ClientCollection, private me: WithListenable<Me>) {
+	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
@@ -33,9 +32,12 @@ export class Applications extends StateBase<Applications, userwidgets.ClientColl
 			this.request = undefined
 		return (this.listenable.current = result) || false
 	}
-	static create(client: userwidgets.ClientCollection, me: WithListenable<Me>): WithListenable<Applications> {
+	static create(
+		client: userwidgets.ClientCollection,
+		me: smoothly.WithListenable<Me>
+	): smoothly.WithListenable<Applications> {
 		const backend = new this(client, me)
-		const listenable = Listenable.load(backend)
+		const listenable = smoothly.Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
 		return listenable
 	}
