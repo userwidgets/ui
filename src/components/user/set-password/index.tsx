@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import * as langly from "langly"
-import { Notice } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { client } from "../../../Client"
 import { model } from "../../../model"
@@ -14,7 +14,7 @@ import * as translation from "./translation"
 export class SetPassword {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
-	@Event() notice: EventEmitter<Notice>
+	@Event() notice: EventEmitter<smoothly.Notice>
 	@State() new: string
 	@State() repeat: string
 	@State() translate: langly.Translate = translation.create("en")
@@ -32,13 +32,13 @@ export class SetPassword {
 		event.stopPropagation()
 		const passwords = Object.fromEntries(new FormData(event.target as HTMLFormElement))
 		if (!userwidgets.User.Password.Change.is(passwords))
-			this.notice.emit(Notice.warn(this.translate("Missing fields.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Missing fields.")))
 		else if (passwords.new != passwords.repeat)
-			this.notice.emit(Notice.warn(this.translate("New password was not repeated correctly.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("New password was not repeated correctly.")))
 		else {
 			const response = await client.user.changePassword(this.user.email, passwords)
 			if (gracely.Error.is(response)) {
-				this.notice.emit(Notice.warn(response.body))
+				this.notice.emit(smoothly.Notice.warn(response.body))
 			}
 		}
 	}

@@ -7,7 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { userwidgets } from "@userwidgets/model";
-import { Notice } from "smoothly";
+import { smoothly } from "smoothly";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsChangeName {
@@ -236,24 +236,24 @@ declare global {
 declare namespace LocalJSX {
     interface UserwidgetsChangeName {
         "name"?: userwidgets.User.Name;
-        "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<smoothly.Notice>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsChangePassword {
-        "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<smoothly.Notice>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsDemo {
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
-        "onNotice"?: (event: UserwidgetsLoginCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsLoginCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsLoginLoaded"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
         "invite"?: userwidgets.User.Invite;
-        "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
@@ -282,7 +282,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsRegisterDialog {
         "invite"?: userwidgets.User.Invite;
-        "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
         "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
 		invite: userwidgets.User.Invite
@@ -291,7 +291,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsSetPassword {
-        "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<Notice>) => void;
+        "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<smoothly.Notice>) => void;
         "state"?: model.State;
         "user"?: userwidgets.User;
     }

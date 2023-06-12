@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as gracely from "gracely"
 import * as langly from "langly"
-import { Notice } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { client } from "../../../Client"
 import { model } from "../../../model"
@@ -13,7 +13,7 @@ import * as translation from "./translation"
 })
 export class ChangePassword {
 	@State() key?: userwidgets.User.Key
-	@Event() notice: EventEmitter<Notice>
+	@Event() notice: EventEmitter<smoothly.Notice>
 	@Prop() state: model.State
 	@State() translate: langly.Translate = translation.create("en")
 	async componentWillLoad(): Promise<void> {
@@ -26,14 +26,14 @@ export class ChangePassword {
 		event.stopPropagation()
 		const passwords = Object.fromEntries(new FormData(event.target as HTMLFormElement))
 		if (!userwidgets.User.Password.Change.is(passwords))
-			this.notice.emit(Notice.failed(this.translate("Missing fields.")))
+			this.notice.emit(smoothly.Notice.failed(this.translate("Missing fields.")))
 		else if (passwords.new != passwords.repeat)
-			this.notice.emit(Notice.failed(this.translate("New password was not repeated correctly.")))
+			this.notice.emit(smoothly.Notice.failed(this.translate("New password was not repeated correctly.")))
 		else {
 			const key = this.key
 			if (key) {
 				this.notice.emit(
-					Notice.execute("Changing password.", async () => {
+					smoothly.Notice.execute("Changing password.", async () => {
 						const response = await client.user.changePassword(key.email, passwords)
 						return gracely.Error.is(response) ? [false, "Failed to change password."] : [true, "Password changed"]
 					})

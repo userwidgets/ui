@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Prop, State } from "@stencil/core"
-import { Option } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
@@ -21,7 +21,7 @@ export class UserwidgetsPermissionUpdate {
 	@Prop() label = "Permissions:"
 	@Prop() options?: CustomOption[]
 	@Prop() preventDefault = false
-	@State() pickerOptions?: (Option & { checked: boolean })[]
+	@State() pickerOptions?: (smoothly.Option & { checked: boolean })[]
 	@State() selectedOptions?: userwidgets.User.Permissions.Readable
 	@State() key?: userwidgets.User.Key
 	@State() organization?: userwidgets.Organization

@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
-import { Notice } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
@@ -20,7 +20,7 @@ export class UserwidgetsLogin {
 	@Prop() state: model.State
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
-	@Event() notice: EventEmitter<Notice>
+	@Event() notice: EventEmitter<smoothly.Notice>
 	@State() translate: langly.Translate = translation.create("en")
 	private onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
 
@@ -37,7 +37,7 @@ export class UserwidgetsLogin {
 			if (this.invite.active && (await this.state.me.join(this.invite)))
 				this.invite = undefined
 		} else
-			this.notice.emit(Notice.warn(this.translate("Used invite is not valid.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
 	}
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()

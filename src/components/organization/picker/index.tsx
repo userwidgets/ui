@@ -1,6 +1,6 @@
 import { Component, Prop, State } from "@stencil/core"
 import * as langly from "langly"
-import { Option } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -23,7 +23,7 @@ export class UserwidgetsOrganizationPicker {
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 
-	menuCloseHandler(event: CustomEvent<Option[]>) {
+	menuCloseHandler(event: CustomEvent<smoothly.Option[]>) {
 		event.stopPropagation()
 		const id: string | undefined = event.detail.at(0)?.value
 		const found = this.organizations?.find(organization => organization.id == id)

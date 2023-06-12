@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
-import { Notice } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -12,7 +12,7 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog {
 	@Prop() state: model.State
 	@Prop() invite?: userwidgets.User.Invite
-	@Event() notice: EventEmitter<Notice>
+	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
@@ -23,9 +23,9 @@ export class UserwidgetsLoginDialog {
 	handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
 		if (!userwidgets.User.Credentials.is(event.detail))
-			this.notice.emit(Notice.warn(this.translate("Both email and password is required to login.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login.")))
 		else if (!event.detail.user.match(/^\S+@\S+$/))
-			this.notice.emit(Notice.warn(this.translate("Provided email is not an email.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email.")))
 		else
 			this.userwidgetsLogin.emit(event.detail)
 	}

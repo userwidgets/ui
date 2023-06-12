@@ -1,7 +1,7 @@
-import { Listenable, StateBase, WithListenable } from "smoothly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 
-export class Invite extends StateBase<Invite, userwidgets.ClientCollection> {
+export class Invite extends smoothly.StateBase<Invite, userwidgets.ClientCollection> {
 	private request?: Promise<Invite["value"]>
 	#value?: Invite["value"]
 	get value(): string | false | undefined {
@@ -22,7 +22,7 @@ export class Invite extends StateBase<Invite, userwidgets.ClientCollection> {
 			this.request = undefined
 		return (this.listenable.value = result) || false
 	}
-	static create(client: userwidgets.ClientCollection): WithListenable<Invite> {
-		return Listenable.load(new this(client))
+	static create(client: userwidgets.ClientCollection): smoothly.WithListenable<Invite> {
+		return smoothly.Listenable.load(new this(client))
 	}
 }
