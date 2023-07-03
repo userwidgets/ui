@@ -29,9 +29,8 @@ export class UserwidgetsOrganizationPicker {
 	inputHandler(event: CustomEvent<Record<string, unknown>>) {
 		event.stopPropagation()
 		const organization = event.detail.organization
-		if (this.listen && userwidgets.Organization.is(organization)) {
+		if (this.listen && userwidgets.Organization.is(organization))
 			this.state.organizations.current = organization
-		}
 	}
 	render() {
 		return (
