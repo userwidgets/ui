@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { model } from "./model";
 import { userwidgets } from "@userwidgets/model";
 import { smoothly } from "smoothly";
+import { State } from "./State";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsChangeName {
@@ -19,6 +20,12 @@ export namespace Components {
     }
     interface UserwidgetsDemo {
     }
+    interface UserwidgetsDemoOrganization {
+        "state": State;
+    }
+    interface UserwidgetsDemoUser {
+        "state": State;
+    }
     interface UserwidgetsLogin {
         "state": model.State;
     }
@@ -26,17 +33,11 @@ export namespace Components {
         "invite"?: userwidgets.User.Invite;
         "state": model.State;
     }
-    interface UserwidgetsLoginTrigger {
-        "state": model.State;
-    }
     interface UserwidgetsLogout {
         "state": model.State;
     }
     interface UserwidgetsMe {
         "state": model.State;
-    }
-    interface UserwidgetsMenu {
-        "menuOpen": boolean;
     }
     interface UserwidgetsOrganizationPicker {
         "state": model.State;
@@ -122,6 +123,18 @@ declare global {
         prototype: HTMLUserwidgetsDemoElement;
         new (): HTMLUserwidgetsDemoElement;
     };
+    interface HTMLUserwidgetsDemoOrganizationElement extends Components.UserwidgetsDemoOrganization, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsDemoOrganizationElement: {
+        prototype: HTMLUserwidgetsDemoOrganizationElement;
+        new (): HTMLUserwidgetsDemoOrganizationElement;
+    };
+    interface HTMLUserwidgetsDemoUserElement extends Components.UserwidgetsDemoUser, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsDemoUserElement: {
+        prototype: HTMLUserwidgetsDemoUserElement;
+        new (): HTMLUserwidgetsDemoUserElement;
+    };
     interface HTMLUserwidgetsLoginElement extends Components.UserwidgetsLogin, HTMLStencilElement {
     }
     var HTMLUserwidgetsLoginElement: {
@@ -134,12 +147,6 @@ declare global {
         prototype: HTMLUserwidgetsLoginDialogElement;
         new (): HTMLUserwidgetsLoginDialogElement;
     };
-    interface HTMLUserwidgetsLoginTriggerElement extends Components.UserwidgetsLoginTrigger, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsLoginTriggerElement: {
-        prototype: HTMLUserwidgetsLoginTriggerElement;
-        new (): HTMLUserwidgetsLoginTriggerElement;
-    };
     interface HTMLUserwidgetsLogoutElement extends Components.UserwidgetsLogout, HTMLStencilElement {
     }
     var HTMLUserwidgetsLogoutElement: {
@@ -151,12 +158,6 @@ declare global {
     var HTMLUserwidgetsMeElement: {
         prototype: HTMLUserwidgetsMeElement;
         new (): HTMLUserwidgetsMeElement;
-    };
-    interface HTMLUserwidgetsMenuElement extends Components.UserwidgetsMenu, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsMenuElement: {
-        prototype: HTMLUserwidgetsMenuElement;
-        new (): HTMLUserwidgetsMenuElement;
     };
     interface HTMLUserwidgetsOrganizationPickerElement extends Components.UserwidgetsOrganizationPicker, HTMLStencilElement {
     }
@@ -216,12 +217,12 @@ declare global {
         "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
         "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
+        "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
+        "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
         "userwidgets-login": HTMLUserwidgetsLoginElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
-        "userwidgets-login-trigger": HTMLUserwidgetsLoginTriggerElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-me": HTMLUserwidgetsMeElement;
-        "userwidgets-menu": HTMLUserwidgetsMenuElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
@@ -245,6 +246,12 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsDemo {
     }
+    interface UserwidgetsDemoOrganization {
+        "state"?: State;
+    }
+    interface UserwidgetsDemoUser {
+        "state"?: State;
+    }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
         "onNotice"?: (event: UserwidgetsLoginCustomEvent<smoothly.Notice>) => void;
@@ -258,17 +265,11 @@ declare namespace LocalJSX {
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
     }
-    interface UserwidgetsLoginTrigger {
-        "state"?: model.State;
-    }
     interface UserwidgetsLogout {
         "state"?: model.State;
     }
     interface UserwidgetsMe {
         "state"?: model.State;
-    }
-    interface UserwidgetsMenu {
-        "menuOpen"?: boolean;
     }
     interface UserwidgetsOrganizationPicker {
         "state"?: model.State;
@@ -318,12 +319,12 @@ declare namespace LocalJSX {
         "userwidgets-change-name": UserwidgetsChangeName;
         "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
+        "userwidgets-demo-organization": UserwidgetsDemoOrganization;
+        "userwidgets-demo-user": UserwidgetsDemoUser;
         "userwidgets-login": UserwidgetsLogin;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
-        "userwidgets-login-trigger": UserwidgetsLoginTrigger;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-me": UserwidgetsMe;
-        "userwidgets-menu": UserwidgetsMenu;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
@@ -342,12 +343,12 @@ declare module "@stencil/core" {
             "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
             "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
+            "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
+            "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
-            "userwidgets-login-trigger": LocalJSX.UserwidgetsLoginTrigger & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginTriggerElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-me": LocalJSX.UserwidgetsMe & JSXBase.HTMLAttributes<HTMLUserwidgetsMeElement>;
-            "userwidgets-menu": LocalJSX.UserwidgetsMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMenuElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;

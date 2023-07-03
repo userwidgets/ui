@@ -3,7 +3,6 @@ import * as isoly from "isoly"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { href } from "stencil-router-v2"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
@@ -61,10 +60,7 @@ export class UserwidgetsRegister {
 				{!this.invite ? null : this.invite.expires < isoly.DateTime.now() ? (
 					<p>
 						{this.translate("This invitation is expired. Back to ")}
-						<a {...href(window.origin)} onClick={e => e.preventDefault()}>
-							{this.translate("home")}
-						</a>
-						.
+						<a onClick={e => e.preventDefault()}>{this.translate("home")}</a>.
 					</p>
 				) : this.invite.active ? null : (
 					<Fragment>
