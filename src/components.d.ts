@@ -50,7 +50,7 @@ export namespace Components {
         "user": userwidgets.User.Readable;
     }
     interface UserwidgetsRegisterDialog {
-        "invite"?: userwidgets.User.Invite;
+        "invite": userwidgets.User.Invite;
         "state": model.State;
     }
     interface UserwidgetsSetPassword {
