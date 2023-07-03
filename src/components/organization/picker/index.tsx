@@ -28,11 +28,9 @@ export class UserwidgetsOrganizationPicker {
 	}
 	inputHandler(event: CustomEvent<Record<string, unknown>>) {
 		event.stopPropagation()
-		const id = event.detail.organization
-		if (this.listen && typeof id == "string") {
-			const organization = this.organizations?.find(organization => organization.id == id)
-			if (organization)
-				this.state.organizations.current = organization
+		const organization = event.detail.organization
+		if (this.listen && userwidgets.Organization.is(organization)) {
+			this.state.organizations.current = organization
 		}
 	}
 	render() {
@@ -45,7 +43,7 @@ export class UserwidgetsOrganizationPicker {
 						onSmoothlyInput={e => this.inputHandler(e)}>
 						<span slot="search">Search</span>
 						{this.organizations?.map(organization => (
-							<smoothly-picker-option selected={organization == this.organization} value={organization.id}>
+							<smoothly-picker-option selected={organization == this.organization} value={organization}>
 								{organization.name}
 							</smoothly-picker-option>
 						))}
