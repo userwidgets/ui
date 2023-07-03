@@ -1,91 +1,93 @@
 {
-	"name": "@userwidgets/ui",
-	"version": "0.4.8",
-	"description": "The userwidgets app ui.",
-	"private": false,
-	"repository": "https://github.com/userwidgets/ui",
-	"type": "module",
-	"bugs": {
-		"url": "https://github.com/userwidgets/ui/issues"
-	},
-	"homepage": "https://github.com/userwidgets/ui",
-	"main": "dist/index.cjs.js",
-	"module": "dist/index.js",
-	"es2015": "dist/esm/index.js",
-	"es2017": "dist/esm/index.js",
-	"collection": "dist/collection/collection-manifest.json",
-	"collection:main": "dist/collection/index.js",
-	"types": "dist/custom-elements/index.d.ts",
-	"unpkg": "dist/userwidgets/userwidgets.esm.js",
-	"files": [
-		"dist/",
-		"loader/"
-	],
-	"jest": {
-		"transform": {
-			"^.+\\.(j|t)sx?$": "ts-jest"
-		},
-		"transformIgnorePatterns": [
-			"<rootDir>/node_modules/(?!(cryptly|authly|isoly|gracely|cloudly-http|cloudly-router|cloudly-formdata)/.*)"
-		],
-		"globals": {
-			"ts-jest": {
-				"tsconfig": "tsconfig.test.json",
-				"setTimeout": 2000
-			}
-		},
-		"testEnvironment": "node",
-		"testRegex": "((\\.|/)(test|spec))(\\.|\\/.+)(jsx?|tsx?)$",
-		"testPathIgnorePatterns": [
-			"node_modules/",
-			"dist/"
-		],
-		"collectCoverageFrom": [
-			"**/*.{ts,tsx,js,jsx}",
-			"!**/node_modules/**",
-			"!**/dist/**"
-		],
-		"preset": "ts-jest",
-		"testMatch": null
-	},
-	"scripts": {
-		"lint": "eslint '**/*.{ts,tsx}'",
-		"fix": "eslint '**/*.{ts,tsx}' --fix",
-		"clean": "rimraf dist node_modules coverage",
-		"test": "npm run build && node --experimental-vm-modules node_modules/.bin/jest --maxWorkers=2",
-		"transpile": "tsc --project tsconfig.test.json",
-		"test:watch": "watch jest",
-		"build": "stencil build",
-		"start": "stencil build --dev --serve --watch"
-	},
-	"devDependencies": {
-		"@stencil/core": "^2.20.0",
-		"@stencil/router": "^1.0.1",
-		"@stencil/sass": "^1.5.2",
-		"@types/jest": "^29.5.0",
-		"@typescript-eslint/eslint-plugin": "^5.57.1",
-		"@typescript-eslint/parser": "^5.57.1",
-		"eslint": "^8.37.0",
-		"eslint-plugin-prettierx": "github:utily/eslint-plugin-prettierx#utily-20221229",
-		"eslint-plugin-simple-import-sort": "^10.0.0",
-		"jest": "^29.5.0",
-		"jest-cli": "^29.5.0",
-		"prettierx": "github:utily/prettierx#utily-20221229",
-		"puppeteer": "^19.8.3",
-		"rimraf": "^4.4.1",
-		"rollup-plugin-dotenv": "^0.4.1",
-		"ts-jest": "^29.1.0",
-		"tslib": "^2.5.0"
-	},
-	"dependencies": {
-		"@userwidgets/model": "^0.4.3",
-		"cloudly-http": "^0.1.6",
-		"cloudly-rest": "^0.1.2",
-		"gracely": "^2.0.4",
-		"isoly": "^2.0.16",
-		"langly": "^2.0.3",
-		"smoothly": "^1.0.0-alpha.67",
-		"stencil-router-v2": "^0.6.0",
-		"urlpattern-polyfill": "^7.0.0"
+  "name": "@userwidgets/ui",
+  "version": "0.4.6",
+  "description": "The userwidgets app ui.",
+  "private": false,
+  "repository": "https://github.com/userwidgets/ui",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/userwidgets/ui/issues"
+  },
+  "homepage": "https://github.com/userwidgets/ui",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "es2015": "dist/esm/index.js",
+  "es2017": "dist/esm/index.js",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "types": "dist/custom-elements/index.d.ts",
+  "unpkg": "dist/userwidgets/userwidgets.esm.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.(j|t)sx?$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(cryptly|authly|isoly|gracely|cloudly-http|cloudly-router|cloudly-formdata)/.*)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.test.json",
+        "setTimeout": 2000
+      }
+    },
+    "testEnvironment": "node",
+    "testRegex": "((\\.|/)(test|spec))(\\.|\\/.+)(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "node_modules/",
+      "dist/"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx,js,jsx}",
+      "!**/node_modules/**",
+      "!**/dist/**"
+    ],
+    "preset": "ts-jest",
+    "testMatch": null
+  },
+  "scripts": {
+    "lint": "eslint '**/*.{ts,tsx}'",
+    "fix": "eslint '**/*.{ts,tsx}' --fix",
+    "clean": "rimraf dist node_modules coverage",
+    "test": "npm run build && node --experimental-vm-modules node_modules/.bin/jest --maxWorkers=2",
+    "transpile": "tsc --project tsconfig.test.json",
+    "test:watch": "watch jest",
+    "build": "stencil build",
+    "start": "stencil build --dev --serve --watch"
+  },
+  "devDependencies": {
+    "@stencil/core": "^2.20.0",
+    "@stencil/router": "^1.0.1",
+    "@stencil/sass": "^1.5.2",
+    "@types/jest": "^29.5.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.44.0",
+    "eslint-plugin-prettierx": "github:utily/eslint-plugin-prettierx#utily-20221229",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "jest": "^29.5.0",
+    "jest-cli": "^29.5.0",
+    "prettierx": "github:utily/prettierx#utily-20221229",
+    "puppeteer": "^19.8.3",
+    "rimraf": "^5.0.1",
+    "rollup-plugin-dotenv": "^0.5.0",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.6.0"
+  },
+  "dependencies": {
+    "@userwidgets/model": "^0.4.3",
+    "cloudly-http": "^0.1.6",
+    "gracely": "^2.0.4",
+    "isoly": "^2.0.21",
+    "langly": "^2.0.3",
+    "smoothly": "^1.0.0-alpha.73",
+    "urlpattern-polyfill": "^9.0.0"
+  },
+	"overrides": {
+		"semver": "^7.5.3",
+		"optionator": "^0.9.3"
 	}
 }
