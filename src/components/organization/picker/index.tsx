@@ -1,6 +1,5 @@
-import { Component, Prop, State } from "@stencil/core"
+import { Component, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
-import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -15,38 +14,41 @@ export class UserwidgetsOrganizationPicker {
 	@State() organizations?: userwidgets.Organization[]
 	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
+	private listen = false
 
 	componentWillLoad() {
+		this.listen = false
 		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
 		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
-
-	menuCloseHandler(event: CustomEvent<smoothly.Option[]>) {
+	clickHandler() {
+		this.listen = true
+	}
+	inputHandler(event: CustomEvent<Record<string, unknown>>) {
 		event.stopPropagation()
-		const id: string | undefined = event.detail.at(0)?.value
-		const found = this.organizations?.find(organization => organization.id == id)
-		if (found)
-			this.state.organizations.current = found
+		const organization = event.detail.organization
+		if (this.listen && userwidgets.Organization.is(organization))
+			this.state.organizations.current = organization
 	}
 	render() {
-		// 	const options = this.organizations?.map(organization => ({ name: organization.name, value: organization.id })) ?? []
-		// 	const selected = [...[options.find(option => option.value == this.organization?.id) ?? []].flat()]
-		// 	return this.key ? (
-		// 		<smoothly-old-picker
-		// 			label="Organization"
-		// 			multiple={false}
-		// 			options={options}
-		// 			onMenuClose={event => this.menuCloseHandler(event)}
-		// 			selections={
-		// 				!selected.length
-		// 					? [{ name: this.translate("You are not a member of any organization"), value: "" }]
-		// 					: selected
-		// 			}
-		// 		/>
-		// 	) : (
-		// 		[]
-		// 	)
+		return (
+			<Host>
+				<smoothly-form>
+					<smoothly-picker
+						name="organization"
+						onClick={() => this.clickHandler()}
+						onSmoothlyInput={e => this.inputHandler(e)}>
+						<span slot="search">Search</span>
+						{this.organizations?.map(organization => (
+							<smoothly-picker-option selected={organization == this.organization} value={organization}>
+								{organization.name}
+							</smoothly-picker-option>
+						))}
+					</smoothly-picker>
+				</smoothly-form>
+			</Host>
+		)
 	}
 }

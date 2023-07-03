@@ -1,9 +1,7 @@
-import { Component, Event, EventEmitter, Fragment, h, Host, Prop, State } from "@stencil/core"
-import * as isoly from "isoly"
+import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { href } from "stencil-router-v2"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
@@ -13,7 +11,7 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsRegister {
-	@Prop() invite?: userwidgets.User.Invite
+	@Prop() invite: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<smoothly.Notice>
@@ -58,48 +56,36 @@ export class UserwidgetsRegister {
 	render() {
 		return (
 			<Host>
-				{!this.invite ? null : this.invite.expires < isoly.DateTime.now() ? (
-					<p>
-						{this.translate("This invitation is expired. Back to ")}
-						<a {...href(window.origin)} onClick={e => e.preventDefault()}>
-							{this.translate("home")}
+				<smoothly-form looks="line">
+					<smoothly-input type="text" readonly value={this.invite.email}>
+						{this.translate("Email")}
+					</smoothly-input>
+				</smoothly-form>
+
+				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+					<smoothly-input type="text" name="first">
+						{this.translate("First name")}
+					</smoothly-input>
+					<smoothly-input type="text" name="last">
+						{this.translate("Last name")}
+					</smoothly-input>
+					<smoothly-input type="password" name="new">
+						{this.translate("Password")}
+					</smoothly-input>
+					<smoothly-input type="password" name="repeat">
+						{this.translate("Repeat password")}
+					</smoothly-input>
+
+					<p slot="submit">
+						{this.translate("Already have an account? ")}
+						<a
+							href={window.origin}
+							onClick={async e => (e.preventDefault(), this.invite && this.userwidgetsActiveAccount.emit(true))}>
+							{this.translate("Login")}
 						</a>
-						.
 					</p>
-				) : this.invite.active ? null : (
-					<Fragment>
-						<smoothly-form looks="line">
-							<smoothly-input type="text" readonly value={this.invite.email}>
-								{this.translate("Email")}
-							</smoothly-input>
-						</smoothly-form>
-
-						<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-							<smoothly-input type="text" name="first">
-								{this.translate("First name")}
-							</smoothly-input>
-							<smoothly-input type="text" name="last">
-								{this.translate("Last name")}
-							</smoothly-input>
-							<smoothly-input type="password" name="new">
-								{this.translate("Password")}
-							</smoothly-input>
-							<smoothly-input type="password" name="repeat">
-								{this.translate("Repeat password")}
-							</smoothly-input>
-
-							<p slot="submit">
-								{this.translate("Already have an account? ")}
-								<a
-									href={window.origin}
-									onClick={async e => (e.preventDefault(), this.invite && this.userwidgetsActiveAccount.emit(true))}>
-									{this.translate("Login")}
-								</a>
-							</p>
-							<smoothly-submit slot="submit">{this.translate("Register")}</smoothly-submit>
-						</smoothly-form>
-					</Fragment>
-				)}
+					<smoothly-submit slot="submit">{this.translate("Register")}</smoothly-submit>
+				</smoothly-form>
 			</Host>
 		)
 	}
