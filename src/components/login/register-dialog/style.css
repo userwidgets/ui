@@ -1,6 +1,9 @@
 smoothly-form + smoothly-form {
 	margin-top: 2rem;
 }
+.email {
+	flex-basis: 100%;
+}
 p {
 	align-self: center;
 	margin-right: auto;

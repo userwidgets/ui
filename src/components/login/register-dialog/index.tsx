@@ -56,13 +56,10 @@ export class UserwidgetsRegister {
 	render() {
 		return (
 			<Host>
-				<smoothly-form looks="line">
-					<smoothly-input type="text" readonly value={this.invite.email}>
+				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+					<smoothly-input class="email" type="text" name="email" readonly value={this.invite.email}>
 						{this.translate("Email")}
 					</smoothly-input>
-				</smoothly-form>
-
-				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="text" name="first">
 						{this.translate("First name")}
 					</smoothly-input>
