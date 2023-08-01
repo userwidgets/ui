@@ -39,6 +39,9 @@ export namespace Components {
     interface UserwidgetsMe {
         "state": model.State;
     }
+    interface UserwidgetsOrganizationList {
+        "state": model.State;
+    }
     interface UserwidgetsOrganizationPicker {
         "state": model.State;
     }
@@ -159,6 +162,12 @@ declare global {
         prototype: HTMLUserwidgetsMeElement;
         new (): HTMLUserwidgetsMeElement;
     };
+    interface HTMLUserwidgetsOrganizationListElement extends Components.UserwidgetsOrganizationList, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsOrganizationListElement: {
+        prototype: HTMLUserwidgetsOrganizationListElement;
+        new (): HTMLUserwidgetsOrganizationListElement;
+    };
     interface HTMLUserwidgetsOrganizationPickerElement extends Components.UserwidgetsOrganizationPicker, HTMLStencilElement {
     }
     var HTMLUserwidgetsOrganizationPickerElement: {
@@ -223,6 +232,7 @@ declare global {
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-me": HTMLUserwidgetsMeElement;
+        "userwidgets-organization-list": HTMLUserwidgetsOrganizationListElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
@@ -269,6 +279,9 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsMe {
+        "state"?: model.State;
+    }
+    interface UserwidgetsOrganizationList {
         "state"?: model.State;
     }
     interface UserwidgetsOrganizationPicker {
@@ -325,6 +338,7 @@ declare namespace LocalJSX {
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-me": UserwidgetsMe;
+        "userwidgets-organization-list": UserwidgetsOrganizationList;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
@@ -349,6 +363,7 @@ declare module "@stencil/core" {
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-me": LocalJSX.UserwidgetsMe & JSXBase.HTMLAttributes<HTMLUserwidgetsMeElement>;
+            "userwidgets-organization-list": LocalJSX.UserwidgetsOrganizationList & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationListElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;

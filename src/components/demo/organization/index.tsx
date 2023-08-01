@@ -12,6 +12,7 @@ export class UserwidgetsDemoOrganization {
 		return (
 			<Host>
 				<userwidgets-organization-picker state={this.state} />
+				<userwidgets-organization-list state={this.state} />
 			</Host>
 		)
 	}
