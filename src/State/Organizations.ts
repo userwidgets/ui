@@ -66,18 +66,24 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 					.list()
 					.then(response => (Response.fetch.is(response) ? response : false)))
 		const result = await promise
-		if (promise == this.request)
-			this.request = undefined
+		this.request = undefined
+		console.log("this.fetch is completed, hello hello")
 		return (this.listenable.value = result) || false
 	}
 	async update(
 		id: userwidgets.Organization.Identifier,
 		organization: userwidgets.Organization.Changeable
 	): Promise<false | userwidgets.Organization> {
-		const result = await this.client.organization
-			.update(id, organization)
-			.then(response => (Response.update.is(response) ? response.organization : false))
-		return result
+		const result = !this.me.key
+			? undefined
+			: await this.client.organization
+					.update(id, organization)
+					.then(response => (Response.update.is(response) ? response.organization : false))
+		console.log("before doing attempting to do this.fetch()")
+		if (result)
+			this.fetch()
+		console.log("after doing the this.fetch()")
+		return result || false
 	}
 	static create(
 		client: userwidgets.ClientCollection,
