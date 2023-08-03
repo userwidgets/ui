@@ -64,6 +64,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsUserListMember {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {
@@ -313,6 +314,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsUserListMember {
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {

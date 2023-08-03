@@ -50,8 +50,8 @@ export class userwidgetsOrganizationList {
 								<smoothly-input
 									disabled={false}
 									name="name" /* the organization name should be editable, its going to require api calls that elias created. */
-								>
-									{organization.name}
+									value={organization.name}>
+									Name
 								</smoothly-input>
 								{/* <smoothly-input disabled={true} name="id">
 									{organization.id}

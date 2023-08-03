@@ -67,7 +67,6 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 					.then(response => (Response.fetch.is(response) ? response : false)))
 		const result = await promise
 		this.request = undefined
-		console.log("this.fetch is completed, hello hello")
 		return (this.listenable.value = result) || false
 	}
 	async update(
@@ -79,10 +78,8 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			: await this.client.organization
 					.update(id, organization)
 					.then(response => (Response.update.is(response) ? response.organization : false))
-		console.log("before doing attempting to do this.fetch()")
 		if (result)
 			this.fetch()
-		console.log("after doing the this.fetch()")
 		return result || false
 	}
 	static create(
