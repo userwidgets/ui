@@ -25,7 +25,7 @@ export class userwidgetsOrganizationList {
 				{this.organizations?.map(organization => (
 					<smoothly-table-expandable-row>
 						<smoothly-table-cell>{organization.name}</smoothly-table-cell>
-						<userwidgets-organization-summary slot="detail" state={this.state} organization={organization} />
+						<userwidgets-organization slot="detail" state={this.state} organization={organization} />
 					</smoothly-table-expandable-row>
 				))}
 			</smoothly-table>

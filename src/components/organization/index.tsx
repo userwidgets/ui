@@ -1,18 +1,18 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../../../model"
+import { model } from "../../model"
 
 interface Change {
 	name: string
 }
 
 @Component({
-	tag: "userwidgets-organization-summary",
+	tag: "userwidgets-organization",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsOrganizationSummary {
+export class UserwidgetsOrganization {
 	@Prop() organization: userwidgets.Organization
 	@Prop() state: model.State
 	@State() change?: Partial<Change>
