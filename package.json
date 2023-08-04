@@ -78,7 +78,7 @@
     "tslib": "^2.6.0"
   },
   "dependencies": {
-    "@userwidgets/model": "../model",
+    "@userwidgets/model": "0.4.7",
     "cloudly-http": "^0.1.6",
     "cloudly-rest": "^0.1.3",
     "gracely": "^2.0.4",
