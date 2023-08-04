@@ -61,6 +61,7 @@ export class UserwidgetsLogin {
 		event: CustomEvent<{ invite: userwidgets.User.Invite; credentials: userwidgets.User.Credentials.Register }>
 	) {
 		const response = await this.state.me.register(event.detail.invite, event.detail.credentials)
+		console.log(response)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
 			this.invite = undefined
 			this.resolves.forEach(resolve => resolve(true))
