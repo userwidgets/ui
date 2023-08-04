@@ -12,14 +12,10 @@ export class UserwidgetsOrganizationUserRemove {
 	@Prop() user: userwidgets.User.Readable
 	@Prop() organization: any
 
-	handleClick() {
-		this.state.organizations.removeUser(this.user.email)
-	}
-
 	render() {
 		return (
 			<smoothly-form looks="line" onSmoothlyFormSubmit={event => event.preventDefault()}>
-				<smoothly-button class={"button"} onClick={() => this.handleClick()}>
+				<smoothly-button class={"button"}>
 					<slot></slot>
 				</smoothly-button>
 			</smoothly-form>

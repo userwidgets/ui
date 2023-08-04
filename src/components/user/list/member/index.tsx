@@ -13,13 +13,14 @@ export class UserwidgetsUserListMember {
 	@Prop() state: model.State
 	@State() users?: userwidgets.User.Readable[]
 	@State() key?: userwidgets.User.Key
-	@State() organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
 		this.state.users.listen("value", users => (this.users = users || undefined))
 		this.state.me.listen("key", async key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
-		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
+		this.organization ??
+			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 	render() {
 		return (
@@ -39,10 +40,10 @@ export class UserwidgetsUserListMember {
 										<slot name={user.email}></slot>
 										<div class={"userwidgets-detail"}>
 											<userwidgets-user-permissions-update state={this.state} user={user}>
-												<smoothly-icon name="paper-plane-sharp" size="small"></smoothly-icon>
+												<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
 											</userwidgets-user-permissions-update>
 											<userwidgets-organization-user-remove state={this.state} user={user} class={"right"}>
-												<smoothly-icon name="person-remove-sharp" size="small"></smoothly-icon>
+												<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 											</userwidgets-organization-user-remove>
 										</div>
 									</div>

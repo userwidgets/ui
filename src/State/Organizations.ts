@@ -1,7 +1,14 @@
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../model"
+import { isly } from "isly"
 import { Me } from "./Me"
+
+namespace Response {
+	export const update = isly.object<{ organization: userwidgets.Organization }>({
+		organization: userwidgets.Organization.type,
+	})
+	export const fetch = isly.array(userwidgets.Organization.type)
+}
 
 export class Organizations extends smoothly.StateBase<Organizations, userwidgets.ClientCollection> {
 	private request?: Promise<Organizations["value"]>
@@ -57,21 +64,23 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			? undefined
 			: (this.request ??= this.client.organization
 					.list()
-					.then(response => (!isOrganizations(response) ? false : response)))
+					.then(response => (Response.fetch.is(response) ? response : false)))
 		const result = await promise
-		if (promise == this.request)
-			this.request = undefined
+		this.request = undefined
 		return (this.listenable.value = result) || false
 	}
-	async removeUser(email: string): Promise<userwidgets.Organization | false> {
-		const result = !this.current
-			? false
+	async update(
+		id: userwidgets.Organization.Identifier,
+		organization: userwidgets.Organization.Changeable
+	): Promise<false | userwidgets.Organization> {
+		const result = !this.me.key
+			? undefined
 			: await this.client.organization
-					.removeUser(this.current.id, email)
-					.then(response => (!userwidgets.Organization.is(response) ? false : response))
+					.update(id, organization)
+					.then(response => (Response.update.is(response) ? response.organization : false))
 		if (result)
-			this.listenable.current = result
-		return result
+			this.fetch()
+		return result || false
 	}
 	static create(
 		client: userwidgets.ClientCollection,
@@ -83,7 +92,3 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 		return listenable
 	}
 }
-
-const isOrganizations = model.createIsArrayOf((value): value is userwidgets.Organization =>
-	userwidgets.Organization.is(value)
-)

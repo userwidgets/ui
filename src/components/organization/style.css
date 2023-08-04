@@ -1,0 +1,20 @@
+* {
+	box-sizing: border-box;	
+}
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+:host.editing smoothly-input-file:not([readonly]),
+:host.editing smoothly-picker:not([readonly]),
+:host.editing smoothly-input:not([readonly]) {
+	--color: var(--smoothly-success-color);
+	box-shadow: inset 0 0 0 1px rgb(var(--color));
+	border-color: rgb(var(--color));
+}
+userwidgets-edit-button[slot="submit"] {
+	margin-top: 1rem;
+	display: flex;
+	margin-left: 0;
+}
