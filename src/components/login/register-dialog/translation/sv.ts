@@ -1,6 +1,6 @@
 export const sv = {
-	"Password and Repeat password must be identical and at least 6 characters long.":
-		"Lösenord och upprepad lösenord måste vara lika och minst 6 karaktärer långt.",
+	"User credential requires a first and last name. Additionally the Password and Repeat password must be identical and at least 6 characters long.":
+		"Användar uppgifter behöver ett förnamn och ett efternamn. Lösenordet och det upprepade lösenordet måste vara lika och minst 6 karaktärer långt.",
 	"This invitation is expired. Back to ": "Inbjudningslänken är gammal. Gå tillbaka till ",
 	home: "Hem",
 	"First name": "Förnamn",

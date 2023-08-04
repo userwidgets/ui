@@ -33,7 +33,9 @@ export class UserwidgetsRegister {
 		!userwidgets.User.Credentials.Register.type.is(event.detail)
 			? this.notice.emit(
 					smoothly.Notice.warn(
-						this.translate("Password and Repeat password must be identical and at least 6 characters long.") //include that a first and last name must be included as well
+						this.translate(
+							"User credential requires a first and last name. Additionally the Password and Repeat password must be identical and at least 6 characters long."
+						)
 					)
 			  )
 			: this.userwidgetsRegister.emit({
