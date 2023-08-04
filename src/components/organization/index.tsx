@@ -22,12 +22,12 @@ export class UserwidgetsOrganization {
 	organizationChanged() {
 		this.editEnd()
 	}
-	editStart(e: CustomEvent) {
-		e.stopPropagation()
+	editStart(event: CustomEvent) {
+		event.stopPropagation()
 		this.change = { name: this.organization.name }
 	}
-	editEnd(e?: CustomEvent) {
-		e?.stopPropagation()
+	editEnd(event?: CustomEvent) {
+		event?.stopPropagation()
 		this.change = undefined
 	}
 	inputHandler(event: CustomEvent<smoothly.Data>) {
@@ -38,10 +38,9 @@ export class UserwidgetsOrganization {
 	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
 		const detail = {
-			...this.organization,
 			name: this.change?.name,
 		}
-		const organization = userwidgets.Organization.type.get(detail)
+		const organization = userwidgets.Organization.Changeable.type.get(detail)
 		if (!organization) {
 			this.notice.emit(smoothly.Notice.failed("Malformed organization"))
 			console.error(userwidgets.Organization.flaw(detail))

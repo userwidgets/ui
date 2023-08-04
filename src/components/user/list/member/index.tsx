@@ -10,9 +10,6 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsUserListMember {
-	// If its given an organization then it lists the members and invites of that organization.
-	// Otherwise it shows the organization the user is currently logged on to.
-	// allows editing of users, resending invites, and removing users. (pending the permissions ofc)
 	@Prop() state: model.State
 	@State() users?: userwidgets.User.Readable[]
 	@State() key?: userwidgets.User.Key

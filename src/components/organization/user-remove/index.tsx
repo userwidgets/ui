@@ -12,9 +12,7 @@ export class UserwidgetsOrganizationUserRemove {
 	@Prop() user: userwidgets.User.Readable
 	@Prop() organization: any
 
-	handleClick() {
-		//this.state.organizations.removeUser(this.user.email)
-	}
+	handleClick() {}
 
 	render() {
 		return (
