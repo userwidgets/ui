@@ -49,6 +49,10 @@ export namespace Components {
     interface UserwidgetsOrganizationPicker {
         "state": model.State;
     }
+    interface UserwidgetsOrganizationSummary {
+        "organization": userwidgets.Organization;
+        "state": model.State;
+    }
     interface UserwidgetsOrganizationUserReinvite {
     }
     interface UserwidgetsOrganizationUserRemove {
@@ -103,6 +107,10 @@ export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
+}
+export interface UserwidgetsOrganizationSummaryCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsOrganizationSummaryElement;
 }
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -189,6 +197,12 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationPickerElement;
         new (): HTMLUserwidgetsOrganizationPickerElement;
     };
+    interface HTMLUserwidgetsOrganizationSummaryElement extends Components.UserwidgetsOrganizationSummary, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsOrganizationSummaryElement: {
+        prototype: HTMLUserwidgetsOrganizationSummaryElement;
+        new (): HTMLUserwidgetsOrganizationSummaryElement;
+    };
     interface HTMLUserwidgetsOrganizationUserReinviteElement extends Components.UserwidgetsOrganizationUserReinvite, HTMLStencilElement {
     }
     var HTMLUserwidgetsOrganizationUserReinviteElement: {
@@ -250,6 +264,7 @@ declare global {
         "userwidgets-me": HTMLUserwidgetsMeElement;
         "userwidgets-organization-list": HTMLUserwidgetsOrganizationListElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
+        "userwidgets-organization-summary": HTMLUserwidgetsOrganizationSummaryElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
@@ -309,6 +324,11 @@ declare namespace LocalJSX {
     interface UserwidgetsOrganizationPicker {
         "state"?: model.State;
     }
+    interface UserwidgetsOrganizationSummary {
+        "onNotice"?: (event: UserwidgetsOrganizationSummaryCustomEvent<smoothly.Notice>) => void;
+        "organization"?: userwidgets.Organization;
+        "state"?: model.State;
+    }
     interface UserwidgetsOrganizationUserReinvite {
     }
     interface UserwidgetsOrganizationUserRemove {
@@ -364,6 +384,7 @@ declare namespace LocalJSX {
         "userwidgets-me": UserwidgetsMe;
         "userwidgets-organization-list": UserwidgetsOrganizationList;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
+        "userwidgets-organization-summary": UserwidgetsOrganizationSummary;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
@@ -390,6 +411,7 @@ declare module "@stencil/core" {
             "userwidgets-me": LocalJSX.UserwidgetsMe & JSXBase.HTMLAttributes<HTMLUserwidgetsMeElement>;
             "userwidgets-organization-list": LocalJSX.UserwidgetsOrganizationList & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationListElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
+            "userwidgets-organization-summary": LocalJSX.UserwidgetsOrganizationSummary & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationSummaryElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;

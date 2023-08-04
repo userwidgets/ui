@@ -1,0 +1,11 @@
+smoothly-icon {
+	padding: 0.3rem;
+}
+
+:host.edit.button {
+	gap: 0.5rem;
+	margin-left: auto;
+	margin-right: 1rem;
+	display: flex;
+	justify-content: flex-end;
+}

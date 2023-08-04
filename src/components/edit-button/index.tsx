@@ -12,7 +12,10 @@ export class UserwidgetsEditButton {
 	@Event() userwidgetsEditEnd: EventEmitter<void>
 
 	handleClick() {
-		!this.change ? this.userwidgetsEditStart.emit() : this.userwidgetsEditEnd.emit()
+		console.log("edit-button handleClick", this.change)
+		!this.change
+			? (this.userwidgetsEditStart.emit(), console.log("edit-button edit start"))
+			: (this.userwidgetsEditEnd.emit(), console.log("edit-button edit end")) //can be here ,
 		this.change = !this.change
 	}
 	render() {
