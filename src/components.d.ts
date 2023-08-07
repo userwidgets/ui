@@ -61,11 +61,11 @@ export namespace Components {
         "state": model.State;
         "user": userwidgets.User;
     }
-    interface UserwidgetsUserListInvited {
+    interface UserwidgetsUserList {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
     }
-    interface UserwidgetsUserListMember {
-        "organization"?: userwidgets.Organization;
+    interface UserwidgetsUserListInvited {
         "state": model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {
@@ -200,17 +200,17 @@ declare global {
         prototype: HTMLUserwidgetsSetPasswordElement;
         new (): HTMLUserwidgetsSetPasswordElement;
     };
+    interface HTMLUserwidgetsUserListElement extends Components.UserwidgetsUserList, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsUserListElement: {
+        prototype: HTMLUserwidgetsUserListElement;
+        new (): HTMLUserwidgetsUserListElement;
+    };
     interface HTMLUserwidgetsUserListInvitedElement extends Components.UserwidgetsUserListInvited, HTMLStencilElement {
     }
     var HTMLUserwidgetsUserListInvitedElement: {
         prototype: HTMLUserwidgetsUserListInvitedElement;
         new (): HTMLUserwidgetsUserListInvitedElement;
-    };
-    interface HTMLUserwidgetsUserListMemberElement extends Components.UserwidgetsUserListMember, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsUserListMemberElement: {
-        prototype: HTMLUserwidgetsUserListMemberElement;
-        new (): HTMLUserwidgetsUserListMemberElement;
     };
     interface HTMLUserwidgetsUserPermissionsUpdateElement extends Components.UserwidgetsUserPermissionsUpdate, HTMLStencilElement {
     }
@@ -240,8 +240,8 @@ declare global {
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
+        "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-list-invited": HTMLUserwidgetsUserListInvitedElement;
-        "userwidgets-user-list-member": HTMLUserwidgetsUserListMemberElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
         "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
     }
@@ -313,11 +313,11 @@ declare namespace LocalJSX {
         "state"?: model.State;
         "user"?: userwidgets.User;
     }
-    interface UserwidgetsUserListInvited {
+    interface UserwidgetsUserList {
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
     }
-    interface UserwidgetsUserListMember {
-        "organization"?: userwidgets.Organization;
+    interface UserwidgetsUserListInvited {
         "state"?: model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {
@@ -349,8 +349,8 @@ declare namespace LocalJSX {
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-set-password": UserwidgetsSetPassword;
+        "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-list-invited": UserwidgetsUserListInvited;
-        "userwidgets-user-list-member": UserwidgetsUserListMember;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
         "userwidgets-user-status": UserwidgetsUserStatus;
     }
@@ -374,8 +374,8 @@ declare module "@stencil/core" {
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
+            "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-list-invited": LocalJSX.UserwidgetsUserListInvited & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInvitedElement>;
-            "userwidgets-user-list-member": LocalJSX.UserwidgetsUserListMember & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListMemberElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
             "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;
         }
