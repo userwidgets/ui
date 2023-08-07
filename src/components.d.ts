@@ -5,19 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { model } from "./model";
-import { userwidgets } from "@userwidgets/model";
-import { smoothly } from "smoothly";
 import { State } from "./State";
+import { model } from "./model";
+import { smoothly } from "smoothly";
+import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
-    interface UserwidgetsChangeName {
-        "name": userwidgets.User.Name;
-        "state": model.State;
-    }
-    interface UserwidgetsChangePassword {
-        "state": model.State;
-    }
     interface UserwidgetsDemo {
     }
     interface UserwidgetsDemoOrganization {
@@ -88,14 +81,6 @@ export namespace Components {
         "user": userwidgets.User.Readable;
     }
 }
-export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsChangeNameElement;
-}
-export interface UserwidgetsChangePasswordCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsChangePasswordElement;
-}
 export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsEditButtonElement;
@@ -125,18 +110,6 @@ export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEv
     target: HTMLUserwidgetsUserPermissionsUpdateElement;
 }
 declare global {
-    interface HTMLUserwidgetsChangeNameElement extends Components.UserwidgetsChangeName, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsChangeNameElement: {
-        prototype: HTMLUserwidgetsChangeNameElement;
-        new (): HTMLUserwidgetsChangeNameElement;
-    };
-    interface HTMLUserwidgetsChangePasswordElement extends Components.UserwidgetsChangePassword, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsChangePasswordElement: {
-        prototype: HTMLUserwidgetsChangePasswordElement;
-        new (): HTMLUserwidgetsChangePasswordElement;
-    };
     interface HTMLUserwidgetsDemoElement extends Components.UserwidgetsDemo, HTMLStencilElement {
     }
     var HTMLUserwidgetsDemoElement: {
@@ -252,8 +225,6 @@ declare global {
         new (): HTMLUserwidgetsUserStatusElement;
     };
     interface HTMLElementTagNameMap {
-        "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
-        "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
@@ -276,15 +247,6 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface UserwidgetsChangeName {
-        "name"?: userwidgets.User.Name;
-        "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<smoothly.Notice>) => void;
-        "state"?: model.State;
-    }
-    interface UserwidgetsChangePassword {
-        "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<smoothly.Notice>) => void;
-        "state"?: model.State;
-    }
     interface UserwidgetsDemo {
     }
     interface UserwidgetsDemoOrganization {
@@ -372,8 +334,6 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User.Readable;
     }
     interface IntrinsicElements {
-        "userwidgets-change-name": UserwidgetsChangeName;
-        "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
         "userwidgets-demo-user": UserwidgetsDemoUser;
@@ -399,8 +359,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
-            "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
             "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;

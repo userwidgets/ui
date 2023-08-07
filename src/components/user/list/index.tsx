@@ -1,15 +1,15 @@
 import { Component, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../../../../model"
+import { model } from "../../../model"
 import * as translation from "./translation"
 
 @Component({
-	tag: "userwidgets-user-list-member",
+	tag: "userwidgets-user-list",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsUserListMember {
+export class UserwidgetsUserList {
 	@Prop() state: model.State
 	@State() users?: userwidgets.User.Readable[]
 	@State() key?: userwidgets.User.Key
