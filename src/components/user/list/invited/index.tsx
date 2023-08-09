@@ -13,7 +13,7 @@ export class UserwidgetsUserListInvited {
 	@State() key?: userwidgets.User.Key
 	@State() organization?: userwidgets.Organization
 	@State() organizations?: userwidgets.Organization[]
-	@State() users?: userwidgets.User.Readable[]
+	@State() users?: userwidgets.User.Readable[] // do we really get this?
 	@State() translate: langly.Translate = translation.create("en")
 	private invited: string[]
 
@@ -32,6 +32,18 @@ export class UserwidgetsUserListInvited {
 						.find(organization => organization.id == this.organization?.id)
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
+	reInvite(user: string) {
+		const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
+		if (this.organization)
+			this.state.organizations.update(this.organization.id, { users: users })
+	}
+	removeInvitation(user: string) {
+		const users = this.organization?.users.filter(e => e != user)
+		if (this.organization) {
+			this.state.organizations.update(this.organization.id, { users: users })
+		}
+	}
+
 	render() {
 		return !this.invited.length ? null : (
 			<smoothly-table>
@@ -44,12 +56,14 @@ export class UserwidgetsUserListInvited {
 						<smoothly-table-cell>{user}</smoothly-table-cell>
 						<smoothly-table-cell class={"buttons-cell"}>
 							<div class={"inputs"}>
-								<userwidgets-organization-user-remove class={"input"}>
-									<smoothly-icon name="paper-plane-sharp" size="small"></smoothly-icon>
-								</userwidgets-organization-user-remove>
-								<userwidgets-organization-user-reinvite class={"input"}>
-									<smoothly-icon name="person-remove-sharp" size="small"></smoothly-icon>
-								</userwidgets-organization-user-reinvite>
+								<smoothly-button onClick={() => this.reInvite(user)} class={"input"}>
+									<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
+									{/* need to update the model in userwidgets/api */}
+								</smoothly-button>
+								<smoothly-button onClick={() => this.removeInvitation(user)} class={"input"}>
+									{/* works */}
+									<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
+								</smoothly-button>
 							</div>
 						</smoothly-table-cell>
 					</smoothly-table-row>
