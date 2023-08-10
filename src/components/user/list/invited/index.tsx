@@ -56,10 +56,10 @@ export class UserwidgetsUserListInvited {
 						<smoothly-table-cell>{user}</smoothly-table-cell>
 						<smoothly-table-cell class={"buttons-cell"}>
 							<div class={"inputs"}>
-								<smoothly-button onClick={() => this.reInvite(user)} class={"input"}>
+								<smoothly-button onClick={() => this.reInvite(user)} size="flexible" class={"input"}>
 									<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
-								<smoothly-button onClick={() => this.removeInvitation(user)} class={"input"}>
+								<smoothly-button onClick={() => this.removeInvitation(user)} size="flexible" class={"input"}>
 									<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
 							</div>
