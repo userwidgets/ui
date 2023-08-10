@@ -58,10 +58,8 @@ export class UserwidgetsUserListInvited {
 							<div class={"inputs"}>
 								<smoothly-button onClick={() => this.reInvite(user)} class={"input"}>
 									<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
-									{/* need to update the model in userwidgets/api. PR in userwidgets/api created to fix this.*/}
 								</smoothly-button>
 								<smoothly-button onClick={() => this.removeInvitation(user)} class={"input"}>
-									{/* works */}
 									<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
 							</div>
