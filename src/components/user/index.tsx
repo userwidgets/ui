@@ -38,8 +38,7 @@ export class UserwidgetsUser {
 	}
 	submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
-		// waiting for model 0.5.x whatever
-		userwidgets.User.Changeable.is(event.detail)
+		// waiting for model 0.5.x
 	}
 	removeInvitation(user: string) {
 		const users = this.organization?.users.filter(e => e != user)
@@ -62,7 +61,7 @@ export class UserwidgetsUser {
 					</smoothly-input>
 					<smoothly-input
 						name="email"
-						readonly={!this.change} //can we edit email? What happens then with the users userwidgets account?
+						readonly={!this.change}
 						value={this.change ? this.change.email : this.user.email}>
 						Email
 					</smoothly-input>
