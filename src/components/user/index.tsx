@@ -67,6 +67,7 @@ export class UserwidgetsUser {
 						Email
 					</smoothly-input>
 					<userwidgets-edit-button
+						class="submit"
 						slot="submit"
 						disabled={true}
 						change={!!this.change}
@@ -76,7 +77,11 @@ export class UserwidgetsUser {
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
 					/>
 					{this.organization ? (
-						<smoothly-button slot="submit" onClick={() => this.removeInvitation(this.user.email)} size="flexible">
+						<smoothly-button
+							class="submit"
+							slot="submit"
+							onClick={() => this.removeInvitation(this.user.email)}
+							size="flexible">
 							<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 						</smoothly-button>
 					) : null}
