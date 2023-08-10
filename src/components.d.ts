@@ -62,6 +62,7 @@ export namespace Components {
         "user": userwidgets.User;
     }
     interface UserwidgetsUser {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
         "user": userwidgets.User.Readable;
     }
@@ -70,6 +71,9 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsUserListInvited {
+        "state": model.State;
+    }
+    interface UserwidgetsUserListOrganization {
         "state": model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {
@@ -222,6 +226,12 @@ declare global {
         prototype: HTMLUserwidgetsUserListInvitedElement;
         new (): HTMLUserwidgetsUserListInvitedElement;
     };
+    interface HTMLUserwidgetsUserListOrganizationElement extends Components.UserwidgetsUserListOrganization, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsUserListOrganizationElement: {
+        prototype: HTMLUserwidgetsUserListOrganizationElement;
+        new (): HTMLUserwidgetsUserListOrganizationElement;
+    };
     interface HTMLUserwidgetsUserPermissionsUpdateElement extends Components.UserwidgetsUserPermissionsUpdate, HTMLStencilElement {
     }
     var HTMLUserwidgetsUserPermissionsUpdateElement: {
@@ -253,6 +263,7 @@ declare global {
         "userwidgets-user": HTMLUserwidgetsUserElement;
         "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-list-invited": HTMLUserwidgetsUserListInvitedElement;
+        "userwidgets-user-list-organization": HTMLUserwidgetsUserListOrganizationElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
         "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
     }
@@ -325,6 +336,7 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User;
     }
     interface UserwidgetsUser {
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
         "user"?: userwidgets.User.Readable;
     }
@@ -333,6 +345,9 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsUserListInvited {
+        "state"?: model.State;
+    }
+    interface UserwidgetsUserListOrganization {
         "state"?: model.State;
     }
     interface UserwidgetsUserPermissionsUpdate {
@@ -367,6 +382,7 @@ declare namespace LocalJSX {
         "userwidgets-user": UserwidgetsUser;
         "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-list-invited": UserwidgetsUserListInvited;
+        "userwidgets-user-list-organization": UserwidgetsUserListOrganization;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
         "userwidgets-user-status": UserwidgetsUserStatus;
     }
@@ -393,6 +409,7 @@ declare module "@stencil/core" {
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;
             "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-list-invited": LocalJSX.UserwidgetsUserListInvited & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInvitedElement>;
+            "userwidgets-user-list-organization": LocalJSX.UserwidgetsUserListOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListOrganizationElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
             "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;
         }

@@ -20,6 +20,7 @@ export class UserwidgetsUserList {
 		this.state.me.listen("key", async key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
+
 	render() {
 		const users = this.organization
 			? this.users?.filter(user => this.organization?.users.includes(user.email))
@@ -41,7 +42,13 @@ export class UserwidgetsUserList {
 								<smoothly-table-expandable-row>
 									<smoothly-table-cell>{user.name.first + " " + user.name.last}</smoothly-table-cell>
 									<smoothly-table-cell>{user.email}</smoothly-table-cell>
-									<userwidgets-user slot="detail" user={user} state={this.state} />
+									<smoothly-table-cell></smoothly-table-cell>
+									<userwidgets-user
+										slot="detail"
+										user={user}
+										state={this.state}
+										organization={this.organization}
+									/>{" "}
 								</smoothly-table-expandable-row>
 						  ))
 						: null}
