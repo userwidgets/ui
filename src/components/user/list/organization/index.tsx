@@ -4,6 +4,8 @@ import { model } from "../../../../model"
 
 @Component({
 	tag: "userwidgets-user-list-organization",
+	styleUrl: "style.css",
+	scoped: true,
 })
 export class UserwidgetsUserListOrganization {
 	@Prop() state: model.State
