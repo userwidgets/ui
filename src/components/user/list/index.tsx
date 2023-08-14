@@ -13,7 +13,7 @@ export class UserwidgetsUserList {
 	@Prop() state: model.State
 	@State() users?: userwidgets.User.Readable[]
 	@State() key?: userwidgets.User.Key
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
 		this.state.users.listen("value", users => (this.users = users || undefined))
