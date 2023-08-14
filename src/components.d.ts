@@ -5,12 +5,19 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { State } from "./State";
 import { model } from "./model";
-import { smoothly } from "smoothly";
 import { userwidgets } from "@userwidgets/model";
+import { smoothly } from "smoothly";
+import { State } from "./State";
 import { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
+    interface UserwidgetsChangeName {
+        "name": userwidgets.User.Name;
+        "state": model.State;
+    }
+    interface UserwidgetsChangePassword {
+        "state": model.State;
+    }
     interface UserwidgetsDemo {
     }
     interface UserwidgetsDemoOrganization {
@@ -73,6 +80,10 @@ export namespace Components {
     interface UserwidgetsUserListInvited {
         "state": model.State;
     }
+    interface UserwidgetsUserListMember {
+        "organization"?: userwidgets.Organization;
+        "state": model.State;
+    }
     interface UserwidgetsUserListOrganization {
         "state": model.State;
     }
@@ -88,6 +99,14 @@ export namespace Components {
         "state": model.State;
         "user": userwidgets.User.Readable;
     }
+}
+export interface UserwidgetsChangeNameCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsChangeNameElement;
+}
+export interface UserwidgetsChangePasswordCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsChangePasswordElement;
 }
 export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -118,6 +137,18 @@ export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEv
     target: HTMLUserwidgetsUserPermissionsUpdateElement;
 }
 declare global {
+    interface HTMLUserwidgetsChangeNameElement extends Components.UserwidgetsChangeName, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsChangeNameElement: {
+        prototype: HTMLUserwidgetsChangeNameElement;
+        new (): HTMLUserwidgetsChangeNameElement;
+    };
+    interface HTMLUserwidgetsChangePasswordElement extends Components.UserwidgetsChangePassword, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsChangePasswordElement: {
+        prototype: HTMLUserwidgetsChangePasswordElement;
+        new (): HTMLUserwidgetsChangePasswordElement;
+    };
     interface HTMLUserwidgetsDemoElement extends Components.UserwidgetsDemo, HTMLStencilElement {
     }
     var HTMLUserwidgetsDemoElement: {
@@ -226,6 +257,12 @@ declare global {
         prototype: HTMLUserwidgetsUserListInvitedElement;
         new (): HTMLUserwidgetsUserListInvitedElement;
     };
+    interface HTMLUserwidgetsUserListMemberElement extends Components.UserwidgetsUserListMember, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsUserListMemberElement: {
+        prototype: HTMLUserwidgetsUserListMemberElement;
+        new (): HTMLUserwidgetsUserListMemberElement;
+    };
     interface HTMLUserwidgetsUserListOrganizationElement extends Components.UserwidgetsUserListOrganization, HTMLStencilElement {
     }
     var HTMLUserwidgetsUserListOrganizationElement: {
@@ -245,6 +282,8 @@ declare global {
         new (): HTMLUserwidgetsUserStatusElement;
     };
     interface HTMLElementTagNameMap {
+        "userwidgets-change-name": HTMLUserwidgetsChangeNameElement;
+        "userwidgets-change-password": HTMLUserwidgetsChangePasswordElement;
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
@@ -263,12 +302,22 @@ declare global {
         "userwidgets-user": HTMLUserwidgetsUserElement;
         "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-list-invited": HTMLUserwidgetsUserListInvitedElement;
+        "userwidgets-user-list-member": HTMLUserwidgetsUserListMemberElement;
         "userwidgets-user-list-organization": HTMLUserwidgetsUserListOrganizationElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
         "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
     }
 }
 declare namespace LocalJSX {
+    interface UserwidgetsChangeName {
+        "name"?: userwidgets.User.Name;
+        "onNotice"?: (event: UserwidgetsChangeNameCustomEvent<smoothly.Notice>) => void;
+        "state"?: model.State;
+    }
+    interface UserwidgetsChangePassword {
+        "onNotice"?: (event: UserwidgetsChangePasswordCustomEvent<smoothly.Notice>) => void;
+        "state"?: model.State;
+    }
     interface UserwidgetsDemo {
     }
     interface UserwidgetsDemoOrganization {
@@ -347,6 +396,10 @@ declare namespace LocalJSX {
     interface UserwidgetsUserListInvited {
         "state"?: model.State;
     }
+    interface UserwidgetsUserListMember {
+        "organization"?: userwidgets.Organization;
+        "state"?: model.State;
+    }
     interface UserwidgetsUserListOrganization {
         "state"?: model.State;
     }
@@ -364,6 +417,8 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User.Readable;
     }
     interface IntrinsicElements {
+        "userwidgets-change-name": UserwidgetsChangeName;
+        "userwidgets-change-password": UserwidgetsChangePassword;
         "userwidgets-demo": UserwidgetsDemo;
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
         "userwidgets-demo-user": UserwidgetsDemoUser;
@@ -382,6 +437,7 @@ declare namespace LocalJSX {
         "userwidgets-user": UserwidgetsUser;
         "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-list-invited": UserwidgetsUserListInvited;
+        "userwidgets-user-list-member": UserwidgetsUserListMember;
         "userwidgets-user-list-organization": UserwidgetsUserListOrganization;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
         "userwidgets-user-status": UserwidgetsUserStatus;
@@ -391,6 +447,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "userwidgets-change-name": LocalJSX.UserwidgetsChangeName & JSXBase.HTMLAttributes<HTMLUserwidgetsChangeNameElement>;
+            "userwidgets-change-password": LocalJSX.UserwidgetsChangePassword & JSXBase.HTMLAttributes<HTMLUserwidgetsChangePasswordElement>;
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
             "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
@@ -409,6 +467,7 @@ declare module "@stencil/core" {
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;
             "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-list-invited": LocalJSX.UserwidgetsUserListInvited & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInvitedElement>;
+            "userwidgets-user-list-member": LocalJSX.UserwidgetsUserListMember & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListMemberElement>;
             "userwidgets-user-list-organization": LocalJSX.UserwidgetsUserListOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListOrganizationElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
             "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;

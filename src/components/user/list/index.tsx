@@ -43,12 +43,7 @@ export class UserwidgetsUserList {
 									<smoothly-table-cell>{user.name.first + " " + user.name.last}</smoothly-table-cell>
 									<smoothly-table-cell>{user.email}</smoothly-table-cell>
 									<smoothly-table-cell></smoothly-table-cell>
-									<userwidgets-user
-										slot="detail"
-										user={user}
-										state={this.state}
-										organization={this.organization}
-									/>{" "}
+									<userwidgets-user slot="detail" user={user} state={this.state} organization={this.organization} />
 								</smoothly-table-expandable-row>
 						  ))
 						: null}

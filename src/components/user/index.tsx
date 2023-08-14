@@ -1,8 +1,10 @@
 import { Component, h, Host, Prop, State, Watch } from "@stencil/core"
+import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { Name } from "@userwidgets/model/dist/User/Name"
 import { model } from "../../model"
+import * as translation from "./translation"
 
 interface Change {
 	name: Name
@@ -19,7 +21,10 @@ export class UserwidgetsUser {
 	@Prop() user: userwidgets.User.Readable
 	@Prop() organization?: userwidgets.Organization
 	@State() change?: Partial<Change>
-	// include langly translations here as well
+	@State() translate: langly.Translate = translation.create("en")
+	componentWillLoad() {
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+	}
 	@Watch("user")
 	userChanged() {
 		this.editEnd()
@@ -54,13 +59,13 @@ export class UserwidgetsUser {
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}
 					looks="grid">
 					<smoothly-input
-						name="name"
+						name={this.translate("Name")}
 						readonly={!this.change}
 						value={this.change ? this.change.name : this.user.name.first + " " + this.user.name.last}>
 						Name
 					</smoothly-input>
 					<smoothly-input
-						name="email"
+						name={this.translate("Email")}
 						readonly={!this.change}
 						value={this.change ? this.change.email : this.user.email}>
 						Email
