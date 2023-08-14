@@ -13,7 +13,7 @@ export class UserwidgetsUserListInvited {
 	@State() key?: userwidgets.User.Key
 	@State() organization?: userwidgets.Organization
 	@State() organizations?: userwidgets.Organization[]
-	@State() users?: userwidgets.User.Readable[] // do we really get this?
+	@State() users?: userwidgets.User.Readable[]
 	@State() translate: langly.Translate = translation.create("en")
 	private invited: string[]
 
