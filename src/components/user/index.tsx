@@ -2,12 +2,11 @@ import { Component, h, Host, Prop, State, Watch } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { Name } from "@userwidgets/model/dist/User/Name"
 import { model } from "../../model"
 import * as translation from "./translation"
 
 interface Change {
-	name: Name
+	name: userwidgets.User.Name
 	email: string
 	permissions: userwidgets.User.Permissions
 }
