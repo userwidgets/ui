@@ -74,6 +74,7 @@ export class UserwidgetsOrganization {
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
 					/>
 				</smoothly-form>
+				<userwidgets-user-list-organization state={this.state} />
 			</Host>
 		)
 	}

@@ -31,4 +31,6 @@ smoothly-table {
 userwidgets-user-permissions-update {
 	width: 100%;
 }
-
+smoothly-summary > * {
+	margin-bottom: 0.5rem;
+}
