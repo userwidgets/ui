@@ -13,7 +13,7 @@ namespace Response {
 export class Organizations extends smoothly.StateBase<Organizations, userwidgets.ClientCollection> {
 	private request?: Promise<Organizations["value"]>
 	private set key(key: Me["key"]) {
-		if (this.#value != undefined)
+		if (this.value != undefined)
 			if (key != undefined)
 				(this.request = undefined), this.fetch()
 			else if (key == undefined)

@@ -5,7 +5,7 @@ import { Me } from "./Me"
 export class Applications extends smoothly.StateBase<Applications, userwidgets.ClientCollection> {
 	private request?: Promise<Applications["current"]>
 	private set key(key: Me["key"]) {
-		if (this.#current != undefined)
+		if (this.current != undefined)
 			if (key != undefined)
 				(this.request = undefined), this.fetch()
 			else if (key == undefined)
