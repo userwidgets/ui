@@ -1,5 +1,6 @@
-import { Component, h, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
 import * as langly from "langly"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
 import * as translation from "./translation"
@@ -14,8 +15,11 @@ export class UserwidgetsUserListInvited {
 	@State() organization?: userwidgets.Organization
 	@State() organizations?: userwidgets.Organization[]
 	@State() users?: userwidgets.User.Readable[]
+	@State() disabled = false
 	@State() translate: langly.Translate = translation.create("en")
+	@Event() notice: EventEmitter<smoothly.Notice>
 	private invited: string[]
+	private status: false | userwidgets.Organization
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
@@ -32,16 +36,27 @@ export class UserwidgetsUserListInvited {
 						.find(organization => organization.id == this.organization?.id)
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
-	reInvite(user: string) {
+	async reInvite(user: string) {
+		console.log("reInvite")
+		this.disabled = !this.disabled
 		const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
 		if (this.organization)
-			this.state.organizations.update(this.organization.id, { users: users })
+			this.status = await this.state.organizations.update(this.organization.id, { users: users })
+		console.log("this.status:", this.status)
+		this.status
+			? this.notice.emit(smoothly.Notice.succeeded("Reinvite successfully sent."))
+			: this.notice.emit(smoothly.Notice.failed("Failed to send out reinvitation."))
+		this.disabled = !this.disabled
 	}
-	removeUser(user: string) {
+	async removeUser(user: string) {
+		this.disabled = !this.disabled
 		const users = this.organization?.users.filter(e => e != user)
-		if (this.organization) {
-			this.state.organizations.update(this.organization.id, { users: users })
-		}
+		if (this.organization)
+			this.status = await this.state.organizations.update(this.organization.id, { users: users })
+		this.status
+			? this.notice.emit(smoothly.Notice.succeeded("User successfully removed from organization."))
+			: this.notice.emit(smoothly.Notice.failed("Failed to remove user from organization."))
+		this.disabled = !this.disabled
 	}
 
 	render() {
@@ -56,10 +71,18 @@ export class UserwidgetsUserListInvited {
 						<smoothly-table-cell>{user}</smoothly-table-cell>
 						<smoothly-table-cell class={"buttons-cell"}>
 							<div class={"inputs"}>
-								<smoothly-button onClick={() => this.reInvite(user)} size="flexible" class={"input"}>
+								<smoothly-button
+									disabled={this.disabled}
+									onClick={() => this.reInvite(user)}
+									size="flexible"
+									class={"input"}>
 									<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
-								<smoothly-button onClick={() => this.removeUser(user)} size="flexible" class={"input"}>
+								<smoothly-button
+									disabled={this.disabled}
+									onClick={() => this.removeUser(user)}
+									size="flexible"
+									class={"input"}>
 									<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
 							</div>
