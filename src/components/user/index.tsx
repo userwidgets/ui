@@ -69,8 +69,7 @@ export class UserwidgetsUser {
 						value={this.change ? this.change.email : this.user.email}>
 						Email
 					</smoothly-input>
-					{/* below code is commented out awaiting userwidget/model 0.5.x */}
-					{/* <userwidgets-edit-button
+					<userwidgets-edit-button
 						class="submit"
 						slot="submit"
 						disabled={true}
@@ -88,7 +87,7 @@ export class UserwidgetsUser {
 							size="flexible">
 							<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 						</smoothly-button>
-					) : null} */}
+					) : null}
 				</smoothly-form>
 			</Host>
 		)

@@ -37,7 +37,7 @@ export class UserwidgetsUserListInvited {
 		if (this.organization)
 			this.state.organizations.update(this.organization.id, { users: users })
 	}
-	removeInvitation(user: string) {
+	removeUser(user: string) {
 		const users = this.organization?.users.filter(e => e != user)
 		if (this.organization) {
 			this.state.organizations.update(this.organization.id, { users: users })
@@ -55,15 +55,14 @@ export class UserwidgetsUserListInvited {
 					<smoothly-table-row class={"user"}>
 						<smoothly-table-cell>{user}</smoothly-table-cell>
 						<smoothly-table-cell class={"buttons-cell"}>
-							{/* below code is commented out awaiting userwidget/model 0.5.x */}
-							{/* <div class={"inputs"}>
+							<div class={"inputs"}>
 								<smoothly-button onClick={() => this.reInvite(user)} size="flexible" class={"input"}>
 									<smoothly-icon name="paper-plane-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
-								<smoothly-button onClick={() => this.removeInvitation(user)} size="flexible" class={"input"}>
+								<smoothly-button onClick={() => this.removeUser(user)} size="flexible" class={"input"}>
 									<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
 								</smoothly-button>
-							</div> */}
+							</div>
 						</smoothly-table-cell>
 					</smoothly-table-row>
 				))}
