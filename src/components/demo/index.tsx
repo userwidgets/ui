@@ -10,6 +10,9 @@ import { State } from "../../State"
 })
 export class Demo {
 	private state = State.create(client.userwidgets)
+	componentWillLoad() {
+		Object.assign(globalThis, { state: this.state })
+	}
 	render() {
 		return (
 			<Host>
