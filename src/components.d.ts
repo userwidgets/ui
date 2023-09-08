@@ -113,6 +113,10 @@ export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsSetPasswordElement;
 }
+export interface UserwidgetsUserListInvitedCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsUserListInvitedElement;
+}
 export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsUserPermissionsUpdateElement;
@@ -345,6 +349,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsUserListInvited {
+        "onNotice"?: (event: UserwidgetsUserListInvitedCustomEvent<smoothly.Notice>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsUserListOrganization {
