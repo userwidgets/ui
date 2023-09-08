@@ -36,25 +36,27 @@ export class UserwidgetsUserListInvited {
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
 	async reInvite(user: string) {
-		let status: false | userwidgets.Organization = false
 		this.disabled = true
-		const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
-		if (this.organization)
-			status = await this.state.organizations.update(this.organization.id, { users: users })
-		status
-			? this.notice.emit(smoothly.Notice.succeeded("Reinvite successfully sent."))
-			: this.notice.emit(smoothly.Notice.failed("Failed to send out reinvitation."))
+		if (this.organization) {
+			const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
+			const response = await this.state.organizations.update(this.organization.id, { users: users })
+			if (response)
+				this.notice.emit(smoothly.Notice.succeeded("Reinvite successfully sent."))
+			else
+				this.notice.emit(smoothly.Notice.failed("Failed to send out reinvitation."))
+		}
 		this.disabled = false
 	}
 	async removeUser(user: string) {
-		let status: false | userwidgets.Organization = false
 		this.disabled = true
-		const users = this.organization?.users.filter(e => e != user)
-		if (this.organization)
-			status = await this.state.organizations.update(this.organization.id, { users: users })
-		status
-			? this.notice.emit(smoothly.Notice.succeeded("User successfully removed from organization."))
-			: this.notice.emit(smoothly.Notice.failed("Failed to remove user from organization."))
+		if (this.organization) {
+			const users = this.organization.users.filter(e => e != user)
+			const response = await this.state.organizations.update(this.organization.id, { users: users })
+			if (response)
+				this.notice.emit(smoothly.Notice.succeeded("User successfully removed from organization."))
+			else
+				this.notice.emit(smoothly.Notice.failed("Failed to remove user from organization."))
+		}
 		this.disabled = false
 	}
 
