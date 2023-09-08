@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Prop, State, Watch } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -17,8 +17,8 @@ export class UserwidgetsUserListInvited {
 	@State() users?: userwidgets.User.Readable[]
 	@State() disabled = false
 	@State() translate: langly.Translate = translation.create("en")
+	@State() invited: string[]
 	@Event() notice: EventEmitter<smoothly.Notice>
-	private invited: string[]
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
@@ -26,8 +26,12 @@ export class UserwidgetsUserListInvited {
 		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
 		this.state.users.listen("value", users => (this.users = users || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.inviteFilter()
 	}
-	componentWillRender() {
+	@Watch("organizations")
+	@Watch("key")
+	@Watch("users")
+	inviteFilter() {
 		this.invited =
 			!this.key || !this.organizations || !this.users
 				? []
