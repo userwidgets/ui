@@ -19,7 +19,6 @@ export class UserwidgetsUserListInvited {
 	@State() translate: langly.Translate = translation.create("en")
 	@Event() notice: EventEmitter<smoothly.Notice>
 	private invited: string[]
-	private status: false | userwidgets.Organization
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
@@ -37,24 +36,26 @@ export class UserwidgetsUserListInvited {
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
 	async reInvite(user: string) {
-		this.disabled = !this.disabled
+		let status: false | userwidgets.Organization = false
+		this.disabled = true
 		const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
 		if (this.organization)
-			this.status = await this.state.organizations.update(this.organization.id, { users: users })
-		this.status
+			status = await this.state.organizations.update(this.organization.id, { users: users })
+		status
 			? this.notice.emit(smoothly.Notice.succeeded("Reinvite successfully sent."))
 			: this.notice.emit(smoothly.Notice.failed("Failed to send out reinvitation."))
-		this.disabled = !this.disabled
+		this.disabled = false
 	}
 	async removeUser(user: string) {
-		this.disabled = !this.disabled
+		let status: false | userwidgets.Organization = false
+		this.disabled = true
 		const users = this.organization?.users.filter(e => e != user)
 		if (this.organization)
-			this.status = await this.state.organizations.update(this.organization.id, { users: users })
-		this.status
+			status = await this.state.organizations.update(this.organization.id, { users: users })
+		status
 			? this.notice.emit(smoothly.Notice.succeeded("User successfully removed from organization."))
 			: this.notice.emit(smoothly.Notice.failed("Failed to remove user from organization."))
-		this.disabled = !this.disabled
+		this.disabled = false
 	}
 
 	render() {
