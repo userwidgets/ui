@@ -37,12 +37,10 @@ export class UserwidgetsUserListInvited {
 						?.users.filter(email => email != this.key?.email && !this.users?.find(user => user.email == email)) ?? []
 	}
 	async reInvite(user: string) {
-		console.log("reInvite")
 		this.disabled = !this.disabled
 		const users = this.organization?.users.map(e => (e == user ? { user: user } : e))
 		if (this.organization)
 			this.status = await this.state.organizations.update(this.organization.id, { users: users })
-		console.log("this.status:", this.status)
 		this.status
 			? this.notice.emit(smoothly.Notice.succeeded("Reinvite successfully sent."))
 			: this.notice.emit(smoothly.Notice.failed("Failed to send out reinvitation."))
