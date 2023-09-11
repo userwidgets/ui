@@ -2,4 +2,6 @@
 	--background-color: var(--smoothly-default-color);
 
 	display: flex;
+	border-style: solid;
 }
+
