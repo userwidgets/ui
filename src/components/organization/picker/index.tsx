@@ -10,7 +10,6 @@ import * as translation from "./translation"
 })
 export class UserwidgetsOrganizationPicker {
 	@Prop() state: model.State
-	@Prop() looks: "plain" | "grid" | "border" | "line" = "border" // same as smoothly form
 	@State() organizations?: userwidgets.Organization[]
 	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
