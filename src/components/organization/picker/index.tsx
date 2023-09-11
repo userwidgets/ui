@@ -21,6 +21,7 @@ export class UserwidgetsOrganizationPicker {
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 	inputHandler(event: CustomEvent<Record<string, unknown>>) {
+		console.log(event.detail)
 		event.stopPropagation()
 		const organization = event.detail.organization
 		if (userwidgets.Organization.is(organization))
@@ -29,16 +30,17 @@ export class UserwidgetsOrganizationPicker {
 	render() {
 		return (
 			<Host>
-				<smoothly-form looks={this.looks}>
+				{this.organization ? (
 					<smoothly-picker name="organization" onSmoothlyInput={e => this.inputHandler(e)}>
+						<span slot="label">Organization</span>
 						<span slot="search">Search</span>
 						{this.organizations?.map(organization => (
-							<smoothly-picker-option selected={organization == this.organization} value={organization}>
+							<smoothly-picker-option selected={organization.id == this.organization?.id} value={organization}>
 								{organization.name}
 							</smoothly-picker-option>
 						))}
 					</smoothly-picker>
-				</smoothly-form>
+				) : null}
 			</Host>
 		)
 	}
