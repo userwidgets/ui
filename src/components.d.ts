@@ -44,6 +44,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsOrganizationPicker {
+        "looks": "plain" | "grid" | "border" | "line";
         "state": model.State;
     }
     interface UserwidgetsOrganizationUserReinvite {
@@ -315,6 +316,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsOrganizationPicker {
+        "looks"?: "plain" | "grid" | "border" | "line";
         "state"?: model.State;
     }
     interface UserwidgetsOrganizationUserReinvite {

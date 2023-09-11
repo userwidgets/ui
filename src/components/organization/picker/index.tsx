@@ -10,6 +10,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsOrganizationPicker {
 	@Prop() state: model.State
+	@Prop() looks: "plain" | "grid" | "border" | "line" = "border" // same as smoothly form
 	@State() organizations?: userwidgets.Organization[]
 	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")
@@ -28,7 +29,7 @@ export class UserwidgetsOrganizationPicker {
 	render() {
 		return (
 			<Host>
-				<smoothly-form>
+				<smoothly-form looks={this.looks}>
 					<smoothly-picker name="organization" onSmoothlyInput={e => this.inputHandler(e)}>
 						<span slot="search">Search</span>
 						{this.organizations?.map(organization => (
