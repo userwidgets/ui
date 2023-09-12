@@ -14,7 +14,7 @@ export class UserwidgetsUserListInvited {
 	@State() key?: userwidgets.User.Key
 	@State() organization?: userwidgets.Organization
 	@State() organizations?: userwidgets.Organization[]
-	@State() users?: userwidgets.User.Readable[]
+	@State() users?: userwidgets.User[]
 	@State() disabled = false
 	@State() translate: langly.Translate = translation.create("en")
 	@State() invited: string[]

@@ -51,7 +51,7 @@ export namespace Components {
     interface UserwidgetsOrganizationUserRemove {
         "organization": any;
         "state": model.State;
-        "user": userwidgets.User.Readable;
+        "user": userwidgets.User;
     }
     interface UserwidgetsRegisterDialog {
         "invite": userwidgets.User.Invite;
@@ -64,7 +64,7 @@ export namespace Components {
     interface UserwidgetsUser {
         "organization"?: userwidgets.Organization;
         "state": model.State;
-        "user": userwidgets.User.Readable;
+        "user": userwidgets.User;
     }
     interface UserwidgetsUserList {
         "organization"?: userwidgets.Organization;
@@ -82,11 +82,11 @@ export namespace Components {
         "options"?: CustomOption[];
         "preventDefault": boolean;
         "state": model.State;
-        "user": userwidgets.User.Readable;
+        "user": userwidgets.User;
     }
     interface UserwidgetsUserStatus {
         "state": model.State;
-        "user": userwidgets.User.Readable;
+        "user": userwidgets.User;
     }
 }
 export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
@@ -322,7 +322,7 @@ declare namespace LocalJSX {
     interface UserwidgetsOrganizationUserRemove {
         "organization"?: any;
         "state"?: model.State;
-        "user"?: userwidgets.User.Readable;
+        "user"?: userwidgets.User;
     }
     interface UserwidgetsRegisterDialog {
         "invite"?: userwidgets.User.Invite;
@@ -342,7 +342,7 @@ declare namespace LocalJSX {
     interface UserwidgetsUser {
         "organization"?: userwidgets.Organization;
         "state"?: model.State;
-        "user"?: userwidgets.User.Readable;
+        "user"?: userwidgets.User;
     }
     interface UserwidgetsUserList {
         "organization"?: userwidgets.Organization;
@@ -358,15 +358,15 @@ declare namespace LocalJSX {
     interface UserwidgetsUserPermissionsUpdate {
         "changed"?: boolean;
         "label"?: string;
-        "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<userwidgets.User.Permissions.Readable>) => void;
+        "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<userwidgets.User.Permissions>) => void;
         "options"?: CustomOption[];
         "preventDefault"?: boolean;
         "state"?: model.State;
-        "user"?: userwidgets.User.Readable;
+        "user"?: userwidgets.User;
     }
     interface UserwidgetsUserStatus {
         "state"?: model.State;
-        "user"?: userwidgets.User.Readable;
+        "user"?: userwidgets.User;
     }
     interface IntrinsicElements {
         "userwidgets-demo": UserwidgetsDemo;
