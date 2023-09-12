@@ -9,7 +9,7 @@ import { model } from "../../../model"
 })
 export class UserwidgetsOrganizationUserRemove {
 	@Prop() state: model.State
-	@Prop() user: userwidgets.User.Readable
+	@Prop() user: userwidgets.User
 	@Prop() organization: any
 
 	render() {

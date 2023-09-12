@@ -21,7 +21,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 				this.listenable.value = undefined
 	}
 	#value?: Users["value"]
-	get value(): userwidgets.User.Readable[] | false | undefined {
+	get value(): userwidgets.User[] | false | undefined {
 		return this.#value ?? (this.fetch(), this.#value)
 	}
 	set value(value: Users["value"]) {
@@ -34,7 +34,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	) {
 		super(client)
 	}
-	async fetch(): Promise<userwidgets.User.Readable[] | false> {
+	async fetch(): Promise<userwidgets.User[] | false> {
 		const promise = !this.me.key
 			? undefined
 			: (this.request ??= this.client.user.list().then(response => (!isUsers(response) ? false : response)))
@@ -46,12 +46,12 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	async updatePermissions(
 		email: string,
 		permissions: userwidgets.User.Permissions.Readable
-	): Promise<userwidgets.User.Readable | false> {
+	): Promise<userwidgets.User | false> {
 		const promise = !this.organizations.current
 			? undefined
 			: this.client.user
 					.updatePermissions(email, this.organizations.current.id, permissions)
-					.then(response => (!userwidgets.User.Readable.is(response) ? false : response))
+					.then(response => (!userwidgets.User.is(response) ? false : response))
 		const result = await promise
 		if (result)
 			this.fetch()
@@ -70,6 +70,4 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	}
 }
 
-const isUsers = model.createIsArrayOf((value): value is userwidgets.User.Readable =>
-	userwidgets.User.Readable.is(value)
-)
+const isUsers = model.createIsArrayOf((value): value is userwidgets.User => userwidgets.User.is(value))

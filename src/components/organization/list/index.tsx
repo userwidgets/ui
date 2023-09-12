@@ -14,6 +14,9 @@ export class userwidgetsOrganizationList {
 
 	componentWillLoad() {
 		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
+		this.state.me.listen("key", key => {
+			console.log("new key", key)
+		})
 	}
 
 	render() {

@@ -17,7 +17,7 @@ interface Change {
 })
 export class UserwidgetsUser {
 	@Prop() state: model.State
-	@Prop() user: userwidgets.User.Readable
+	@Prop() user: userwidgets.User
 	@Prop() organization?: userwidgets.Organization
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")

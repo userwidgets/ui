@@ -11,7 +11,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserList {
 	@Prop() state: model.State
-	@State() users?: userwidgets.User.Readable[]
+	@State() users?: userwidgets.User[]
 	@State() key?: userwidgets.User.Key
 	@Prop() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")

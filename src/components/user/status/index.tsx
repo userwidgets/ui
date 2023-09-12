@@ -10,7 +10,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserStatus implements ComponentWillLoad {
 	@Prop() state: model.State
-	@Prop() user: userwidgets.User.Readable
+	@Prop() user: userwidgets.User
 	@State() organizations?: userwidgets.Organization[]
 	@State() organization?: userwidgets.Organization
 	@State() translate: langly.Translate = translation.create("en")

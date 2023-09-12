@@ -17,7 +17,7 @@ export interface CustomOption {
 export class UserwidgetsPermissionUpdate {
 	@Prop({ mutable: true, reflect: true }) changed = false
 	@Prop() state: model.State
-	@Prop() user: userwidgets.User.Readable
+	@Prop() user: userwidgets.User
 	@Prop() label = "Permissions:"
 	@Prop() options?: CustomOption[]
 	@Prop() preventDefault = false
@@ -25,7 +25,7 @@ export class UserwidgetsPermissionUpdate {
 	@State() selectedOptions?: userwidgets.User.Permissions.Readable
 	@State() key?: userwidgets.User.Key
 	@State() organization?: userwidgets.Organization
-	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions.Readable>
+	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions>
 
 	// @Watch("key")
 	// @Watch("organization")
