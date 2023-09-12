@@ -20,7 +20,6 @@ export class UserwidgetsOrganizationPicker {
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 	}
 	inputHandler(event: CustomEvent<Record<string, unknown>>) {
-		console.log(event.detail)
 		event.stopPropagation()
 		const organization = this.organizations?.find(organization => organization.id == event.detail.organization)
 		if (this.organizations && organization)
