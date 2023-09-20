@@ -45,11 +45,13 @@ export class UserwidgetsLogin {
 
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await (this.invite ? this.state.me.join(this.invite) : this.state.me.login(event.detail))
+		const response = await this.state.me.login(event.detail)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
 			this.resolves.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
+			if (this.invite)
+				this.state.me.join(this.invite)
 		}
 	}
 
