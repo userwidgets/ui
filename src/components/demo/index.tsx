@@ -25,6 +25,8 @@ export class Demo {
 							<smoothly-app-room path={"/organization"} label="Organization">
 								<userwidgets-demo-organization state={this.state} />
 							</smoothly-app-room>
+
+							<userwidgets-logout slot="nav-end" state={this.state} />
 						</smoothly-app>
 					</userwidgets-login>
 				</smoothly-notifier>
