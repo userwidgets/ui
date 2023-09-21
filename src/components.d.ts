@@ -31,6 +31,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsLogout {
+        "color": smoothly.Color;
         "state": model.State;
     }
     interface UserwidgetsMe {
@@ -301,6 +302,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsLogout {
+        "color"?: smoothly.Color;
         "state"?: model.State;
     }
     interface UserwidgetsMe {

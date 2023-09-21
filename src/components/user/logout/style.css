@@ -1,6 +1,17 @@
 smoothly-icon {
-display: block;
-margin-left: auto;
-margin-right: auto;
-
+	margin-left: auto;
+	margin-right: auto;
+}
+:host {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 0.5rem;
+	max-width: 6rem;
+	width: 100%;
+	height: 2.5rem;
+}
+smoothly-button {
+	flex: auto;
+	height: 100%;
 }
