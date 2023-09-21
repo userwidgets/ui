@@ -7,7 +7,9 @@ smoothly-icon {
 	justify-content: center;
 	align-items: center;
 	border-radius: 0.5rem;
-
+	max-width: 6rem;
+	width: 100%;
+	height: 2.5rem;
 }
 smoothly-button {
 	flex: auto;
