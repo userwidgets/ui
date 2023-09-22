@@ -85,7 +85,7 @@
     "isly": "^0.1.10",
     "isoly": "^2.0.21",
     "langly": "^2.0.3",
-    "smoothly": "^1.0.0-alpha.90",
+    "smoothly": "^1.0.0-alpha.94",
     "urlpattern-polyfill": "^6.0.2"
   },
   "overrides": {
