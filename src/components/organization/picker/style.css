@@ -1,14 +1,14 @@
 :host {
-	--background-color: var(--smoothly-default-color);
-	border: rgb(var(--smoothly-default-contrast)) solid 1px;
+	--background-color: var(--smoothly-color);
+	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 	display: flex;
 }
 :host smoothly-picker {
 	width: 100%;
 }
 :host::slotted(smoothly-picker > smoothly-picker-menu)  {
-	border: rgb(var(--smoothly-default-contrast)) solid 1px;
+	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 }
 :host::slotted(smoothly-picker > smoothly-picker-menu > .controls)  {
-	border: rgb(var(--smoothly-default-contrast)) solid 1px;
+	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 }
