@@ -1,5 +1,4 @@
 :host {
-	--background-color: var(--smoothly-color);
 	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 	display: flex;
 }
