@@ -23,7 +23,8 @@
 	gap: 1rem;
 	position: absolute;
 	top: 100%;
-	width: 15rem;
+	width: 50dvw;
+	max-width: 15rem;
 	background-color: rgb(var(--smoothly-color));
 	right: 0;
 	padding: 1rem;
