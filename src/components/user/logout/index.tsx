@@ -10,7 +10,7 @@ import { model } from "../../../model"
 })
 export class Logout {
 	@Prop() state: model.State
-	@Prop({ reflect: true }) color: smoothly.Color = "primary"
+	@Prop({ reflect: true }) color: smoothly.Color
 
 	@State() key?: userwidgets.User.Key
 	componentWillLoad() {

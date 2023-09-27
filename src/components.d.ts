@@ -35,7 +35,9 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsMe {
+        "open": boolean;
         "state": model.State;
+        "visible": boolean;
     }
     interface UserwidgetsOrganization {
         "organization": userwidgets.Organization;
@@ -306,7 +308,9 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsMe {
+        "open"?: boolean;
         "state"?: model.State;
+        "visible"?: boolean;
     }
     interface UserwidgetsOrganization {
         "onNotice"?: (event: UserwidgetsOrganizationCustomEvent<smoothly.Notice>) => void;
