@@ -8,10 +8,12 @@
 	display: none
 
 }
-:host button {
+:host smoothly-button {
 	height: 100%;
+	border-radius: 0;
+	padding: 1rem;
 }
-:host button:hover {
+:host smoothly-button:hover {
 	background-color: rgb(var(--smoothly-color-tint));
 }
 :host > div {
