@@ -11,6 +11,7 @@
 :host smoothly-button {
 	height: 100%;
 	padding: 0.5rem;
+	border-radius: 0;
 }
 :host userwidgets-logout {
 	width: 2.5rem;
