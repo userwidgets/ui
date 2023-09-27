@@ -27,7 +27,6 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsLoginButton {
-        "color": smoothly.Color;
         "state": model.State;
     }
     interface UserwidgetsLoginDialog {
@@ -308,7 +307,6 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsLoginButton {
-        "color"?: smoothly.Color;
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {

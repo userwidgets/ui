@@ -14,7 +14,7 @@ export class UserwidgetsMeMenu {
 	@State() token?: userwidgets.User.Key | false
 
 	async componentWillLoad() {
-		// this.state.me.listen("key", key => (this.token = key))
+		this.state.me.listen("key", key => (this.token = key))
 	}
 
 	render() {
@@ -30,7 +30,7 @@ export class UserwidgetsMeMenu {
 							<smoothly-display
 								type="text"
 								value={this.token.name.first + " " + this.token.name.last}></smoothly-display>
-							{/* <userwidgets-organization-picker state={this.state} /> */}
+							<userwidgets-organization-picker state={this.state} />
 							<div class="actions">
 								<smoothly-button fill="solid" size="flexible" onClick={() => console.log("yo")}>
 									<smoothly-icon name="settings-outline" size="medium" />
@@ -40,7 +40,7 @@ export class UserwidgetsMeMenu {
 						</Fragment>
 					) : (
 						<Fragment>
-							<span>Not logged in</span> <button onClick={() => this.state.me.onUnauthorized?.()}>Login</button>{" "}
+							<userwidgets-login-button state={this.state} />
 						</Fragment>
 					)}
 				</div>

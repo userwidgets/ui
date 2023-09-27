@@ -10,8 +10,6 @@ import { model } from "../../../model"
 })
 export class LoginButton {
 	@Prop() state: model.State
-	@Prop({ reflect: true }) color: smoothly.Color
-
 	@State() key?: userwidgets.User.Key
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
@@ -22,10 +20,10 @@ export class LoginButton {
 		smoothly.redirect(window.location.origin)
 	}
 	render() {
-		return this.key ? (
-			<smoothly-button fill="solid" color={this.color} size="flexible" onClick={() => this.handleClick()}>
+		return (
+			<smoothly-button fill="solid" size="flexible" onClick={() => this.state.me.onUnauthorized?.()}>
 				<smoothly-icon name="log-in-outline" size="medium"></smoothly-icon>
 			</smoothly-button>
-		) : null
+		)
 	}
 }
