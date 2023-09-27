@@ -44,7 +44,7 @@ export class UserwidgetsOrganization {
 		if (!organization) {
 			this.notice.emit(smoothly.Notice.failed("Malformed organization"))
 			console.error(userwidgets.Organization.flaw(detail))
-		} else if (!(await (this.request = this.state.organizations.update(this.organization.id, organization))))
+		} else if (!(await (this.request = this.state.organizations.update(organization, { id: this.organization.id }))))
 			this.notice.emit(smoothly.Notice.failed("Failed to change organization"))
 		else
 			this.notice.emit(smoothly.Notice.succeeded("Changed organization"))
@@ -66,8 +66,9 @@ export class UserwidgetsOrganization {
 					</smoothly-input>
 					<userwidgets-edit-button
 						slot="submit"
+						state={this.state}
 						disabled={!!this.request || this.change?.name == this.organization.name}
-						change={!!this.change}
+						changed={!!this.change}
 						onUserwidgetsEditStart={e => {
 							this.editStart(e)
 						}}

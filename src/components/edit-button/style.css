@@ -1,11 +1,17 @@
-smoothly-icon {
-	padding: 0.3rem;
+:host {
+	height: fit-content;
 }
-
-:host.edit.button {
+:host.edit {
 	gap: 0.5rem;
-	margin-left: auto;
-	margin-right: 1rem;
 	display: flex;
 	justify-content: flex-end;
+}
+:host .button {
+	padding: 0.2rem;
+}
+.button smoothly-icon {
+	padding: 0.3rem;
+	width: 2.5rem;
+	height: 2.5rem;
+	box-sizing: border-box;
 }

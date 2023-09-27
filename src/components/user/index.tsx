@@ -1,12 +1,11 @@
-import { Component, h, Host, Prop, State, Watch } from "@stencil/core"
-import * as langly from "langly"
+import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
+import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
 
 interface Change {
-	name: userwidgets.User.Name
 	email: string
 	permissions: userwidgets.User.Permissions
 }
@@ -16,79 +15,99 @@ interface Change {
 	scoped: true,
 })
 export class UserwidgetsUser {
+	@Element() element: HTMLElement
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
-	@Prop() organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
+	@State() disabled = false
+	@Event() notice: EventEmitter<smoothly.Notice>
+
 	componentWillLoad() {
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		if (!this.organization)
+			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
+	}
+	componentDidRender() {
+		Array.from(this.element?.children ?? []).map(detail => detail.removeAttribute("hidden"))
 	}
 	@Watch("user")
 	userChanged() {
-		this.editEnd()
+		this.editEndHandler()
 	}
-	editStart(event: CustomEvent) {
+	editStartHandler(event: CustomEvent) {
 		event.stopPropagation()
-		this.change = { name: this.user.name }
+		this.change = {}
 	}
-	editEnd(event?: CustomEvent) {
+	editEndHandler(event?: CustomEvent) {
 		event?.stopPropagation()
 		this.change = undefined
 	}
 	inputHandler(event: CustomEvent<smoothly.Data>) {
+		event.stopPropagation()
 		if (this.change)
-			this.change = (({ name }) => ({ name }))({ ...this.change, ...event.detail })
+			this.change = {}
 	}
 	submitHandler(event: CustomEvent<smoothly.Data>) {
+		event.stopPropagation()
 		this.inputHandler(event)
-		// waiting for model 0.5.x
 	}
-	removeInvitation(user: string) {
-		const users = this.organization?.users.filter(e => e != user)
-		if (this.organization) {
-			this.state.organizations.update(this.organization.id, { users: users })
+	async remove() {
+		if (!this.disabled && this.organization) {
+			this.disabled = true
+			const users = this.organization.users.filter(email => email != this.user.email)
+			const response = await this.state.organizations.update({ users }, { id: this.organization.id })
+			if (!response) {
+				const message = `${this.translate("Failed to remove")} ${this.user.email} ${this.translate("from")} ${
+					this.organization.name
+				}`
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				const message = `${this.translate("Successfully removed")} ${this.user.email} ${this.translate("from")} ${
+					this.organization.name
+				}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+			}
+			this.disabled = false
 		}
 	}
 	render() {
 		return (
 			<Host class={{ editing: !!this.change }}>
+				<slot name={`${this.user.email}-detail-start`} />
 				<smoothly-form
+					looks="grid"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}
-					looks="grid">
-					<smoothly-input
-						name={this.translate("Name")}
-						readonly={!this.change}
-						value={this.change ? this.change.name : this.user.name.first + " " + this.user.name.last}>
-						Name
+					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+					<smoothly-input name={"name"} readonly value={`${this.user.name.first} ${this.user.name.last}`}>
+						{this.translate("Name")}
 					</smoothly-input>
-					<smoothly-input
-						name={this.translate("Email")}
-						readonly={!this.change}
-						value={this.change ? this.change.email : this.user.email}>
-						Email
+					<smoothly-input name={"email"} readonly value={this.user.email}>
+						{this.translate("Email")}
 					</smoothly-input>
-					<userwidgets-edit-button
-						class="submit"
-						slot="submit"
-						disabled={true}
-						change={!!this.change}
-						onUserwidgetsEditStart={e => {
-							this.editStart(e)
-						}}
-						onUserwidgetsEditEnd={e => this.editEnd(e)}
-					/>
-					{this.organization ? (
+					<div slot="submit" class={"buttons"}>
+						<userwidgets-edit-button
+							state={this.state}
+							disabled={true}
+							changed={!!this.change}
+							onUserwidgetsEditStart={e => {
+								this.editStartHandler(e)
+							}}
+							onUserwidgetsEditEnd={e => this.editEndHandler(e)}
+						/>
 						<smoothly-button
-							class="submit"
 							slot="submit"
-							onClick={() => this.removeInvitation(this.user.email)}
-							size="flexible">
-							<smoothly-icon name="person-remove-sharp" size="tiny"></smoothly-icon>
+							class="button"
+							size="flexible"
+							color="danger"
+							type="button"
+							onClick={() => this.remove()}>
+							<smoothly-icon name="person-remove-outline" size="small"></smoothly-icon>
 						</smoothly-button>
-					) : null}
+					</div>
 				</smoothly-form>
+				<slot name={`${this.user.email}-detail-end`} />
 			</Host>
 		)
 	}

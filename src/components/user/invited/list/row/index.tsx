@@ -1,0 +1,37 @@
+import { Component, h, Host, Prop, State } from "@stencil/core"
+import { langly } from "langly"
+import { userwidgets } from "@userwidgets/model"
+import { model } from "../../../../../model"
+import * as translation from "./translation"
+
+@Component({
+	tag: "userwidgets-user-invited-list-row",
+	styleUrl: "style.css",
+	scoped: true,
+})
+export class UserwidgetsUserInvitedListRow {
+	@Prop() state: model.State
+	@Prop() user: Pick<userwidgets.User, "email">
+	@State() translate: langly.Translate = translation.create("en")
+
+	componentWillLoad() {
+		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+	}
+
+	render() {
+		return (
+			<Host>
+				<smoothly-table-expandable-row>
+					<slot name={`${this.user.email}-cell-start`} />
+					<smoothly-table-cell>{this.user.email}</smoothly-table-cell>
+					<slot name={`${this.user.email}-cell-end`} />
+					<smoothly-table-cell></smoothly-table-cell>
+					<userwidgets-user-invited slot="detail" state={this.state} user={this.user}>
+						<slot name={`${this.user.email}-detail-start`} slot={`${this.user.email}-detail-start`} />
+						<slot name={`${this.user.email}-detail-end`} slot={`${this.user.email}-detail-end`} />
+					</userwidgets-user-invited>
+				</smoothly-table-expandable-row>
+			</Host>
+		)
+	}
+}
