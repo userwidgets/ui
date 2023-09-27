@@ -26,6 +26,10 @@ export namespace Components {
     interface UserwidgetsLogin {
         "state": model.State;
     }
+    interface UserwidgetsLoginButton {
+        "color": smoothly.Color;
+        "state": model.State;
+    }
     interface UserwidgetsLoginDialog {
         "invite"?: userwidgets.User.Invite;
         "state": model.State;
@@ -155,6 +159,12 @@ declare global {
         prototype: HTMLUserwidgetsLoginElement;
         new (): HTMLUserwidgetsLoginElement;
     };
+    interface HTMLUserwidgetsLoginButtonElement extends Components.UserwidgetsLoginButton, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsLoginButtonElement: {
+        prototype: HTMLUserwidgetsLoginButtonElement;
+        new (): HTMLUserwidgetsLoginButtonElement;
+    };
     interface HTMLUserwidgetsLoginDialogElement extends Components.UserwidgetsLoginDialog, HTMLStencilElement {
     }
     var HTMLUserwidgetsLoginDialogElement: {
@@ -257,6 +267,7 @@ declare global {
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
         "userwidgets-edit-button": HTMLUserwidgetsEditButtonElement;
         "userwidgets-login": HTMLUserwidgetsLoginElement;
+        "userwidgets-login-button": HTMLUserwidgetsLoginButtonElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-me-menu": HTMLUserwidgetsMeMenuElement;
@@ -294,6 +305,10 @@ declare namespace LocalJSX {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
         "onNotice"?: (event: UserwidgetsLoginCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsLoginLoaded"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
+        "state"?: model.State;
+    }
+    interface UserwidgetsLoginButton {
+        "color"?: smoothly.Color;
         "state"?: model.State;
     }
     interface UserwidgetsLoginDialog {
@@ -380,6 +395,7 @@ declare namespace LocalJSX {
         "userwidgets-demo-user": UserwidgetsDemoUser;
         "userwidgets-edit-button": UserwidgetsEditButton;
         "userwidgets-login": UserwidgetsLogin;
+        "userwidgets-login-button": UserwidgetsLoginButton;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-me-menu": UserwidgetsMeMenu;
@@ -407,6 +423,7 @@ declare module "@stencil/core" {
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
             "userwidgets-edit-button": LocalJSX.UserwidgetsEditButton & JSXBase.HTMLAttributes<HTMLUserwidgetsEditButtonElement>;
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
+            "userwidgets-login-button": LocalJSX.UserwidgetsLoginButton & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginButtonElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-me-menu": LocalJSX.UserwidgetsMeMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMeMenuElement>;

@@ -4,11 +4,11 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
 @Component({
-	tag: "userwidgets-login",
+	tag: "userwidgets-login-button",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class Login {
+export class LoginButton {
 	@Prop() state: model.State
 	@Prop({ reflect: true }) color: smoothly.Color
 
