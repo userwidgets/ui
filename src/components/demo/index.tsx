@@ -19,12 +19,12 @@ export class Demo {
 				<smoothly-notifier>
 					<userwidgets-login state={this.state}>
 						<smoothly-app color="secondary" label="Userwidgets ui demo">
-							{/* <smoothly-app-room path={"/user"} label={"User"}>
+							<smoothly-app-room path={"/user"} label={"User"}>
 								<userwidgets-demo-user state={this.state} />
-							</smoothly-app-room> */}
-							{/* <smoothly-app-room path={"/organization"} label="Organization">
+							</smoothly-app-room>
+							<smoothly-app-room path={"/organization"} label="Organization">
 								<userwidgets-demo-organization state={this.state} />
-							</smoothly-app-room> */}
+							</smoothly-app-room>
 
 							<userwidgets-me-menu slot="nav-end" state={this.state} />
 						</smoothly-app>
