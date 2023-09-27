@@ -23,7 +23,7 @@ export class Logout {
 	}
 	render() {
 		return this.key ? (
-			<smoothly-button fill="solid" color={this.color} size="flexible" onClick={() => this.handleClick()}>
+			<smoothly-button fill="solid" size="flexible" onClick={() => this.handleClick()}>
 				<smoothly-icon name="log-out-outline" size="medium"></smoothly-icon>
 			</smoothly-button>
 		) : null

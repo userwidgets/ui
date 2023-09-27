@@ -10,8 +10,14 @@
 }
 :host smoothly-button {
 	height: 100%;
-	border-radius: 0;
-	padding: 1rem;
+	padding: 0.5rem;
+}
+:host userwidgets-logout {
+	width: 2.5rem;
+}
+:host userwidgets-logout smoothly-button {
+	height: 100%;
+	padding: 0.5rem;
 }
 :host smoothly-button:hover {
 	background-color: rgb(var(--smoothly-color-tint));
