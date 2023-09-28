@@ -22,7 +22,7 @@ export class UserwidgetsUser {
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	@Watch("user")
 	userChanged() {

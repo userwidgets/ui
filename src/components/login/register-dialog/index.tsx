@@ -23,7 +23,7 @@ export class UserwidgetsRegister {
 	@State() translate: langly.Translate = translation.create("en")
 
 	async componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
 	async handleSubmit(event: CustomEvent<model.Data>) {

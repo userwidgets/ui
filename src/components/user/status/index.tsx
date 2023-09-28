@@ -17,7 +17,7 @@ export class UserwidgetsUserStatus implements ComponentWillLoad {
 	componentWillLoad(): void | Promise<void> {
 		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
 		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
 	render() {

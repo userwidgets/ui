@@ -21,7 +21,7 @@ export class UserwidgetsUserList {
 			users => (this.users = (users || undefined)?.filter(user => this.organization?.users.includes(user.email)))
 		)
 		this.state.me.listen("key", async key => (this.key = key || undefined))
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
 	render() {
