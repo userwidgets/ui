@@ -11,5 +11,9 @@
 	width: 1px;
 }
 :host smoothly-button {
-	margin: auto;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+}
+:host::slotted(smoothly-table-expandable-cell > aside) {
+	justify-content: center;
 }

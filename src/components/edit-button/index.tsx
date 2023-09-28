@@ -67,13 +67,14 @@ export class UserwidgetsEditButton {
 							key={"submit"}
 							class={"button"}
 							disabled={this.disabled}
+							color="primary"
 							size="flexible"
 							fill="default"
 							onClick={() => this.submitHandler()}>
 							<smoothly-icon
 								size="small"
 								fill="default"
-								color="success"
+								color="primary"
 								name="checkmark-outline"
 								toolTip={this.translate("Submit changes")}
 							/>

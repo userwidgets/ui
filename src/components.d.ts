@@ -88,6 +88,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsUserListInvite {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
     }
     interface UserwidgetsUserListInviteCell {
@@ -444,7 +445,9 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsUserListInvite {
+        "onNotice"?: (event: UserwidgetsUserListInviteCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsFormControls"?: (event: UserwidgetsUserListInviteCustomEvent<{ clear: () => void }>) => void;
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
     }
     interface UserwidgetsUserListInviteCell {
