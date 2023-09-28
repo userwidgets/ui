@@ -11,13 +11,13 @@ import { Events } from "../../../../edit-button"
 export class UserwidgetsUserListInviteCell {
 	private formControls?: { clear: () => void }
 	@Prop() state: model.State
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() open = false
 	@State() key?: userwidgets.User.Key
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
-		if (!this.organization)
+		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
@@ -56,7 +56,10 @@ export class UserwidgetsUserListInviteCell {
 						<smoothly-button size="flexible">
 							<smoothly-icon name="person-add-outline" size="small" />
 						</smoothly-button>
-						<userwidgets-user-list-invite slot="detail" state={this.state} organization={this.organization}>
+						<userwidgets-user-list-invite
+							slot="detail"
+							state={this.state}
+							organization={this.organization || undefined}>
 							<slot slot="detail" name="detail" />
 						</userwidgets-user-list-invite>
 					</smoothly-table-expandable-cell>

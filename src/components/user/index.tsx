@@ -17,7 +17,7 @@ export class UserwidgetsUser {
 	@Element() element: HTMLElement
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() key?: userwidgets.User.Key
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
@@ -27,7 +27,7 @@ export class UserwidgetsUser {
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
-		if (!this.organization)
+		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 	componentDidRender() {

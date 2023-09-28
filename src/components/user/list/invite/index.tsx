@@ -12,7 +12,7 @@ import * as translation from "./translation"
 export class UserwidgetsUserListInvite {
 	private form?: HTMLSmoothlyFormElement
 	@Prop() state: model.State
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() invite?: Partial<userwidgets.Organization.Changeable.Invite> = {}
 	@State() translate: langly.Translate = translation.create("en")
 	@State() disabled = false
@@ -21,7 +21,7 @@ export class UserwidgetsUserListInvite {
 
 	componentWillLoad() {
 		this.userwidgetsFormControls.emit({ clear: () => this.form?.clear() })
-		if (!this.organization)
+		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 

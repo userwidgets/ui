@@ -11,7 +11,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserList {
 	@Prop() state: model.State
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() users?: userwidgets.User[]
 	@State() invited?: Pick<userwidgets.User, "email">[]
 	@State() key?: userwidgets.User.Key
@@ -25,7 +25,7 @@ export class UserwidgetsUserList {
 		this.state.users.listen("invited", invited => (this.invited = invited || undefined))
 		this.state.me.listen("key", async key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
-		if (!this.organization)
+		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
@@ -38,13 +38,17 @@ export class UserwidgetsUserList {
 						<smoothly-table-header>{this.translate("Name")}</smoothly-table-header>
 						<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
 						<slot name="header-end" />
-						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization}>
+						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization || undefined}>
 							<slot slot="detail" name="detail" />
 						</userwidgets-user-list-invite-cell>
 					</smoothly-table-row>
 					<slot name="row-start" />
 					{this.users?.map(user => (
-						<userwidgets-user-list-row key={user.email} state={this.state} user={user} organization={this.organization}>
+						<userwidgets-user-list-row
+							key={user.email}
+							state={this.state}
+							user={user}
+							organization={this.organization || undefined}>
 							<slot name={`${user.email}-cell-start`} slot={`${user.email}-cell-start`} />
 							<slot name={`${user.email}-cell-end`} slot={`${user.email}-cell-end`} />
 							<slot name={`${user.email}-detail-start`} slot={`${user.email}-detail-start`} />

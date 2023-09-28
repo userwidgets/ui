@@ -12,7 +12,7 @@ import * as translation from "../translation"
 })
 export class UserwidgetsUserInvitedList {
 	@Prop() state: model.State
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() invited?: Pick<userwidgets.User, "email">[]
 	@State() disabled = false
 	@State() translate: langly.Translate = translation.create("en")
@@ -21,7 +21,7 @@ export class UserwidgetsUserInvitedList {
 	componentWillLoad() {
 		this.state.users.listen("invited", users => (this.invited = users || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
-		if (!this.organization)
+		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
@@ -33,7 +33,7 @@ export class UserwidgetsUserInvitedList {
 						<slot name="header-start" />
 						<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
 						<slot name="header-end" />
-						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization} />
+						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization || undefined} />
 					</smoothly-table-row>
 					<slot name="row-start" />
 					{this.invited?.map(user => (
@@ -41,7 +41,7 @@ export class UserwidgetsUserInvitedList {
 							key={user.email}
 							state={this.state}
 							user={user}
-							organization={this.organization}>
+							organization={this.organization || undefined}>
 							<slot name={`${user.email}-cell-start`} slot={`${user.email}-cell-start`} />
 							<slot name={`${user.email}-cell-end`} slot={`${user.email}-cell-end`} />
 							<slot name={`${user.email}-detail-start`} slot={`${user.email}-detail-start`} />
