@@ -10,8 +10,10 @@ h1 {
 	font-size: 1.4em;
 	font-weight: 400;
 }
-
-body{
+smoothly-app {
+	--margin: 0;
+}
+smoothly-app > * > main {
 	max-width: 80em;
 	margin: 0 auto;
 	background-color: rgb(var(--smoothly-default-tint));
