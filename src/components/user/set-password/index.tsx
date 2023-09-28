@@ -19,7 +19,7 @@ export class SetPassword {
 	@State() repeat: string
 	@State() translate: langly.Translate = translation.create("en")
 	componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
 	@Listen("smoothlyInput")

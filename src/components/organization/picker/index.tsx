@@ -17,7 +17,7 @@ export class UserwidgetsOrganizationPicker {
 	componentWillLoad() {
 		this.state.organizations.listen("value", organizations => (this.organizations = organizations || undefined))
 		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	inputHandler(event: CustomEvent<Record<string, unknown>>) {
 		event.stopPropagation()
