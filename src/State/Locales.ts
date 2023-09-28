@@ -7,26 +7,29 @@ export class Locales extends smoothly.StateBase<Locales> {
 		return this.#current
 	}
 	set current(current: Locales["current"]) {
-		this.#current = current
+		if (Locales.supported.includes(current)) {
+			this.#current = current
+			this.listenable.language = isoly.Locale.toLanguage(this.#current)
+		}
 	}
 	#language: Locales["language"]
-	get language(): isoly.Language {
+	get language(): isoly.Language | undefined {
 		return this.#language
 	}
 	private set language(language: Locales["language"]) {
 		this.#language = language
 	}
-	private constructor() {
-		super()
+	private static supported: [isoly.Locale, ...isoly.Locale[]] = ["en-GB", "sv-SE"]
+	static create() {
+		const backend = new this()
+		const listenable = smoothly.Listenable.load(backend)
+
 		const locale = isoly.Locale.is(window.navigator.language) ? window.navigator.language : undefined
 		const language = locale && isoly.Locale.toLanguage(locale)
 		const found =
 			Locales.supported.find(supported => supported == locale) ??
 			(language && Locales.supported.find(supported => supported.startsWith(language)))
-		this.current = found ?? Locales.supported[0]
-	}
-	private static supported: [isoly.Locale, ...isoly.Locale[]] = ["en-GB", "sv-SE"]
-	static create() {
-		return smoothly.Listenable.load(new this())
+		listenable.current = found ?? Locales.supported[0]
+		return listenable
 	}
 }
