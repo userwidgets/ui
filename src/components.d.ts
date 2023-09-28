@@ -77,9 +77,11 @@ export namespace Components {
         "user": Pick<userwidgets.User, "email">;
     }
     interface UserwidgetsUserInvitedList {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
     }
     interface UserwidgetsUserInvitedListRow {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
         "user": Pick<userwidgets.User, "email">;
     }
@@ -92,6 +94,7 @@ export namespace Components {
         "state": model.State;
     }
     interface UserwidgetsUserListInviteCell {
+        "organization"?: userwidgets.Organization;
         "state": model.State;
     }
     interface UserwidgetsUserListOrganization {
@@ -434,9 +437,11 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsUserInvitedList {
         "onNotice"?: (event: UserwidgetsUserInvitedListCustomEvent<smoothly.Notice>) => void;
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
     }
     interface UserwidgetsUserInvitedListRow {
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
         "user"?: Pick<userwidgets.User, "email">;
     }
@@ -451,6 +456,7 @@ declare namespace LocalJSX {
         "state"?: model.State;
     }
     interface UserwidgetsUserListInviteCell {
+        "organization"?: userwidgets.Organization;
         "state"?: model.State;
     }
     interface UserwidgetsUserListOrganization {

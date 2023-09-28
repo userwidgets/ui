@@ -71,7 +71,7 @@ export class UserwidgetsUserListInvite {
 					<smoothly-input type="email" name={"user"} value={this.invite?.user}>
 						Email
 					</smoothly-input>
-					<userwidgets-edit-button state={this.state} disabled={this.disabled} toggle={false} slot="submit" />
+					<userwidgets-edit-button slot="submit" state={this.state} disabled={this.disabled} toggle={false} />
 				</smoothly-form>
 			</Host>
 		)

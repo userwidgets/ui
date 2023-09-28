@@ -11,7 +11,7 @@ import * as translation from "./translation"
 })
 export class UserwidgetsUserList {
 	@Prop() state: model.State
-	@Prop() organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization
 	@State() users?: userwidgets.User[]
 	@State() invited?: Pick<userwidgets.User, "email">[]
 	@State() key?: userwidgets.User.Key
@@ -25,6 +25,8 @@ export class UserwidgetsUserList {
 		this.state.users.listen("invited", invited => (this.invited = invited || undefined))
 		this.state.me.listen("key", async key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		if (!this.organization)
+			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
 	render() {
@@ -35,9 +37,8 @@ export class UserwidgetsUserList {
 						<slot name="header-start" />
 						<smoothly-table-header>{this.translate("Name")}</smoothly-table-header>
 						<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
-						<smoothly-table-header>{this.translate("Status")}</smoothly-table-header>
 						<slot name="header-end" />
-						<userwidgets-user-list-invite-cell state={this.state}>
+						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization}>
 							<slot slot="detail" name="detail" />
 						</userwidgets-user-list-invite-cell>
 					</smoothly-table-row>

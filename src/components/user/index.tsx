@@ -6,7 +6,6 @@ import { model } from "../../model"
 import * as translation from "./translation"
 
 interface Change {
-	email: string
 	permissions: userwidgets.User.Permissions
 }
 @Component({
@@ -19,12 +18,14 @@ export class UserwidgetsUser {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
 	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@State() key?: userwidgets.User.Key
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
 	@State() disabled = false
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	componentWillLoad() {
+		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
 		if (!this.organization)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
@@ -87,24 +88,38 @@ export class UserwidgetsUser {
 						{this.translate("Email")}
 					</smoothly-input>
 					<div slot="submit" class={"buttons"}>
-						<userwidgets-edit-button
-							state={this.state}
-							disabled={true}
-							changed={!!this.change}
-							onUserwidgetsEditStart={e => {
-								this.editStartHandler(e)
-							}}
-							onUserwidgetsEditEnd={e => this.editEndHandler(e)}
-						/>
-						<smoothly-button
-							slot="submit"
-							class="button"
-							size="flexible"
-							color="danger"
-							type="button"
-							onClick={() => this.remove()}>
-							<smoothly-icon name="person-remove-outline" size="small"></smoothly-icon>
-						</smoothly-button>
+						{!this.key ||
+						!userwidgets.User.Permissions.check(
+							this.key.permissions,
+							this.organization?.id ?? "*",
+							"user.edit"
+						) ? null : (
+							<userwidgets-edit-button
+								state={this.state}
+								disabled={true}
+								changed={!!this.change}
+								onUserwidgetsEditStart={e => {
+									this.editStartHandler(e)
+								}}
+								onUserwidgetsEditEnd={e => this.editEndHandler(e)}
+							/>
+						)}
+						{!this.key ||
+						!userwidgets.User.Permissions.check(
+							this.key.permissions,
+							this.organization?.id ?? "*",
+							"org.edit"
+						) ? null : (
+							<smoothly-button
+								slot="submit"
+								class="button"
+								size="flexible"
+								color="danger"
+								type="button"
+								onClick={() => this.remove()}>
+								<smoothly-icon name="person-remove-outline" size="small"></smoothly-icon>
+							</smoothly-button>
+						)}
 					</div>
 				</smoothly-form>
 				<slot name={`${this.user.email}-detail-end`} />
