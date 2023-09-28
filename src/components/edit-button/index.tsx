@@ -26,7 +26,7 @@ export class UserwidgetsEditButton {
 	@Event() userwidgetsEditEnd: EventEmitter<void>
 
 	componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.userwidgetsEditLoad.emit((event, handler) => this.events[event].push(handler))
 	}
 

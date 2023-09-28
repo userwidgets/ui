@@ -19,7 +19,7 @@ export class UserwidgetsUserInvited {
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (!this.organization)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}

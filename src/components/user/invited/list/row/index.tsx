@@ -16,7 +16,7 @@ export class UserwidgetsUserInvitedListRow {
 	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
