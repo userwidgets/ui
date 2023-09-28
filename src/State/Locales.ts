@@ -7,8 +7,10 @@ export class Locales extends smoothly.StateBase<Locales> {
 		return this.#current
 	}
 	set current(current: Locales["current"]) {
-		this.#current = current
-		this.listenable.language = isoly.Locale.toLanguage(this.#current)
+		if (Locales.supported.includes(current)) {
+			this.#current = current
+			this.listenable.language = isoly.Locale.toLanguage(this.#current)
+		}
 	}
 	#language: Locales["language"]
 	get language(): isoly.Language | undefined {
