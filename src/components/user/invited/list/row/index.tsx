@@ -28,7 +28,7 @@ export class UserwidgetsUserInvitedListRow {
 					<slot name={`${this.user.email}-cell-start`} />
 					<smoothly-table-cell>{this.user.email}</smoothly-table-cell>
 					<slot name={`${this.user.email}-cell-end`} />
-					<smoothly-table-cell></smoothly-table-cell>
+					<smoothly-table-cell />
 					<userwidgets-user-invited
 						slot="detail"
 						state={this.state}
