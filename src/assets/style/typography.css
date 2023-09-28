@@ -13,9 +13,11 @@ h1 {
 smoothly-app {
 	--margin: 0;
 }
-smoothly-app > * > main {
+smoothly-app > smoothly-notifier {
+	min-height: 100dvh;
+}
+smoothly-app > smoothly-notifier > main {
 	max-width: 80em;
 	margin: 0 auto;
 	background-color: rgb(var(--smoothly-default-tint));
-	min-height: 100vh;
 }
