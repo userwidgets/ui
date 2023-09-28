@@ -24,7 +24,7 @@ export class UserwidgetsUserList {
 		)
 		this.state.users.listen("invited", invited => (this.invited = invited || undefined))
 		this.state.me.listen("key", async key => (this.key = key || undefined))
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}

@@ -26,7 +26,7 @@ export class UserwidgetsUser {
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
-		this.state.locales.listen("language", language => (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
