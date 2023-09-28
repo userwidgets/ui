@@ -88,7 +88,8 @@ export class UserwidgetsUser {
 						{this.translate("Email")}
 					</smoothly-input>
 					<div slot="submit" class={"buttons"}>
-						{!this.key ||
+						{/* enabled when implementing permission changing */}
+						{/* {!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,
 							this.organization?.id ?? "*",
@@ -103,7 +104,7 @@ export class UserwidgetsUser {
 								}}
 								onUserwidgetsEditEnd={e => this.editEndHandler(e)}
 							/>
-						)}
+						)} */}
 						{!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,
