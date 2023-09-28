@@ -13,14 +13,14 @@ import * as translation from "./translation"
 export class UserwidgetsUserInvited {
 	@Prop() state: model.State
 	@Prop() user: Pick<userwidgets.User, "email">
-	@Prop({ mutable: true }) organization?: userwidgets.Organization
+	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() translate: langly.Translate = translation.create("en")
 	@State() disabled = false
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
-		if (!this.organization)
+		if (this.organization == null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 	async invite() {

@@ -72,7 +72,7 @@ export namespace Components {
         "user": userwidgets.User;
     }
     interface UserwidgetsUserInvited {
-        "organization"?: userwidgets.Organization;
+        "organization"?: userwidgets.Organization | null;
         "state": model.State;
         "user": Pick<userwidgets.User, "email">;
     }
@@ -431,7 +431,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsUserInvited {
         "onNotice"?: (event: UserwidgetsUserInvitedCustomEvent<smoothly.Notice>) => void;
-        "organization"?: userwidgets.Organization;
+        "organization"?: userwidgets.Organization | null;
         "state"?: model.State;
         "user"?: Pick<userwidgets.User, "email">;
     }
