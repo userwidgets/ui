@@ -4,6 +4,7 @@ import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
+import { Me } from "../../State/Me"
 import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
@@ -23,6 +24,8 @@ export class UserwidgetsLogin {
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@State() translate: langly.Translate = translation.create("en")
 	private onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
+	// save invite request to know if one should be sent in the other join
+	private join?: ReturnType<Me["join"]>
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
@@ -34,6 +37,7 @@ export class UserwidgetsLogin {
 
 		if (this.invite) {
 			this.activeAccount = this.invite.active
+			console.log("user is active", this.activeAccount)
 			if (this.invite.active && (await this.state.me.join(this.invite)))
 				this.invite = undefined
 		} else
@@ -47,11 +51,13 @@ export class UserwidgetsLogin {
 		event.preventDefault()
 		const response = await this.state.me.login(event.detail)
 		if (userwidgets.User.Key.is(response)) {
+			console.log("account", this.activeAccount)
+			console.log("resolves", this.resolves)
+			if (this.invite && !this.resolves)
+				this.state.me.join(this.invite)
 			this.resolves?.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
-			if (this.invite)
-				this.state.me.join(this.invite)
 		}
 	}
 
