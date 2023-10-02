@@ -32,15 +32,14 @@ export class UserwidgetsLogin {
 		this.userwidgetsLoginLoaded.emit()
 	}
 	async handleInvite(inviteToken: string) {
-		this.onUnauthorized()
 		this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
-
 		if (this.invite) {
 			this.activeAccount = this.invite.active
 			if (this.invite.active) {
 				const invite = this.invite
 				this.invite = undefined
-				await this.state.me.join(invite)
+				if (!(await this.state.me.join(invite)))
+					this.invite = invite
 			}
 		} else
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
@@ -52,7 +51,8 @@ export class UserwidgetsLogin {
 			if (this.invite) {
 				const invite = this.invite
 				this.invite = undefined
-				await this.state.me.join(invite)
+				if (!(await this.state.me.join(invite)))
+					this.invite = invite
 			}
 			this.resolves?.forEach(resolve => resolve(true))
 			this.resolves = undefined
