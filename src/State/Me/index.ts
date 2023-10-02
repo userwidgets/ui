@@ -46,9 +46,11 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		return result
 	}
 	async join(invite: userwidgets.User.Invite) {
-		const result = await this.client.me
-			.join(invite)
-			.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
+		const result = !this.key
+			? undefined
+			: await this.client.me
+					.join(invite)
+					.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
 		if (result) {
 			this.listenable.key = result
 			sessionStorage.setItem("token", result.token)
