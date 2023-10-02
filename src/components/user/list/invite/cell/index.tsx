@@ -1,7 +1,9 @@
 import { Component, h, Host, Listen, Prop, State } from "@stencil/core"
+import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../../model"
 import { Events } from "../../../../edit-button"
+import * as translation from "./translation"
 
 @Component({
 	tag: "userwidgets-user-list-invite-cell",
@@ -14,9 +16,11 @@ export class UserwidgetsUserListInviteCell {
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() open = false
 	@State() key?: userwidgets.User.Key
+	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
@@ -54,7 +58,7 @@ export class UserwidgetsUserListInviteCell {
 						open={this.open}
 						onSmoothlyExpandableChange={e => this.expandableChangeHandler(e)}>
 						<smoothly-button size="flexible">
-							<smoothly-icon name="person-add-outline" size="small" />
+							<smoothly-icon name="person-add-outline" size="small" toolTip={this.translate("Invite a new member")} />
 						</smoothly-button>
 						<userwidgets-user-list-invite
 							slot="detail"

@@ -1,7 +1,9 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
+import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
+import * as translation from "./translation"
 
 interface Change {
 	name: string
@@ -15,9 +17,15 @@ interface Change {
 export class UserwidgetsOrganization {
 	@Prop() organization: userwidgets.Organization
 	@Prop() state: model.State
+	@State() translate: langly.Translate = translation.create("en")
 	@State() change?: Partial<Change>
 	@State() request?: ReturnType<typeof this.state.organizations.update>
 	@Event() notice: EventEmitter<smoothly.Notice>
+
+	componentWillLoad() {
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
+	}
+
 	@Watch("organization")
 	organizationChanged() {
 		this.editEnd()
@@ -42,12 +50,12 @@ export class UserwidgetsOrganization {
 		}
 		const organization = userwidgets.Organization.Changeable.type.get(detail)
 		if (!organization) {
-			this.notice.emit(smoothly.Notice.failed("Malformed organization"))
+			this.notice.emit(smoothly.Notice.failed(this.translate("Malformed organization")))
 			console.error(userwidgets.Organization.flaw(detail))
 		} else if (!(await (this.request = this.state.organizations.update(organization, { id: this.organization.id }))))
-			this.notice.emit(smoothly.Notice.failed("Failed to change organization"))
+			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to change organization")))
 		else
-			this.notice.emit(smoothly.Notice.succeeded("Changed organization"))
+			this.notice.emit(smoothly.Notice.succeeded(this.translate("Changed organization")))
 		this.request = undefined
 	}
 
@@ -62,7 +70,7 @@ export class UserwidgetsOrganization {
 						name="name"
 						readonly={!this.change}
 						value={this.change ? this.change.name : this.organization.name}>
-						Name
+						{this.translate("Name")}
 					</smoothly-input>
 					<userwidgets-edit-button
 						slot="submit"

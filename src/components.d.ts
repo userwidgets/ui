@@ -113,10 +113,6 @@ export namespace Components {
         "state": model.State;
         "user": userwidgets.User;
     }
-    interface UserwidgetsUserStatus {
-        "state": model.State;
-        "user": userwidgets.User;
-    }
 }
 export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -313,12 +309,6 @@ declare global {
         prototype: HTMLUserwidgetsUserPermissionsUpdateElement;
         new (): HTMLUserwidgetsUserPermissionsUpdateElement;
     };
-    interface HTMLUserwidgetsUserStatusElement extends Components.UserwidgetsUserStatus, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsUserStatusElement: {
-        prototype: HTMLUserwidgetsUserStatusElement;
-        new (): HTMLUserwidgetsUserStatusElement;
-    };
     interface HTMLElementTagNameMap {
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
@@ -345,7 +335,6 @@ declare global {
         "userwidgets-user-list-organization": HTMLUserwidgetsUserListOrganizationElement;
         "userwidgets-user-list-row": HTMLUserwidgetsUserListRowElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
-        "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
     }
 }
 declare namespace LocalJSX {
@@ -476,10 +465,6 @@ declare namespace LocalJSX {
         "state"?: model.State;
         "user"?: userwidgets.User;
     }
-    interface UserwidgetsUserStatus {
-        "state"?: model.State;
-        "user"?: userwidgets.User;
-    }
     interface IntrinsicElements {
         "userwidgets-demo": UserwidgetsDemo;
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
@@ -506,7 +491,6 @@ declare namespace LocalJSX {
         "userwidgets-user-list-organization": UserwidgetsUserListOrganization;
         "userwidgets-user-list-row": UserwidgetsUserListRow;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
-        "userwidgets-user-status": UserwidgetsUserStatus;
     }
 }
 export { LocalJSX as JSX };
@@ -538,7 +522,6 @@ declare module "@stencil/core" {
             "userwidgets-user-list-organization": LocalJSX.UserwidgetsUserListOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListOrganizationElement>;
             "userwidgets-user-list-row": LocalJSX.UserwidgetsUserListRow & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListRowElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
-            "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;
         }
     }
 }

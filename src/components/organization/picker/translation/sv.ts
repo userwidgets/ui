@@ -1,3 +1,5 @@
+/* eslint-disable prettierx/options */
 export const sv = {
-	"You are not a member of any organization": "Du är inte medlem i någon organisation.",
+	"Organization": "Organisation",
+	"Search": "Sök",
 }
