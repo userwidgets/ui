@@ -28,30 +28,35 @@ export class UserwidgetsLogin {
 		this.state.me.onUnauthorized = this.onUnauthorized
 		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
 	}
-	async handleInvite(inviteToken: string) {
-		this.onUnauthorized()
-		this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
-
-		if (this.invite) {
-			this.activeAccount = this.invite.active
-			if (this.invite.active && (await this.state.me.join(this.invite)))
-				this.invite = undefined
-		} else
-			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
-	}
 	componentDidLoad() {
 		this.userwidgetsLoginLoaded.emit()
 	}
-
+	async handleInvite(inviteToken: string) {
+		this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
+		if (this.invite) {
+			this.activeAccount = this.invite.active
+			if (this.invite.active) {
+				const invite = this.invite
+				this.invite = undefined
+				if (!(await this.state.me.join(invite)))
+					this.invite = invite
+			}
+		} else
+			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
+	}
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await this.state.me.login(event.detail)
-		if (userwidgets.User.Key.is(response) && this.resolves) {
-			this.resolves.forEach(resolve => resolve(true))
+		if (userwidgets.User.Key.is(response)) {
+			if (this.invite) {
+				const invite = this.invite
+				this.invite = undefined
+				if (!(await this.state.me.join(invite)))
+					this.invite = invite
+			}
+			this.resolves?.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
-			if (this.invite)
-				this.state.me.join(this.invite)
 		}
 	}
 
