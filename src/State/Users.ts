@@ -1,6 +1,5 @@
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../model"
 import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
@@ -37,7 +36,9 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	async fetch(): Promise<userwidgets.User[] | false> {
 		const promise = !this.me.key
 			? undefined
-			: (this.request ??= this.client.user.list().then(response => (!isUsers(response) ? false : response)))
+			: (this.request ??= this.client.user
+					.list()
+					.then(response => (!userwidgets.User.type.array().is(response) ? false : response)))
 		const result = await promise
 		if (promise == this.request)
 			this.request = undefined
@@ -69,5 +70,3 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		return listenable
 	}
 }
-
-const isUsers = model.createIsArrayOf((value): value is userwidgets.User => userwidgets.User.is(value))

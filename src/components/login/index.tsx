@@ -4,7 +4,6 @@ import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
-import { Me } from "../../State/Me"
 import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
@@ -24,12 +23,13 @@ export class UserwidgetsLogin {
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@State() translate: langly.Translate = translation.create("en")
 	private onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
-	// save invite request to know if one should be sent in the other join
-	private join?: ReturnType<Me["join"]>
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
 		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
+	}
+	componentDidLoad() {
+		this.userwidgetsLoginLoaded.emit()
 	}
 	async handleInvite(inviteToken: string) {
 		this.onUnauthorized()
@@ -37,24 +37,23 @@ export class UserwidgetsLogin {
 
 		if (this.invite) {
 			this.activeAccount = this.invite.active
-			console.log("user is active", this.activeAccount)
-			if (this.invite.active && (await this.state.me.join(this.invite)))
+			if (this.invite.active) {
+				const invite = this.invite
 				this.invite = undefined
+				await this.state.me.join(invite)
+			}
 		} else
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
 	}
-	componentDidLoad() {
-		this.userwidgetsLoginLoaded.emit()
-	}
-
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await this.state.me.login(event.detail)
 		if (userwidgets.User.Key.is(response)) {
-			console.log("account", this.activeAccount)
-			console.log("resolves", this.resolves)
-			if (this.invite && !this.resolves)
-				this.state.me.join(this.invite)
+			if (this.invite) {
+				const invite = this.invite
+				this.invite = undefined
+				await this.state.me.join(invite)
+			}
 			this.resolves?.forEach(resolve => resolve(true))
 			this.resolves = undefined
 			this.loggedIn.emit()
