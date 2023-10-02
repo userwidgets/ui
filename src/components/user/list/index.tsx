@@ -1,5 +1,5 @@
 import { Component, h, Host, Prop, State } from "@stencil/core"
-import * as langly from "langly"
+import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
