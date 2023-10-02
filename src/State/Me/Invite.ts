@@ -11,11 +11,13 @@ export class Invite extends smoothly.StateBase<Invite, userwidgets.ClientCollect
 		this.#value = value
 	}
 	async fetch(): Promise<NonNullable<Invite["value"]>> {
-		const id = new URL(window.location.href).searchParams.get(this.client.configuration.inviteParameterName)
-		const promise = !id
+		const invite = new URL(window.location.href).searchParams.get(this.client.configuration.inviteParameterName)
+		const promise = !invite
 			? undefined
+			: invite.match(/^[^.]+\.[^.]+\.[^.]+$/)
+			? invite
 			: (this.request ??= this.client.me.invite
-					.fetch(id)
+					.fetch(invite)
 					.then(response => (typeof response == "string" ? response : false)))
 		const result = await promise
 		if (promise == this.request)
