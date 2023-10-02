@@ -1,4 +1,4 @@
 /* eslint-disable prettierx/options */
 export const sv = {
-	"Email": "E-post"
+	"Invite a new member": "Bjud in en ny medlem",
 }

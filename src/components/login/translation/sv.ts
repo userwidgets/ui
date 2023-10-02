@@ -1,1 +1,4 @@
-export const sv = { "Used invite is not valid.": "Den använda inbjudan är inte giltig." }
+/* eslint-disable prettierx/options */
+export const sv = {
+	"Used invite is not valid.": "Den använda inbjudan är inte giltig.",
+}
