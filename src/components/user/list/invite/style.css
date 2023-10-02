@@ -1,0 +1,10 @@
+:host {
+	display: flex;
+}
+:host smoothly-form {
+	width: 100%;
+}
+:host userwidgets-edit-button {
+	margin-right: 1rem;
+	margin-top: 1rem;
+}
