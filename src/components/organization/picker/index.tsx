@@ -30,8 +30,8 @@ export class UserwidgetsOrganizationPicker {
 			<Host>
 				{this.organization ? (
 					<smoothly-picker name="organization" onSmoothlyInput={e => this.inputHandler(e)}>
-						<span slot="label">Organization</span>
-						<span slot="search">Search</span>
+						<span slot="label">{this.translate("Organization")}</span>
+						<span slot="search">{this.translate("Search")}</span>
 						{this.organizations?.map(organization => (
 							<smoothly-picker-option selected={organization.id == this.organization?.id} value={organization.id}>
 								{organization.name}
