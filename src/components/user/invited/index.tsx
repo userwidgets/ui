@@ -23,7 +23,7 @@ export class UserwidgetsUserInvited {
 		if (this.organization == null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
-	async invite() {
+	async reInvite() {
 		if (!this.disabled && this.organization) {
 			this.disabled = true
 			const users = this.organization.users.map(email => (email != this.user.email ? email : { user: this.user.email }))
@@ -70,7 +70,7 @@ export class UserwidgetsUserInvited {
 						{this.translate("Email")}
 					</smoothly-input>
 					<div class={"buttons"} slot="submit">
-						<smoothly-button class={"button"} size={"flexible"} color={"success"} onClick={() => this.invite()}>
+						<smoothly-button class={"button"} size={"flexible"} color={"success"} onClick={() => this.reInvite()}>
 							<smoothly-icon
 								class={"size-override"}
 								name={"paper-plane-outline"}
