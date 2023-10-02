@@ -25,16 +25,33 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	}
 	set value(value: Users["value"]) {
 		this.#value = value
+		if (this.#value && this.state.organizations.current) {
+			const organization = this.state.organizations.current
+			const users = this.#value
+			this.listenable.invited = organization.users
+				.filter(email => !users.some(user => user.email == email))
+				.map(email => ({ email }))
+		} else
+			this.listenable.invited = this.#value && this.state.organizations.current && undefined
+	}
+	#invited?: Users["invited"]
+	get invited(): Pick<userwidgets.User, "email">[] | false | undefined {
+		return this.#invited ?? (this.fetch(), undefined)
+	}
+	set invited(invited: Users["invited"]) {
+		this.#invited = invited
 	}
 	private constructor(
 		client: userwidgets.ClientCollection,
-		private me: smoothly.WithListenable<Me>,
-		private organizations: smoothly.WithListenable<Organizations>
+		private state: {
+			me: smoothly.WithListenable<Me>
+			organizations: smoothly.WithListenable<Organizations>
+		}
 	) {
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
-		const promise = !this.me.key
+		const promise = !this.state.me.key
 			? undefined
 			: (this.request ??= this.client.user
 					.list()
@@ -48,10 +65,10 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		email: string,
 		permissions: userwidgets.User.Permissions.Readable
 	): Promise<userwidgets.User | false> {
-		const promise = !this.organizations.current
+		const promise = !this.state.organizations.current
 			? undefined
 			: this.client.user
-					.updatePermissions(email, this.organizations.current.id, permissions)
+					.updatePermissions(email, this.state.organizations.current.id, permissions)
 					.then(response => (!userwidgets.User.is(response) ? false : response))
 		const result = await promise
 		if (result)
@@ -63,7 +80,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		me: smoothly.WithListenable<Me>,
 		organizations: smoothly.WithListenable<Organizations>
 	): smoothly.WithListenable<Users> {
-		const backend = new this(client, me, organizations)
+		const backend = new this(client, { me, organizations })
 		const listenable = smoothly.Listenable.load(backend)
 		me.listen("key", key => (backend.key = key))
 		organizations.listen("current", organization => (backend.organization = organization))
