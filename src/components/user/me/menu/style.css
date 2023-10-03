@@ -1,0 +1,63 @@
+:host {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+:host .closed {
+	display: none;
+}
+:host smoothly-button {
+	height: 100%;
+	padding: 0.5rem;
+	border-radius: 0;
+}
+:host userwidgets-logout {
+	width: 2.5rem;
+}
+:host userwidgets-logout smoothly-button {
+	height: 100%;
+	padding: 0.5rem;
+}
+:host smoothly-button:hover {
+	background-color: rgb(var(--smoothly-color-tint));
+}
+:host > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	position: absolute;
+	top: 100%;
+	width: 50dvw;
+	max-width: 15rem;
+	background-color: rgb(var(--smoothly-color));
+	right: 0;
+	padding: 1rem;
+}
+
+:host div userwidgets-organization-picker {
+	width: 100%;
+	border: none;
+}
+:host .actions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+}
+@media screen and (max-width: 900px) {
+	.spacer {
+		height: 2px;
+		width: calc(100% - 1rem);
+		background-color: rgb(var(--smoothly-color-shade));
+	}
+	:host > smoothly-button {
+		display: none;
+	} 
+	:host .closed  {
+		display: flex;
+	}
+
+}

@@ -26,7 +26,11 @@ export class Demo {
 								<userwidgets-demo-organization state={this.state} />
 							</smoothly-app-room>
 
-							<userwidgets-logout slot="nav-end" state={this.state} />
+							<userwidgets-me-menu slot="nav-end" state={this.state}>
+								<smoothly-button slot="action" type="link" link={"/organization"} fill="solid" size="flexible">
+									<smoothly-icon name="settings-outline" size="medium" />
+								</smoothly-button>
+							</userwidgets-me-menu>
 						</smoothly-app>
 					</userwidgets-login>
 				</smoothly-notifier>
