@@ -23,6 +23,7 @@
 	background-color: rgb(var(--smoothly-color-tint));
 }
 :host > div {
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
