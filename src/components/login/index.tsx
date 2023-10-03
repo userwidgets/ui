@@ -1,9 +1,10 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
-import * as langly from "langly"
+import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { model } from "../../model"
+import { Me } from "../../State/Me"
 import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
@@ -14,15 +15,17 @@ if (!("URLPattern" in globalThis))
 	scoped: true,
 })
 export class UserwidgetsLogin {
-	@State() resolves?: ((result: boolean | PromiseLike<boolean>) => void)[]
+	@Prop() state: model.State
+	@State() resolves?: (() => void)[]
 	@State() invite?: userwidgets.User.Invite
 	@State() activeAccount?: boolean
-	@Prop() state: model.State
+	@State() translate: langly.Translate = translation.create("en")
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Event() notice: EventEmitter<smoothly.Notice>
-	@State() translate: langly.Translate = translation.create("en")
-	private onUnauthorized = () => new Promise<boolean>(resolve => (this.resolves ??= []).push(resolve))
+	private request?: ReturnType<Me["login"]>
+	private onUnauthorized = () =>
+		new Promise<boolean>(resolve => (this.resolves ??= []).push(() => resolve(!this.request)))
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
@@ -46,7 +49,7 @@ export class UserwidgetsLogin {
 	}
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await this.state.me.login(event.detail)
+		const response = await (this.request = this.state.me.login(event.detail))
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
@@ -54,10 +57,11 @@ export class UserwidgetsLogin {
 				if (!(await this.state.me.join(invite)))
 					this.invite = invite
 			}
-			this.resolves?.forEach(resolve => resolve(true))
+			this.resolves?.forEach(resolve => resolve())
 			this.resolves = undefined
 			this.loggedIn.emit()
 		}
+		this.request = undefined
 	}
 
 	async activeAccountHandler(event: CustomEvent<boolean>) {
@@ -70,7 +74,7 @@ export class UserwidgetsLogin {
 		const response = await this.state.me.register(event.detail.invite, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
 			this.invite = undefined
-			this.resolves.forEach(resolve => resolve(true))
+			this.resolves.forEach(resolve => resolve())
 			this.resolves = undefined
 			this.loggedIn.emit()
 		}
