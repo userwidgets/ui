@@ -24,12 +24,8 @@ export class UserwidgetsLogin {
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Event() notice: EventEmitter<smoothly.Notice>
 	private request?: ReturnType<Me["login"]>
-	private onUnauthorized = () => {
-		// future resolve value
-		// !this.request may not have the same value here compared to when it is used
-		const redo = !this.request
-		return new Promise<boolean>(resolve => (this.resolves ??= []).push(() => resolve(redo)))
-	}
+	private onUnauthorized = () =>
+		new Promise<boolean>(resolve => (this.resolves ??= []).push(() => resolve(!this.request)))
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
