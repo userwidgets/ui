@@ -11,6 +11,7 @@ export class UserwidgetsMeMenu {
 	@Prop() state: model.State
 	@Prop({ mutable: true, reflect: true }) visible = false
 	@Prop({ mutable: true, reflect: true }) open = false
+	@Prop() path: string
 	@State() token?: userwidgets.User.Key | false
 
 	async componentWillLoad() {
@@ -32,9 +33,7 @@ export class UserwidgetsMeMenu {
 								value={this.token.name.first + " " + this.token.name.last}></smoothly-display>
 							<userwidgets-organization-picker state={this.state} />
 							<div class="actions">
-								<smoothly-button fill="solid" size="flexible" onClick={() => console.log("yo")}>
-									<smoothly-icon name="settings-outline" size="medium" />
-								</smoothly-button>
+								<slot name="action"></slot>
 								<userwidgets-logout state={this.state} />
 							</div>
 						</Fragment>

@@ -39,6 +39,7 @@ export namespace Components {
     }
     interface UserwidgetsMeMenu {
         "open": boolean;
+        "path": string;
         "state": model.State;
         "visible": boolean;
     }
@@ -322,6 +323,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsMeMenu {
         "open"?: boolean;
+        "path"?: string;
         "state"?: model.State;
         "visible"?: boolean;
     }
