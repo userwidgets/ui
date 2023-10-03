@@ -28,12 +28,10 @@ export class UserwidgetsMeMenu {
 					<div class="spacer"></div>
 					{this.token ? (
 						<Fragment>
-							<smoothly-display
-								type="text"
-								value={this.token.name.first + " " + this.token.name.last}></smoothly-display>
+							<smoothly-display type="text" value={this.token.name.first + " " + this.token.name.last} />
 							<userwidgets-organization-picker state={this.state} />
 							<div class="actions">
-								<slot name="action"></slot>
+								<slot name="action" />
 								<userwidgets-logout state={this.state} />
 							</div>
 						</Fragment>

@@ -22,7 +22,7 @@ export class LoginButton {
 	render() {
 		return (
 			<smoothly-button fill="solid" size="flexible" onClick={() => this.state.me.onUnauthorized?.()}>
-				<smoothly-icon name="log-in-outline" size="medium"></smoothly-icon>
+				<smoothly-icon name="log-in-outline" size="medium" />
 			</smoothly-button>
 		)
 	}
