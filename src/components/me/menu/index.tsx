@@ -1,6 +1,6 @@
 import { Component, Fragment, h, Host, Prop, State } from "@stencil/core"
 import { userwidgets } from "@userwidgets/model"
-import { model } from "../../../../model"
+import { model } from "../../../model"
 
 @Component({
 	tag: "userwidgets-me-menu",
