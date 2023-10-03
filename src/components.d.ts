@@ -103,9 +103,6 @@ export namespace Components {
         "organization"?: userwidgets.Organization | null;
         "state": model.State;
     }
-    interface UserwidgetsUserListInvited {
-        "state": model.State;
-    }
     interface UserwidgetsUserListOrganization {
         "state": model.State;
     }
@@ -119,10 +116,6 @@ export namespace Components {
         "label": string;
         "options"?: CustomOption[];
         "preventDefault": boolean;
-        "state": model.State;
-        "user": userwidgets.User;
-    }
-    interface UserwidgetsUserStatus {
         "state": model.State;
         "user": userwidgets.User;
     }
@@ -166,10 +159,6 @@ export interface UserwidgetsUserInvitedListCustomEvent<T> extends CustomEvent<T>
 export interface UserwidgetsUserListInviteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsUserListInviteElement;
-}
-export interface UserwidgetsUserListInvitedCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsUserListInvitedElement;
 }
 export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -314,12 +303,6 @@ declare global {
         prototype: HTMLUserwidgetsUserListInviteCellElement;
         new (): HTMLUserwidgetsUserListInviteCellElement;
     };
-    interface HTMLUserwidgetsUserListInvitedElement extends Components.UserwidgetsUserListInvited, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsUserListInvitedElement: {
-        prototype: HTMLUserwidgetsUserListInvitedElement;
-        new (): HTMLUserwidgetsUserListInvitedElement;
-    };
     interface HTMLUserwidgetsUserListOrganizationElement extends Components.UserwidgetsUserListOrganization, HTMLStencilElement {
     }
     var HTMLUserwidgetsUserListOrganizationElement: {
@@ -337,12 +320,6 @@ declare global {
     var HTMLUserwidgetsUserPermissionsUpdateElement: {
         prototype: HTMLUserwidgetsUserPermissionsUpdateElement;
         new (): HTMLUserwidgetsUserPermissionsUpdateElement;
-    };
-    interface HTMLUserwidgetsUserStatusElement extends Components.UserwidgetsUserStatus, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsUserStatusElement: {
-        prototype: HTMLUserwidgetsUserStatusElement;
-        new (): HTMLUserwidgetsUserStatusElement;
     };
     interface HTMLElementTagNameMap {
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
@@ -368,11 +345,9 @@ declare global {
         "userwidgets-user-list": HTMLUserwidgetsUserListElement;
         "userwidgets-user-list-invite": HTMLUserwidgetsUserListInviteElement;
         "userwidgets-user-list-invite-cell": HTMLUserwidgetsUserListInviteCellElement;
-        "userwidgets-user-list-invited": HTMLUserwidgetsUserListInvitedElement;
         "userwidgets-user-list-organization": HTMLUserwidgetsUserListOrganizationElement;
         "userwidgets-user-list-row": HTMLUserwidgetsUserListRowElement;
         "userwidgets-user-permissions-update": HTMLUserwidgetsUserPermissionsUpdateElement;
-        "userwidgets-user-status": HTMLUserwidgetsUserStatusElement;
     }
 }
 declare namespace LocalJSX {
@@ -492,10 +467,6 @@ declare namespace LocalJSX {
         "organization"?: userwidgets.Organization | null;
         "state"?: model.State;
     }
-    interface UserwidgetsUserListInvited {
-        "onNotice"?: (event: UserwidgetsUserListInvitedCustomEvent<smoothly.Notice>) => void;
-        "state"?: model.State;
-    }
     interface UserwidgetsUserListOrganization {
         "state"?: model.State;
     }
@@ -510,10 +481,6 @@ declare namespace LocalJSX {
         "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<userwidgets.User.Permissions>) => void;
         "options"?: CustomOption[];
         "preventDefault"?: boolean;
-        "state"?: model.State;
-        "user"?: userwidgets.User;
-    }
-    interface UserwidgetsUserStatus {
         "state"?: model.State;
         "user"?: userwidgets.User;
     }
@@ -541,11 +508,9 @@ declare namespace LocalJSX {
         "userwidgets-user-list": UserwidgetsUserList;
         "userwidgets-user-list-invite": UserwidgetsUserListInvite;
         "userwidgets-user-list-invite-cell": UserwidgetsUserListInviteCell;
-        "userwidgets-user-list-invited": UserwidgetsUserListInvited;
         "userwidgets-user-list-organization": UserwidgetsUserListOrganization;
         "userwidgets-user-list-row": UserwidgetsUserListRow;
         "userwidgets-user-permissions-update": UserwidgetsUserPermissionsUpdate;
-        "userwidgets-user-status": UserwidgetsUserStatus;
     }
 }
 export { LocalJSX as JSX };
@@ -575,11 +540,9 @@ declare module "@stencil/core" {
             "userwidgets-user-list": LocalJSX.UserwidgetsUserList & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListElement>;
             "userwidgets-user-list-invite": LocalJSX.UserwidgetsUserListInvite & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInviteElement>;
             "userwidgets-user-list-invite-cell": LocalJSX.UserwidgetsUserListInviteCell & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInviteCellElement>;
-            "userwidgets-user-list-invited": LocalJSX.UserwidgetsUserListInvited & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListInvitedElement>;
             "userwidgets-user-list-organization": LocalJSX.UserwidgetsUserListOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListOrganizationElement>;
             "userwidgets-user-list-row": LocalJSX.UserwidgetsUserListRow & JSXBase.HTMLAttributes<HTMLUserwidgetsUserListRowElement>;
             "userwidgets-user-permissions-update": LocalJSX.UserwidgetsUserPermissionsUpdate & JSXBase.HTMLAttributes<HTMLUserwidgetsUserPermissionsUpdateElement>;
-            "userwidgets-user-status": LocalJSX.UserwidgetsUserStatus & JSXBase.HTMLAttributes<HTMLUserwidgetsUserStatusElement>;
         }
     }
 }
