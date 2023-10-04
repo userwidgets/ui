@@ -34,7 +34,7 @@ export class UserwidgetsLoginDialog {
 		return (
 			<Host>
 				<div class="plate">
-					<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+					<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 						<smoothly-input type="email" name="user">
 							{this.translate("Email")}
 						</smoothly-input>

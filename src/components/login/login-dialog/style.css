@@ -15,10 +15,10 @@ p {
 
 
 
-@media (max-width: 620px) {
+@media (max-width: 600px) {
 	.plate {
 		min-width: 300px;
-		margin: 0.5rem;
+		margin: 0.7rem;
 	}
 
 }
