@@ -2,3 +2,23 @@ p {
 	align-self: center;
 	margin-right: auto;
 }
+
+.plate {
+	padding:2rem 4rem 1rem 4rem ; 
+	background-color: rgba(var(--smoothly-color-contrast), 0.3);
+	border-radius: 3px;
+	z-index: 10;
+	text-align: center;
+}
+
+
+
+
+
+@media (max-width: 620px) {
+	.plate {
+		min-width: 300px;
+		margin: 0.5rem;
+	}
+
+}
