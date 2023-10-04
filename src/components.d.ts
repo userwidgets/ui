@@ -41,14 +41,15 @@ export namespace Components {
         "color": smoothly.Color;
         "state": model.State;
     }
-    interface UserwidgetsMe {
-        "state": model.State;
-    }
     interface UserwidgetsMeMenu {
         "open": boolean;
         "path": string;
         "state": model.State;
         "visible": boolean;
+    }
+    interface UserwidgetsMeName {
+        "state": model.State;
+        "user": userwidgets.User | undefined;
     }
     interface UserwidgetsOrganization {
         "organization": userwidgets.Organization;
@@ -135,6 +136,10 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
 }
+export interface UserwidgetsMeNameCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsMeNameElement;
+}
 export interface UserwidgetsOrganizationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsOrganizationElement;
@@ -216,17 +221,17 @@ declare global {
         prototype: HTMLUserwidgetsLogoutElement;
         new (): HTMLUserwidgetsLogoutElement;
     };
-    interface HTMLUserwidgetsMeElement extends Components.UserwidgetsMe, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsMeElement: {
-        prototype: HTMLUserwidgetsMeElement;
-        new (): HTMLUserwidgetsMeElement;
-    };
     interface HTMLUserwidgetsMeMenuElement extends Components.UserwidgetsMeMenu, HTMLStencilElement {
     }
     var HTMLUserwidgetsMeMenuElement: {
         prototype: HTMLUserwidgetsMeMenuElement;
         new (): HTMLUserwidgetsMeMenuElement;
+    };
+    interface HTMLUserwidgetsMeNameElement extends Components.UserwidgetsMeName, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsMeNameElement: {
+        prototype: HTMLUserwidgetsMeNameElement;
+        new (): HTMLUserwidgetsMeNameElement;
     };
     interface HTMLUserwidgetsOrganizationElement extends Components.UserwidgetsOrganization, HTMLStencilElement {
     }
@@ -339,8 +344,8 @@ declare global {
         "userwidgets-login-button": HTMLUserwidgetsLoginButtonElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
-        "userwidgets-me": HTMLUserwidgetsMeElement;
         "userwidgets-me-menu": HTMLUserwidgetsMeMenuElement;
+        "userwidgets-me-name": HTMLUserwidgetsMeNameElement;
         "userwidgets-organization": HTMLUserwidgetsOrganizationElement;
         "userwidgets-organization-list": HTMLUserwidgetsOrganizationListElement;
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
@@ -402,14 +407,16 @@ declare namespace LocalJSX {
         "color"?: smoothly.Color;
         "state"?: model.State;
     }
-    interface UserwidgetsMe {
-        "state"?: model.State;
-    }
     interface UserwidgetsMeMenu {
         "open"?: boolean;
         "path"?: string;
         "state"?: model.State;
         "visible"?: boolean;
+    }
+    interface UserwidgetsMeName {
+        "onNotice"?: (event: UserwidgetsMeNameCustomEvent<smoothly.Notice>) => void;
+        "state"?: model.State;
+        "user"?: userwidgets.User | undefined;
     }
     interface UserwidgetsOrganization {
         "onNotice"?: (event: UserwidgetsOrganizationCustomEvent<smoothly.Notice>) => void;
@@ -506,8 +513,8 @@ declare namespace LocalJSX {
         "userwidgets-login-button": UserwidgetsLoginButton;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
         "userwidgets-logout": UserwidgetsLogout;
-        "userwidgets-me": UserwidgetsMe;
         "userwidgets-me-menu": UserwidgetsMeMenu;
+        "userwidgets-me-name": UserwidgetsMeName;
         "userwidgets-organization": UserwidgetsOrganization;
         "userwidgets-organization-list": UserwidgetsOrganizationList;
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
@@ -539,8 +546,8 @@ declare module "@stencil/core" {
             "userwidgets-login-button": LocalJSX.UserwidgetsLoginButton & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginButtonElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
-            "userwidgets-me": LocalJSX.UserwidgetsMe & JSXBase.HTMLAttributes<HTMLUserwidgetsMeElement>;
             "userwidgets-me-menu": LocalJSX.UserwidgetsMeMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMeMenuElement>;
+            "userwidgets-me-name": LocalJSX.UserwidgetsMeName & JSXBase.HTMLAttributes<HTMLUserwidgetsMeNameElement>;
             "userwidgets-organization": LocalJSX.UserwidgetsOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationElement>;
             "userwidgets-organization-list": LocalJSX.UserwidgetsOrganizationList & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationListElement>;
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
