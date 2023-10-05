@@ -24,7 +24,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		this.#onUnauthorized = onUnauthorized
 		this.client.onUnauthorized = onUnauthorized
 	}
-	async login(user: userwidgets.User.Credentials): Promise<Me["key"]> {
+	async login(user: userwidgets.User.Credentials | userwidgets.User.Key): Promise<Me["key"]> {
 		const result = await this.client.me
 			.login(user)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))

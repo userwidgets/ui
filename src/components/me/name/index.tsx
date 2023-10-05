@@ -42,16 +42,20 @@ export class UserwidgetsMeName {
 			})
 		console.log("inputHandler, this.change", this.change, "event.detail", event.detail)
 	}
-	submitHandler(event: CustomEvent<smoothly.Data>) {
+	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
 		const name = this.change?.name
 		if (!userwidgets.User.Name.is(name))
 			this.notice.emit(smoothly.Notice.failed("Malformed name."))
 		else if (!this.token)
 			this.notice.emit(smoothly.Notice.failed("need a token"))
-		//fix error message
-		else
-			this.state.users.update(this.user?.email ?? this.token.email, { name })
+		//fix error message and flow, needs more checks(?)
+		else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name })))
+			this.notice.emit(smoothly.Notice.failed("failed to update name"))
+		else {
+			this.notice.emit(smoothly.Notice.succeeded("Your name has been updated"))
+			this.change = undefined
+		}
 	}
 	render() {
 		return (
