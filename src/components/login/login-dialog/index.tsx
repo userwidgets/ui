@@ -33,7 +33,7 @@ export class UserwidgetsLoginDialog {
 	render() {
 		return (
 			<Host>
-				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="email" name="user">
 						{this.translate("Email")}
 					</smoothly-input>
@@ -50,7 +50,9 @@ export class UserwidgetsLoginDialog {
 							</a>
 						</p>
 					) : null}
-					<smoothly-submit slot="submit">{this.translate("Login")}</smoothly-submit>
+					<smoothly-submit color="primary" slot="submit">
+						{this.translate("Login")}
+					</smoothly-submit>
 				</smoothly-form>
 			</Host>
 		)
