@@ -2,3 +2,17 @@ p {
 	align-self: center;
 	margin-right: auto;
 }
+
+smoothly-form {
+	padding: 4rem 8rem 3rem 8rem;
+	background-color: rgba(var(--smoothly-color-contrast), 0.3);
+	border-radius: 3px;
+	margin: 0.7rem;
+}
+
+@media (max-width: 600px) {
+	smoothly-form {
+		min-width: 300px;
+		margin: 0.7rem;
+	}
+}
