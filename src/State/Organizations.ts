@@ -68,7 +68,9 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 					.then(response => (Response.fetch.is(response) ? response : false)))
 		const result = await promise
 		this.request = undefined
-		return (this.listenable.value = result) || false
+		if (this.#value != result)
+			this.listenable.value = result
+		return result || false
 	}
 
 	async update(

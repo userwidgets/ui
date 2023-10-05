@@ -28,7 +28,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		const result = await this.client.me
 			.login(user)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result)
+		if (result && this.#key != result)
 			this.listenable.key = result
 		return result
 	}
@@ -39,7 +39,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		const result = await this.client.me
 			.register(invite, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result) {
+		if (result && this.#key != result) {
 			this.listenable.key = result
 			sessionStorage.setItem("token", result.token)
 		}
@@ -51,7 +51,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 			: await this.client.me
 					.join(invite)
 					.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
-		if (result) {
+		if (result && this.#key != result) {
 			this.listenable.key = result
 			sessionStorage.setItem("token", result.token)
 		}
