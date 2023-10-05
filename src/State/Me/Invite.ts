@@ -8,7 +8,6 @@ export class Invite extends smoothly.StateBase<Invite, userwidgets.ClientCollect
 		return this.#value ?? (this.fetch(), undefined)
 	}
 	set value(value: Invite["value"]) {
-		console.log("Invite setting value")
 		this.#value = value
 	}
 	async fetch(): Promise<NonNullable<Invite["value"]>> {
