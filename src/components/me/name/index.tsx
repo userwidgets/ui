@@ -5,8 +5,8 @@ import { model } from "../../../model"
 
 interface Change {
 	name: {
-		first: string
-		last: string
+		first?: string
+		last?: string
 	}
 }
 
@@ -20,9 +20,8 @@ export class UserwidgetsMeName {
 	@Prop() user: userwidgets.User | undefined
 	@State() token?: userwidgets.User.Key | false
 	@State() change?: Partial<Change>
-	@State() request?: ReturnType<typeof this.state.users.
+	@State() request?: ReturnType<typeof this.state.users.update>
 	@Event() notice: EventEmitter<smoothly.Notice>
-	private edit: false //don't think im going to need this one
 
 	async componentWillLoad() {
 		this.state.me.listen("key", key => (this.token = key))
@@ -37,14 +36,22 @@ export class UserwidgetsMeName {
 	}
 	inputHandler(event: CustomEvent<smoothly.Data>) {
 		if (this.change)
-			this.change = (({ name }) => ({ name }))({ ...this.change, ...event.detail })
+			this.change = (({ name }) => ({ name }))({
+				...this.change,
+				name: { ...this.change.name, ...(typeof event.detail.name == "object" && event.detail.name) },
+			})
+		console.log("inputHandler, this.change", this.change, "event.detail", event.detail)
 	}
 	submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
-		const name = { name: this.change?.name }
+		const name = this.change?.name
 		if (!userwidgets.User.Name.is(name))
 			this.notice.emit(smoothly.Notice.failed("Malformed name."))
-		else if (!(await (this.req)))
+		else if (!this.token)
+			this.notice.emit(smoothly.Notice.failed("need a token"))
+		//fix error message
+		else
+			this.state.users.update(this.user?.email ?? this.token.email, { name })
 	}
 	render() {
 		return (
@@ -54,20 +61,21 @@ export class UserwidgetsMeName {
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input
-						readonly={!this.edit}
-						name="First name"
+						readonly={!this.change}
+						name="name.first"
 						value={this.user ? this.user.name.first : this.token ? this.token.name.first : null}>
 						First name
 					</smoothly-input>
 					<smoothly-input
-						readonly={!this.edit}
-						name="Last name"
+						readonly={!this.change}
+						name="name.last"
 						value={this.user ? this.user.name.last : this.token ? this.token.name.last : null}>
 						Last name
 					</smoothly-input>
 					{/* edit-button is what we want to use */}
 					<userwidgets-edit-button
 						slot="submit"
+						state={this.state}
 						onUserwidgetsEditStart={e => this.editStart(e)}
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
 					/>
