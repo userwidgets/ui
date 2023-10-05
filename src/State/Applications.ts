@@ -28,9 +28,10 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 					.fetch()
 					.then(response => (!userwidgets.Application.is(response) ? false : response)))
 		const result = await promise
-		if (promise == this.request)
-			this.request = undefined
-		return (this.listenable.current = result) || false
+		this.request = undefined
+		if (this.#current != result)
+			this.listenable.current = result
+		return result || false
 	}
 	static create(
 		client: userwidgets.ClientCollection,

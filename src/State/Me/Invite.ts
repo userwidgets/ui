@@ -22,7 +22,9 @@ export class Invite extends smoothly.StateBase<Invite, userwidgets.ClientCollect
 		const result = await promise
 		if (promise == this.request)
 			this.request = undefined
-		return (this.listenable.value = result) || false
+		if (this.#value != result)
+			this.listenable.value = result
+		return result || false
 	}
 	static create(client: userwidgets.ClientCollection): smoothly.WithListenable<Invite> {
 		return smoothly.Listenable.load(new this(client))
