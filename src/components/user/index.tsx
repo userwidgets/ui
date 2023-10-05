@@ -1,12 +1,13 @@
-import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
+import { Component, Element, Event, EventEmitter, h, Host, Listen, Prop, State, Watch } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { Controls } from "smoothly/dist/types/components/picker/menu"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
 
 interface Change {
-	permissions: userwidgets.User.Permissions
+	permissions: string
 }
 @Component({
 	tag: "userwidgets-user",
@@ -21,8 +22,9 @@ export class UserwidgetsUser {
 	@State() key?: userwidgets.User.Key
 	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
-	@State() disabled = false
+	@State() processing = false
 	@Event() notice: EventEmitter<smoothly.Notice>
+	private controls?: Controls
 
 	componentWillLoad() {
 		this.state.me.listen("key", key => (this.key = key || undefined))
@@ -33,30 +35,51 @@ export class UserwidgetsUser {
 	componentDidRender() {
 		Array.from(this.element?.children ?? []).map(detail => detail.removeAttribute("hidden"))
 	}
+
+	@Listen("smoothlyPickerLoaded")
+	pickerLoadedHandler(event: CustomEvent<Controls>) {
+		event.stopPropagation()
+		this.controls = event.detail
+	}
+
 	@Watch("user")
 	userChanged() {
 		this.editEndHandler()
 	}
 	editStartHandler(event: CustomEvent) {
 		event.stopPropagation()
-		this.change = {}
+		this.controls?.remember()
+		this.change = { permissions: this.user.permissions }
 	}
 	editEndHandler(event?: CustomEvent) {
 		event?.stopPropagation()
 		this.change = undefined
+		this.controls?.restore()
 	}
 	inputHandler(event: CustomEvent<smoothly.Data>) {
 		event.stopPropagation()
 		if (this.change)
-			this.change = {}
+			this.change = (({ permissions }) => ({ permissions }))({ ...this.change, ...event.detail })
 	}
-	submitHandler(event: CustomEvent<smoothly.Data>) {
+	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		event.stopPropagation()
 		this.inputHandler(event)
+		if (!this.processing) {
+			this.processing = true
+			const user = userwidgets.User.Changeable.type.get(this.change)
+			if (!user) {
+				const message = `${this.translate("Malformed user")}`
+				console.error(this.change, userwidgets.User.Changeable.flaw(this.change))
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				await new Promise(resolve => setTimeout(resolve, 1000))
+			}
+			this.processing = false
+		}
 	}
 	async remove() {
-		if (!this.disabled && this.organization) {
-			this.disabled = true
+		if (!this.processing && this.organization) {
+			this.processing = true
 			const users = this.organization.users.filter(email => email != this.user.email)
 			const response = await this.state.organizations.update({ users }, { id: this.organization.id })
 			if (!response) {
@@ -70,7 +93,7 @@ export class UserwidgetsUser {
 				}`
 				this.notice.emit(smoothly.Notice.succeeded(message))
 			}
-			this.disabled = false
+			this.processing = false
 		}
 	}
 	render() {
@@ -79,6 +102,7 @@ export class UserwidgetsUser {
 				<slot name={`${this.user.email}-detail-start`} />
 				<smoothly-form
 					looks="grid"
+					processing={this.processing}
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input name={"name"} readonly value={`${this.user.name.first} ${this.user.name.last}`}>
@@ -87,9 +111,15 @@ export class UserwidgetsUser {
 					<smoothly-input name={"email"} readonly value={this.user.email}>
 						{this.translate("Email")}
 					</smoothly-input>
+					<userwidgets-permission-picker
+						name={"permissions"}
+						state={this.state}
+						user={this.user}
+						organization={this.organization || undefined}
+						readonly={!this.change}
+					/>
 					<div slot="submit" class={"buttons"}>
-						{/* enabled when implementing permission changing */}
-						{/* {!this.key ||
+						{!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,
 							this.organization?.id ?? "*",
@@ -97,14 +127,13 @@ export class UserwidgetsUser {
 						) ? null : (
 							<userwidgets-edit-button
 								state={this.state}
-								disabled={true}
-								changed={!!this.change}
+								disabled={this.processing || this.change?.permissions == this.user.permissions}
 								onUserwidgetsEditStart={e => {
 									this.editStartHandler(e)
 								}}
 								onUserwidgetsEditEnd={e => this.editEndHandler(e)}
 							/>
-						)} */}
+						)}
 						{!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,
@@ -117,8 +146,9 @@ export class UserwidgetsUser {
 								size="flexible"
 								color="danger"
 								type="button"
+								disabled={this.processing}
 								onClick={() => this.remove()}>
-								<smoothly-icon name="person-remove-outline" size="small"></smoothly-icon>
+								<smoothly-icon name="person-remove-outline" size="small" />
 							</smoothly-button>
 						)}
 					</div>

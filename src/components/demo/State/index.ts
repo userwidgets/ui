@@ -8,11 +8,11 @@ export class State extends smoothly.StateBase<State, Client> {
 	static create(client: Client): smoothly.WithListenable<State> {
 		const backend = new this(client)
 		const listenable = smoothly.Listenable.load(backend)
+		listenable.userwidgets.roles.translator = translation.create
 		listenable.userwidgets.roles.value = [
 			{ label: "Admin", permissions: id => `${id}` },
 			{ label: "User", permissions: id => `${id}.user.view ${id}.user.invite` },
 		]
-		listenable.userwidgets.roles.translator = translation.create
 		return listenable
 	}
 }

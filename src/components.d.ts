@@ -64,6 +64,14 @@ export namespace Components {
         "state": model.State;
         "user": userwidgets.User;
     }
+    interface UserwidgetsPermissionPicker {
+        "default": boolean;
+        "name": string;
+        "organization"?: userwidgets.Organization;
+        "readonly": boolean;
+        "state": model.State;
+        "user": userwidgets.User;
+    }
     interface UserwidgetsRegisterDialog {
         "invite": userwidgets.User.Invite;
         "state": model.State;
@@ -135,6 +143,10 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsOrganizationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsOrganizationElement;
+}
+export interface UserwidgetsPermissionPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsPermissionPickerElement;
 }
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -249,6 +261,12 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationUserRemoveElement;
         new (): HTMLUserwidgetsOrganizationUserRemoveElement;
     };
+    interface HTMLUserwidgetsPermissionPickerElement extends Components.UserwidgetsPermissionPicker, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsPermissionPickerElement: {
+        prototype: HTMLUserwidgetsPermissionPickerElement;
+        new (): HTMLUserwidgetsPermissionPickerElement;
+    };
     interface HTMLUserwidgetsRegisterDialogElement extends Components.UserwidgetsRegisterDialog, HTMLStencilElement {
     }
     var HTMLUserwidgetsRegisterDialogElement: {
@@ -336,6 +354,7 @@ declare global {
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
+        "userwidgets-permission-picker": HTMLUserwidgetsPermissionPickerElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-user": HTMLUserwidgetsUserElement;
@@ -413,6 +432,15 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsOrganizationUserRemove {
         "organization"?: any;
+        "state"?: model.State;
+        "user"?: userwidgets.User;
+    }
+    interface UserwidgetsPermissionPicker {
+        "default"?: boolean;
+        "name"?: string;
+        "onSmoothlyInput"?: (event: UserwidgetsPermissionPickerCustomEvent<smoothly.Data>) => void;
+        "organization"?: userwidgets.Organization;
+        "readonly"?: boolean;
         "state"?: model.State;
         "user"?: userwidgets.User;
     }
@@ -499,6 +527,7 @@ declare namespace LocalJSX {
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
+        "userwidgets-permission-picker": UserwidgetsPermissionPicker;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-user": UserwidgetsUser;
@@ -531,6 +560,7 @@ declare module "@stencil/core" {
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
+            "userwidgets-permission-picker": LocalJSX.UserwidgetsPermissionPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsPermissionPickerElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;

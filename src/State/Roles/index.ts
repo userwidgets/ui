@@ -32,7 +32,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 	}
 	#value?: Roles["value"]
 	get value(): Role[] | undefined {
-		return this.#value ?? this.default
+		return this.#value ?? (console.log("getting default as fallback for value"), this.default)
 	}
 	set value(roles: Roles["value"]) {
 		this.#value = roles?.map(role => Role.translate(role, this.#translate))
