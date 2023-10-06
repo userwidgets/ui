@@ -55,6 +55,7 @@ export class UserwidgetsMeName {
 		else {
 			this.notice.emit(smoothly.Notice.succeeded("Your name has been updated"))
 			this.change = undefined
+			this.request = undefined
 		}
 	}
 	render() {
@@ -76,10 +77,11 @@ export class UserwidgetsMeName {
 						value={this.user ? this.user.name.last : this.token ? this.token.name.last : null}>
 						Last name
 					</smoothly-input>
-					{/* edit-button is what we want to use */}
 					<userwidgets-edit-button
 						slot="submit"
 						state={this.state}
+						disabled={!!this.request} //add check to disable if this.change.name == original name
+						changed={!!this.change}
 						onUserwidgetsEditStart={e => this.editStart(e)}
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
 					/>
