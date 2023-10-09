@@ -59,6 +59,7 @@ export class UserwidgetsPasswordChange {
 		return (
 			<Host>
 				<smoothly-form
+					processing={!!this.request}
 					looks="border"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
