@@ -61,7 +61,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 			this.request = undefined
 		return (this.listenable.value = result) || false
 	}
-	async update( //this function requires more control and checks. More error messages. Also a success message if everything was successful.
+	async update(
 		email: userwidgets.Email,
 		user: userwidgets.User.Changeable,
 		options?: { entityTag?: string }
@@ -71,28 +71,12 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 			: this.client.user
 					.update(email, user, options)
 					.then(response => (!userwidgets.User.is(response) ? false : response))
-		// this should reauthenticate the user by using the login function(?) but giving it the current token instead of the email and password as credentials
-		// maybe modify login function to handle token as well?
 		const result = await promise
 		console.log("state update", result, "this.state.me.key", this.state.me.key)
 		if (result && this.state.me.key)
 			this.state.me.login(this.state.me.key)
 		return result || false
 	}
-	// async updatePermissions(
-	// 	email: string,
-	// 	permissions: userwidgets.User.Permissions.Readable
-	// ): Promise<userwidgets.User | false> {
-	// 	const promise = !this.state.organizations.current
-	// 		? undefined
-	// 		: this.client.user
-	// 				.updatePermissions(email, this.state.organizations.current.id, permissions)
-	// 				.then(response => (!userwidgets.User.is(response) ? false : response))
-	// 	const result = await promise
-	// 	if (result)
-	// 		this.fetch()
-	// 	return result || false
-	// }
 	static create(
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>,

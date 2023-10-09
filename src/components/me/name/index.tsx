@@ -49,7 +49,6 @@ export class UserwidgetsMeName {
 			this.notice.emit(smoothly.Notice.failed("Malformed name."))
 		else if (!this.token)
 			this.notice.emit(smoothly.Notice.failed("need a token"))
-		//fix error message and flow, needs more checks(?)
 		else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name })))
 			this.notice.emit(smoothly.Notice.failed("failed to update name"))
 		else {
@@ -80,7 +79,7 @@ export class UserwidgetsMeName {
 					<userwidgets-edit-button
 						slot="submit"
 						state={this.state}
-						disabled={!!this.request} //add check to disable if this.change.name == original name
+						disabled={!!this.request}
 						changed={!!this.change}
 						onUserwidgetsEditStart={e => this.editStart(e)}
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
