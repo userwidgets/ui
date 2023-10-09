@@ -73,6 +73,7 @@ export class UserwidgetsMeName {
 					looks="border"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+					<slot />
 					<smoothly-input
 						readonly={!this.change}
 						name="name.first"
