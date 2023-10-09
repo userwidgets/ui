@@ -76,13 +76,13 @@ export class UserwidgetsMeName {
 						readonly={!this.change}
 						name="name.first"
 						value={this.user ? this.user.name.first : this.token ? this.token.name.first : null}>
-						First name
+						{this.translate("First name")}
 					</smoothly-input>
 					<smoothly-input
 						readonly={!this.change}
 						name="name.last"
 						value={this.user ? this.user.name.last : this.token ? this.token.name.last : null}>
-						Last name
+						{this.translate("Last name")}
 					</smoothly-input>
 					<userwidgets-edit-button
 						slot="submit"
