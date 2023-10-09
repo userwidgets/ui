@@ -67,12 +67,18 @@ export class UserwidgetsUser {
 		if (!this.processing) {
 			this.processing = true
 			const user = userwidgets.User.Changeable.type.get(this.change)
+			console.log("user", user)
 			if (!user) {
 				const message = `${this.translate("Malformed user")}`
 				console.error(this.change, userwidgets.User.Changeable.flaw(this.change))
 				this.notice.emit(smoothly.Notice.failed(message))
+			} else if (!(await this.state.users.update(this.user.email, user))) {
+				const message = `${this.translate("Failed to update user")}: ${this.user.email}`
+				this.notice.emit(smoothly.Notice.failed(message))
 			} else {
-				await new Promise(resolve => setTimeout(resolve, 1000))
+				const message = `${this.translate("Successfully updated user")}: ${this.user.email}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+				this.change = undefined
 			}
 			this.processing = false
 		}
@@ -128,6 +134,7 @@ export class UserwidgetsUser {
 							<userwidgets-edit-button
 								state={this.state}
 								disabled={this.processing || this.change?.permissions == this.user.permissions}
+								changed={!!this.change}
 								onUserwidgetsEditStart={e => {
 									this.editStartHandler(e)
 								}}

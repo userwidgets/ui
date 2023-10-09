@@ -46,11 +46,16 @@ export class UserwidgetsPermissionPicker {
 	inputHandler(event: CustomEvent<smoothly.Data>) {
 		if (event.target != this.element) {
 			event.stopPropagation()
-			if (Permissions.type.is(event.detail.permissions)) {
+			if (this.organization && Permissions.type.is(event.detail.permissions)) {
+				const organization = this.organization
 				this.smoothlyInput.emit({
 					permissions: event.detail.permissions.reduce(
 						(result, permission) => userwidgets.User.Permissions.merge(result, permission),
-						""
+						userwidgets.User.Permissions.set(
+							userwidgets.User.Permissions.remove(this.user.permissions, organization.id, false),
+							organization.id,
+							["user.read"] // default userwidgets permissions
+						)
 					),
 				})
 			}
