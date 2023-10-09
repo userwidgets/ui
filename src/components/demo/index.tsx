@@ -26,7 +26,7 @@ export class Demo {
 								<userwidgets-demo-organization state={this.state.userwidgets} />
 							</smoothly-app-room>
 							<smoothly-app-room path={"/settings"}>
-								<userwidgets-me-name state={this.state.userwidgets} />
+								<userwidgets-demo-settings state={this.state.userwidgets} />
 							</smoothly-app-room>
 							<userwidgets-me-menu slot="nav-end" state={this.state.userwidgets}>
 								<smoothly-button slot="action" type="link" link={"/settings"} fill="solid" size="flexible">
