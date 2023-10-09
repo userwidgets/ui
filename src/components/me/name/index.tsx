@@ -48,14 +48,18 @@ export class UserwidgetsMeName {
 	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
 		const name = this.change?.name
-		if (!userwidgets.User.Name.is(name))
-			this.notice.emit(smoothly.Notice.failed(`${this.translate("Malformed name.")}`))
-		else if (!this.token)
-			this.notice.emit(smoothly.Notice.failed(`${this.translate("Need a token")}`))
-		else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name })))
-			this.notice.emit(smoothly.Notice.failed(`${this.translate("Failed to update name")}`))
-		else {
-			this.notice.emit(smoothly.Notice.succeeded(`${this.translate("Your name has been updated")}`))
+		if (!userwidgets.User.Name.is(name)) {
+			const message = `${this.translate("Malformed name.")}`
+			this.notice.emit(smoothly.Notice.failed(message))
+		} else if (!this.token) {
+			const message = `${this.translate("Need a token")}`
+			this.notice.emit(smoothly.Notice.failed(message))
+		} else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name }))) {
+			const message = `${this.translate("Failed to update name")}`
+			this.notice.emit(smoothly.Notice.failed(message))
+		} else {
+			const message = `${this.translate("Your name has been updated")}`
+			this.notice.emit(smoothly.Notice.succeeded(message))
 			this.change = undefined
 			this.request = undefined
 		}
