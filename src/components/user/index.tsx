@@ -67,7 +67,6 @@ export class UserwidgetsUser {
 		if (!this.processing) {
 			this.processing = true
 			const user = userwidgets.User.Changeable.type.get(this.change)
-			console.log("user", user)
 			if (!user) {
 				const message = `${this.translate("Malformed user")}`
 				console.error(this.change, userwidgets.User.Changeable.flaw(this.change))
