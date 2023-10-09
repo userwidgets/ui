@@ -13,9 +13,9 @@ export class Roles extends smoothly.StateBase<Roles> {
 	#admin = false
 	private set key(key: Me["key"]) {
 		this.#admin = !!(key && userwidgets.User.Permissions.check(key.permissions, "*", "user.edit"))
-		const default_ = this.#admin ? this.#application : this.#organization
-		if (default_ != this.#default)
-			this.listenable.default = default_
+		const roles = this.#admin ? this.#application : this.#organization
+		if (roles != this.#default)
+			this.listenable.default = roles
 	}
 	#translate: Role.Translate = {}
 	#translator: {
