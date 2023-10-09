@@ -1,13 +1,9 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
-// import { langly } from "langly"
+import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
-// import * as translation from "./translation"
-
-// interface Change {
-// 	password: userwidgets.User.Password.Change
-// }
+import * as translation from "./translation"
 
 @Component({
 	tag: "userwidgets-password-change",
@@ -20,16 +16,16 @@ export class UserwidgetsPasswordChange {
 	@State() token?: userwidgets.User.Key | false
 	@State() change?: Partial<userwidgets.User.Password.Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
-	// @State() translate: langly.Translate = translation.create(document.documentElement)
+	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	async componentWillLoad() {
 		this.state.me.listen("key", key => (this.token = key))
-		// this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	editStart(event: CustomEvent) {
 		event.stopPropagation()
-		this.change = { old: "" } //fix
+		this.change = { old: "" }
 	}
 	editEnd(event?: CustomEvent) {
 		event?.stopPropagation()
@@ -44,14 +40,17 @@ export class UserwidgetsPasswordChange {
 		this.inputHandler(event)
 		const password = this.change
 		if (!userwidgets.User.Password.Change.is(password)) {
-			//translate
-			this.notice.emit(smoothly.Notice.failed("not password change"))
+			const message = `${this.translate("Malformed name.")}`
+			this.notice.emit(smoothly.Notice.failed(message))
 		} else if (!this.token) {
-			this.notice.emit(smoothly.Notice.failed("Need a token"))
+			const message = `${this.translate("Need a token")}`
+			this.notice.emit(smoothly.Notice.failed(message))
 		} else if (!(await this.state.users.update(this.token.email, { password }))) {
-			this.notice.emit(smoothly.Notice.failed("failed to update password"))
+			const message = `${this.translate("Failed to update password")}`
+			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			this.notice.emit(smoothly.Notice.succeeded("Success"))
+			const message = `${this.translate("Your password has been updated")}`
+			this.notice.emit(smoothly.Notice.succeeded(message))
 			this.change = undefined
 			this.request = undefined
 		}
@@ -64,14 +63,13 @@ export class UserwidgetsPasswordChange {
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input type="password" readonly={!this.change} name="password.old">
-						{/* translate */}
-						Old password
+						{this.translate("Old password")}
 					</smoothly-input>
 					<smoothly-input type="password" readonly={!this.change} name="password.new">
-						New password
+						{this.translate("New password")}
 					</smoothly-input>
 					<smoothly-input type="password" readonly={!this.change} name="password.repeat">
-						Repeat new password
+						{this.translate("Repeat new password")}
 					</smoothly-input>
 					<userwidgets-edit-button
 						slot="submit"
