@@ -1,7 +1,9 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
+import * as translation from "./translation"
 
 interface Change {
 	name: {
@@ -21,6 +23,7 @@ export class UserwidgetsMeName {
 	@State() token?: userwidgets.User.Key | false
 	@State() change?: Partial<Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
+	@State() translate: langly.Translate = translation.create("en")
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	async componentWillLoad() {
@@ -46,13 +49,13 @@ export class UserwidgetsMeName {
 		this.inputHandler(event)
 		const name = this.change?.name
 		if (!userwidgets.User.Name.is(name))
-			this.notice.emit(smoothly.Notice.failed("Malformed name."))
+			this.notice.emit(smoothly.Notice.failed(`${this.translate("Malformed name.")}`))
 		else if (!this.token)
-			this.notice.emit(smoothly.Notice.failed("need a token"))
+			this.notice.emit(smoothly.Notice.failed(`${this.translate("Need a token")}`))
 		else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name })))
-			this.notice.emit(smoothly.Notice.failed("failed to update name"))
+			this.notice.emit(smoothly.Notice.failed(`${this.translate("Failed to update name")}`))
 		else {
-			this.notice.emit(smoothly.Notice.succeeded("Your name has been updated"))
+			this.notice.emit(smoothly.Notice.succeeded(`${this.translate("Your name has been updated")}`))
 			this.change = undefined
 			this.request = undefined
 		}
