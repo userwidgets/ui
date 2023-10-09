@@ -54,7 +54,7 @@ export class UserwidgetsMeName {
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
-		} else if (!(await this.state.users.update(this.user?.email ?? this.token.email, { name }))) {
+		} else if (!(await (this.request = this.state.users.update(this.user?.email ?? this.token.email, { name })))) {
 			const message = `${this.translate("Failed to update name")}`
 			this.notice.emit(smoothly.Notice.failed(message))
 		} else {

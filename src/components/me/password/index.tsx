@@ -45,7 +45,7 @@ export class UserwidgetsPasswordChange {
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
-		} else if (!(await this.state.users.update(this.token.email, { password }))) {
+		} else if (!(await (this.request = this.state.users.update(this.token.email, { password })))) {
 			const message = `${this.translate("Failed to update password")}`
 			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
