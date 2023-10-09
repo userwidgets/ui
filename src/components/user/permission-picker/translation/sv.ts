@@ -1,2 +1,5 @@
 /* eslint-disable prettierx/options */
-export const sv = {}
+export const sv = {
+	"Permissions": "Rättigheter",
+	"Search": "Sök",
+}

@@ -62,20 +62,20 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 			this.listenable.value = result
 		return result || false
 	}
-	async updatePermissions(
-		email: string,
-		permissions: userwidgets.User.Permissions.Readable
-	): Promise<userwidgets.User | false> {
-		const promise = !this.state.organizations.current
-			? undefined
-			: this.client.user
-					.updatePermissions(email, this.state.organizations.current.id, permissions)
-					.then(response => (!userwidgets.User.is(response) ? false : response))
-		const result = await promise
-		if (result)
-			this.fetch()
-		return result || false
-	}
+	// async updatePermissions(
+	// 	email: string,
+	// 	permissions: userwidgets.User.Permissions.Readable
+	// ): Promise<userwidgets.User | false> {
+	// 	const promise = !this.state.organizations.current
+	// 		? undefined
+	// 		: this.client.user
+	// 				.updatePermissions(email, this.state.organizations.current.id, permissions)
+	// 				.then(response => (!userwidgets.User.is(response) ? false : response))
+	// 	const result = await promise
+	// 	if (result)
+	// 		this.fetch()
+	// 	return result || false
+	// }
 	static create(
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>,

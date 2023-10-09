@@ -12,8 +12,8 @@ export class State extends smoothly.StateBase<State, ClientCollection> {
 	readonly me = State.Me.create(this.client)
 	readonly applications = State.Applications.create(this.client, this.me)
 	readonly organizations = State.Organizations.create(this.client, this.me)
-	readonly roles = State.Roles.create(this.locales, this.applications)
 	readonly users = State.Users.create(this.client, this.me, this.organizations)
+	readonly roles = State.Roles.create(this.locales, this.me, this.applications, this.organizations)
 	static create(client: ClientCollection): smoothly.WithListenable<State> {
 		return smoothly.Listenable.load(new this(client))
 	}

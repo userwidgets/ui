@@ -9,6 +9,12 @@ export namespace Role {
 		default?: langly.Translate | undefined
 		custom?: langly.Translate | undefined
 	}
+	export function from(permissions: string[]): Role[] {
+		return permissions.map(permission => ({
+			permissions: id => `${id}.${permission}`,
+			label: (permission.at(0)?.toLocaleUpperCase() ?? "") + permission.slice(1).split(".").join(" "),
+		}))
+	}
 	export function translate(role: Role, translate: Translate): Role {
 		return (({ label: display, ...role }) => ({
 			...role,

@@ -10,6 +10,7 @@ export class State extends smoothly.StateBase<State, Client> {
 		const listenable = smoothly.Listenable.load(backend)
 		listenable.userwidgets.roles.translator = translation.create
 		listenable.userwidgets.roles.value = [
+			{ label: "Super admin", permissions: id => `* ${id}` },
 			{ label: "Admin", permissions: id => `${id}` },
 			{ label: "User", permissions: id => `${id}.user.view ${id}.user.invite` },
 		]

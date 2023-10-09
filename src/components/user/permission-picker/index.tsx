@@ -19,7 +19,7 @@ namespace Permissions {
 export class UserwidgetsPermissionPicker {
 	@Element() element: HTMLElement
 	@Prop() state: model.State
-	@Prop() organization?: userwidgets.Organization
+	@Prop() organization: userwidgets.Organization
 	@Prop() user: userwidgets.User
 	@Prop() default = false
 	@Prop() readonly = false
@@ -60,7 +60,7 @@ export class UserwidgetsPermissionPicker {
 		return (
 			<Host>
 				<smoothly-picker
-					key={(this.organization?.id ?? "") + this.roles?.map(role => role.label).join(" ")}
+					key={this.organization.id + this.roles?.map(role => role.label).join(" ")}
 					name={this.name}
 					mutable={false}
 					multiple={true}
@@ -68,17 +68,16 @@ export class UserwidgetsPermissionPicker {
 					onSmoothlyInput={e => this.inputHandler(e)}>
 					<span slot="label">{this.translate("Permissions")}</span>
 					<span slot="search">{this.translate("Search")}</span>
-					{this.organization &&
-						this.roles?.map(role => {
-							const permissions = !this.organization?.id ? undefined : role.permissions(this.organization.id)
-							return permissions == undefined ? null : (
-								<smoothly-picker-option
-									selected={userwidgets.User.Permissions.check(this.user.permissions, permissions)}
-									value={permissions}>
-									{role.label}
-								</smoothly-picker-option>
-							)
-						})}
+					{this.roles?.map(role => {
+						const permissions = role.permissions(this.organization.id)
+						return permissions == undefined ? null : (
+							<smoothly-picker-option
+								selected={userwidgets.User.Permissions.check(this.user.permissions, permissions)}
+								value={permissions}>
+								{role.label}
+							</smoothly-picker-option>
+						)
+					})}
 				</smoothly-picker>
 			</Host>
 		)

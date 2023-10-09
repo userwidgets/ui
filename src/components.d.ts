@@ -67,7 +67,7 @@ export namespace Components {
     interface UserwidgetsPermissionPicker {
         "default": boolean;
         "name": string;
-        "organization"?: userwidgets.Organization;
+        "organization": userwidgets.Organization;
         "readonly": boolean;
         "state": model.State;
         "user": userwidgets.User;
