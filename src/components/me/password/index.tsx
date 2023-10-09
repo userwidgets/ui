@@ -66,6 +66,7 @@ export class UserwidgetsPasswordChange {
 					looks="border"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+					<input type="email" name="email" value={(this.token || undefined)?.email} />
 					<smoothly-input type="password" readonly={!this.change} name="password.old">
 						{this.translate("Old password")}
 					</smoothly-input>
