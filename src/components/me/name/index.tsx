@@ -44,7 +44,6 @@ export class UserwidgetsMeName {
 				...this.change,
 				name: { ...this.change.name, ...(typeof event.detail.name == "object" && event.detail.name) },
 			})
-		console.log("inputHandler, this.change", this.change, "event.detail", event.detail)
 	}
 	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
