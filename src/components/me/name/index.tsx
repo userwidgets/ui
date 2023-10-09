@@ -62,8 +62,8 @@ export class UserwidgetsMeName {
 			const message = `${this.translate("Your name has been updated")}`
 			this.notice.emit(smoothly.Notice.succeeded(message))
 			this.change = undefined
-			this.request = undefined
 		}
+		this.request = undefined
 	}
 	render() {
 		return (

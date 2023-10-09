@@ -25,7 +25,7 @@ export class UserwidgetsPasswordChange {
 	}
 	editStart(event: CustomEvent) {
 		event.stopPropagation()
-		this.change = { old: "" }
+		this.change = {}
 	}
 	editEnd(event?: CustomEvent) {
 		event?.stopPropagation()
@@ -52,8 +52,8 @@ export class UserwidgetsPasswordChange {
 			const message = `${this.translate("Your password has been updated")}`
 			this.notice.emit(smoothly.Notice.succeeded(message))
 			this.change = undefined
-			this.request = undefined
 		}
+		this.request = undefined
 	}
 	render() {
 		return (
@@ -75,7 +75,7 @@ export class UserwidgetsPasswordChange {
 					<userwidgets-edit-button
 						slot="submit"
 						state={this.state}
-						disabled={!!this.request}
+						disabled={!!this.request || !this.change?.old || !this.change?.new || !this.change?.repeat}
 						changed={!!this.change}
 						onUserwidgetsEditStart={e => this.editStart(e)}
 						onUserwidgetsEditEnd={e => this.editEnd(e)}
