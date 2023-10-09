@@ -16,11 +16,11 @@ export namespace Role {
 		}))
 	}
 	export function translate(role: Role, translate: Translate): Role {
-		return (({ label: display, ...role }) => ({
+		return (({ label, ...role }) => ({
 			...role,
 			get label(): string {
-				const custom = translate.custom?.(display) ?? display
-				const result = translate.default?.(custom) ?? display
+				const custom = translate.custom?.(label) ?? label
+				const result = translate.default?.(custom) ?? label
 				return result
 			},
 		}))(role)
