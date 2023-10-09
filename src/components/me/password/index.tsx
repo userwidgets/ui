@@ -34,14 +34,14 @@ export class UserwidgetsPasswordChange {
 	inputHandler(event: CustomEvent<smoothly.Data>) {
 		if (this.change)
 			this.change = { ...this.change, ...(typeof event.detail.password == "object" && event.detail.password) }
-		console.log("inputHandler, this.change", this.change, "event.detail", event.detail)
 	}
 	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
-		const password = this.change
-		if (!userwidgets.User.Password.Change.is(password)) {
+		const password = userwidgets.User.Password.Change.type.get(this.change)
+		if (!password) {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
+			console.log("password flaw", userwidgets.User.Password.Change.flaw(password))
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))

@@ -47,10 +47,11 @@ export class UserwidgetsMeName {
 	}
 	async submitHandler(event: CustomEvent<smoothly.Data>) {
 		this.inputHandler(event)
-		const name = this.change?.name
-		if (!userwidgets.User.Name.is(name)) {
+		const name = userwidgets.User.Name.type.get(this.change?.name)
+		if (!name) {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
+			console.log("Change name flaw", userwidgets.User.Name.flaw(name))
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
