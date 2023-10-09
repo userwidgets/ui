@@ -23,11 +23,12 @@ export class UserwidgetsMeName {
 	@State() token?: userwidgets.User.Key | false
 	@State() change?: Partial<Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
-	@State() translate: langly.Translate = translation.create("en")
+	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	async componentWillLoad() {
 		this.state.me.listen("key", key => (this.token = key))
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	editStart(event: CustomEvent) {
 		event.stopPropagation()
