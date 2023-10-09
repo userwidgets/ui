@@ -27,6 +27,7 @@ export class Demo {
 							</smoothly-app-room>
 							<smoothly-app-room path={"/settings"}>
 								<userwidgets-me-name state={this.state} />
+								<userwidgets-password-change state={this.state} />
 							</smoothly-app-room>
 
 							<userwidgets-me-menu slot="nav-end" state={this.state}>
