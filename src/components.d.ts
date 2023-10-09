@@ -68,6 +68,10 @@ export namespace Components {
         "state": model.State;
         "user": userwidgets.User;
     }
+    interface UserwidgetsPasswordChange {
+        "state": model.State;
+        "user": userwidgets.User | undefined;
+    }
     interface UserwidgetsRegisterDialog {
         "invite": userwidgets.User.Invite;
         "state": model.State;
@@ -143,6 +147,10 @@ export interface UserwidgetsMeNameCustomEvent<T> extends CustomEvent<T> {
 export interface UserwidgetsOrganizationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsOrganizationElement;
+}
+export interface UserwidgetsPasswordChangeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsPasswordChangeElement;
 }
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -263,6 +271,12 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationUserRemoveElement;
         new (): HTMLUserwidgetsOrganizationUserRemoveElement;
     };
+    interface HTMLUserwidgetsPasswordChangeElement extends Components.UserwidgetsPasswordChange, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsPasswordChangeElement: {
+        prototype: HTMLUserwidgetsPasswordChangeElement;
+        new (): HTMLUserwidgetsPasswordChangeElement;
+    };
     interface HTMLUserwidgetsRegisterDialogElement extends Components.UserwidgetsRegisterDialog, HTMLStencilElement {
     }
     var HTMLUserwidgetsRegisterDialogElement: {
@@ -351,6 +365,7 @@ declare global {
         "userwidgets-organization-picker": HTMLUserwidgetsOrganizationPickerElement;
         "userwidgets-organization-user-reinvite": HTMLUserwidgetsOrganizationUserReinviteElement;
         "userwidgets-organization-user-remove": HTMLUserwidgetsOrganizationUserRemoveElement;
+        "userwidgets-password-change": HTMLUserwidgetsPasswordChangeElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-user": HTMLUserwidgetsUserElement;
@@ -436,6 +451,11 @@ declare namespace LocalJSX {
         "state"?: model.State;
         "user"?: userwidgets.User;
     }
+    interface UserwidgetsPasswordChange {
+        "onNotice"?: (event: UserwidgetsPasswordChangeCustomEvent<smoothly.Notice>) => void;
+        "state"?: model.State;
+        "user"?: userwidgets.User | undefined;
+    }
     interface UserwidgetsRegisterDialog {
         "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<smoothly.Notice>) => void;
@@ -520,6 +540,7 @@ declare namespace LocalJSX {
         "userwidgets-organization-picker": UserwidgetsOrganizationPicker;
         "userwidgets-organization-user-reinvite": UserwidgetsOrganizationUserReinvite;
         "userwidgets-organization-user-remove": UserwidgetsOrganizationUserRemove;
+        "userwidgets-password-change": UserwidgetsPasswordChange;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-user": UserwidgetsUser;
@@ -553,6 +574,7 @@ declare module "@stencil/core" {
             "userwidgets-organization-picker": LocalJSX.UserwidgetsOrganizationPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationPickerElement>;
             "userwidgets-organization-user-reinvite": LocalJSX.UserwidgetsOrganizationUserReinvite & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserReinviteElement>;
             "userwidgets-organization-user-remove": LocalJSX.UserwidgetsOrganizationUserRemove & JSXBase.HTMLAttributes<HTMLUserwidgetsOrganizationUserRemoveElement>;
+            "userwidgets-password-change": LocalJSX.UserwidgetsPasswordChange & JSXBase.HTMLAttributes<HTMLUserwidgetsPasswordChangeElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;

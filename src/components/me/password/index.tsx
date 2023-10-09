@@ -18,7 +18,7 @@ export class UserwidgetsPasswordChange {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User | undefined
 	@State() token?: userwidgets.User.Key | false
-	@State() change?: userwidgets.User.Password.Change
+	@State() change?: Partial<userwidgets.User.Password.Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
 	// @State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
@@ -29,7 +29,7 @@ export class UserwidgetsPasswordChange {
 	}
 	editStart(event: CustomEvent) {
 		event.stopPropagation()
-		this.change = undefined
+		this.change = { old: "" } //fix
 	}
 	editEnd(event?: CustomEvent) {
 		event?.stopPropagation()
@@ -37,7 +37,6 @@ export class UserwidgetsPasswordChange {
 	}
 	inputHandler(event: CustomEvent<smoothly.Data>) {
 		if (this.change)
-			//if we have change then unpack old change and then add the new stuff from event.detail
 			this.change = { ...this.change, ...(typeof event.detail.password == "object" && event.detail.password) }
 		console.log("inputHandler, this.change", this.change, "event.detail", event.detail)
 	}
@@ -45,14 +44,14 @@ export class UserwidgetsPasswordChange {
 		this.inputHandler(event)
 		const password = this.change
 		if (!userwidgets.User.Password.Change.is(password)) {
+			//translate
 			this.notice.emit(smoothly.Notice.failed("not password change"))
 		} else if (!this.token) {
 			this.notice.emit(smoothly.Notice.failed("Need a token"))
 		} else if (!(await this.state.users.update(this.token.email, { password }))) {
 			this.notice.emit(smoothly.Notice.failed("failed to update password"))
 		} else {
-			// const message = `${this.translate("Your name has been updated")}`
-			this.notice.emit(smoothly.Notice.succeeded("succeded"))
+			this.notice.emit(smoothly.Notice.succeeded("Success"))
 			this.change = undefined
 			this.request = undefined
 		}
@@ -64,14 +63,14 @@ export class UserwidgetsPasswordChange {
 					looks="border"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
-					{/* no idea if name or value is correct on inputs */}
-					<smoothly-input readonly={!this.change} name="password.old" value={null}>
+					<smoothly-input type="password" readonly={!this.change} name="password.old">
+						{/* translate */}
 						Old password
 					</smoothly-input>
-					<smoothly-input readonly={!this.change} name="password.new" value={null}>
+					<smoothly-input type="password" readonly={!this.change} name="password.new">
 						New password
 					</smoothly-input>
-					<smoothly-input readonly={!this.change} name="password.repeat" value={null}>
+					<smoothly-input type="password" readonly={!this.change} name="password.repeat">
 						Repeat new password
 					</smoothly-input>
 					<userwidgets-edit-button
