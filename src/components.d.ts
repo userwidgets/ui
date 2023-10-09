@@ -17,6 +17,9 @@ export namespace Components {
     interface UserwidgetsDemoOrganization {
         "state": State;
     }
+    interface UserwidgetsDemoSettings {
+        "state": model.State;
+    }
     interface UserwidgetsDemoUser {
         "state": model.State;
     }
@@ -193,6 +196,12 @@ declare global {
         prototype: HTMLUserwidgetsDemoOrganizationElement;
         new (): HTMLUserwidgetsDemoOrganizationElement;
     };
+    interface HTMLUserwidgetsDemoSettingsElement extends Components.UserwidgetsDemoSettings, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsDemoSettingsElement: {
+        prototype: HTMLUserwidgetsDemoSettingsElement;
+        new (): HTMLUserwidgetsDemoSettingsElement;
+    };
     interface HTMLUserwidgetsDemoUserElement extends Components.UserwidgetsDemoUser, HTMLStencilElement {
     }
     var HTMLUserwidgetsDemoUserElement: {
@@ -352,6 +361,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "userwidgets-demo": HTMLUserwidgetsDemoElement;
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
+        "userwidgets-demo-settings": HTMLUserwidgetsDemoSettingsElement;
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
         "userwidgets-edit-button": HTMLUserwidgetsEditButtonElement;
         "userwidgets-login": HTMLUserwidgetsLoginElement;
@@ -385,6 +395,9 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsDemoOrganization {
         "state"?: State;
+    }
+    interface UserwidgetsDemoSettings {
+        "state"?: model.State;
     }
     interface UserwidgetsDemoUser {
         "state"?: model.State;
@@ -527,6 +540,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "userwidgets-demo": UserwidgetsDemo;
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
+        "userwidgets-demo-settings": UserwidgetsDemoSettings;
         "userwidgets-demo-user": UserwidgetsDemoUser;
         "userwidgets-edit-button": UserwidgetsEditButton;
         "userwidgets-login": UserwidgetsLogin;
@@ -561,6 +575,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "userwidgets-demo": LocalJSX.UserwidgetsDemo & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoElement>;
             "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
+            "userwidgets-demo-settings": LocalJSX.UserwidgetsDemoSettings & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoSettingsElement>;
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
             "userwidgets-edit-button": LocalJSX.UserwidgetsEditButton & JSXBase.HTMLAttributes<HTMLUserwidgetsEditButtonElement>;
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
