@@ -17,6 +17,7 @@ export class UserwidgetsPasswordChange {
 	@State() change?: Partial<userwidgets.User.Password.Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
+	private form?: HTMLSmoothlyFormElement
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	async componentWillLoad() {
@@ -52,6 +53,7 @@ export class UserwidgetsPasswordChange {
 			const message = `${this.translate("Your password has been updated")}`
 			this.notice.emit(smoothly.Notice.succeeded(message))
 			this.change = undefined
+			this.form?.clear()
 		}
 		this.request = undefined
 	}
@@ -59,6 +61,7 @@ export class UserwidgetsPasswordChange {
 		return (
 			<Host>
 				<smoothly-form
+					ref={e => (this.form = e)}
 					processing={!!this.request}
 					looks="border"
 					onSmoothlyFormInput={e => this.inputHandler(e)}
