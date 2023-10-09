@@ -25,9 +25,11 @@ export class Demo {
 							<smoothly-app-room path={"/organization"} label="Organization">
 								<userwidgets-demo-organization state={this.state.userwidgets} />
 							</smoothly-app-room>
-
+							<smoothly-app-room path={"/settings"}>
+								<userwidgets-me-name state={this.state.userwidgets} />
+							</smoothly-app-room>
 							<userwidgets-me-menu slot="nav-end" state={this.state.userwidgets}>
-								<smoothly-button slot="action" type="link" link={"/organization"} fill="solid" size="flexible">
+								<smoothly-button slot="action" type="link" link={"/settings"} fill="solid" size="flexible">
 									<smoothly-icon name="settings-outline" size="medium" />
 								</smoothly-button>
 							</userwidgets-me-menu>
