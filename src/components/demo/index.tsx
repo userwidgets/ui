@@ -1,7 +1,7 @@
 import { Component, h, Host } from "@stencil/core"
 import "smoothly"
 import { client } from "../../Client"
-import { State } from "../../State"
+import { State } from "./State"
 
 @Component({
 	tag: "userwidgets-demo",
@@ -9,7 +9,7 @@ import { State } from "../../State"
 	scoped: true,
 })
 export class Demo {
-	private state = State.create(client.userwidgets)
+	private state = State.create(client)
 	componentWillLoad() {
 		Object.assign(globalThis, { state: this.state })
 	}
@@ -17,19 +17,18 @@ export class Demo {
 		return (
 			<Host>
 				<smoothly-notifier>
-					<userwidgets-login state={this.state}>
-						<smoothly-app color="secondary" label="Userwidgets ui demo">
+					<userwidgets-login state={this.state.userwidgets}>
+						<smoothly-app color="primary" label="Userwidgets ui demo">
 							<smoothly-app-room path={"/user"} label={"User"}>
-								<userwidgets-demo-user state={this.state} />
+								<userwidgets-demo-user state={this.state.userwidgets} />
 							</smoothly-app-room>
 							<smoothly-app-room path={"/organization"} label="Organization">
-								<userwidgets-demo-organization state={this.state} />
+								<userwidgets-demo-organization state={this.state.userwidgets} />
 							</smoothly-app-room>
 							<smoothly-app-room path={"/settings"}>
-								<userwidgets-demo-settings state={this.state} />
+								<userwidgets-demo-settings state={this.state.userwidgets} />
 							</smoothly-app-room>
-
-							<userwidgets-me-menu slot="nav-end" state={this.state}>
+							<userwidgets-me-menu slot="nav-end" state={this.state.userwidgets}>
 								<smoothly-button slot="action" type="link" link={"/settings"} fill="solid" size="flexible">
 									<smoothly-icon name="settings-outline" size="medium" />
 								</smoothly-button>

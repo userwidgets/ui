@@ -1,9 +1,10 @@
 import { smoothly } from "smoothly"
 import { ClientCollection } from "@userwidgets/model"
 import { Applications as StateApplications } from "./Applications"
-import { Locales as UserwidgetsLocales } from "./Locales"
+import { Locales as StateLocales } from "./Locales"
 import { Me as StateMe } from "./Me"
 import { Organizations as StateOrganizations } from "./Organizations"
+import { Roles as StateRoles } from "./Roles"
 import { Users as StateUsers } from "./Users"
 
 export class State extends smoothly.StateBase<State, ClientCollection> {
@@ -12,6 +13,7 @@ export class State extends smoothly.StateBase<State, ClientCollection> {
 	readonly applications = State.Applications.create(this.client, this.me)
 	readonly organizations = State.Organizations.create(this.client, this.me)
 	readonly users = State.Users.create(this.client, this.me, this.organizations)
+	readonly roles = State.Roles.create(this.locales, this.me, this.applications, this.organizations)
 	static create(client: ClientCollection): smoothly.WithListenable<State> {
 		return smoothly.Listenable.load(new this(client))
 	}
@@ -25,6 +27,8 @@ export namespace State {
 	export const Me = StateMe
 	export type Users = StateUsers
 	export const Users = StateUsers
-	export type Locales = UserwidgetsLocales
-	export const Locales = UserwidgetsLocales
+	export type Locales = StateLocales
+	export const Locales = StateLocales
+	export type Roles = StateRoles
+	export const Roles = StateRoles
 }

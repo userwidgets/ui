@@ -73,8 +73,11 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 					.update(email, user, options)
 					.then(response => (!userwidgets.User.is(response) ? false : response))
 		const result = await promise
-		if (result && this.state.me.key)
-			this.state.me.login(this.state.me.key)
+		if (result) {
+			this.fetch()
+			if (this.state.me.key && result.email == this.state.me.key.email)
+				this.state.me.login(this.state.me.key)
+		}
 		return result || false
 	}
 	static create(

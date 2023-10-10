@@ -1,4 +1,5 @@
 import { State as UserwidgetsState } from "../State"
+import { Role as RolesRole } from "../State/Roles/Role"
 
 export type State = UserwidgetsState
 export const State = UserwidgetsState
@@ -16,3 +17,5 @@ export function nest<T extends Record<string, any>>(target: T, [head, ...tail]: 
 
 type Value = string | number | boolean | Blob | undefined
 export type Data = { [name: string]: Data | Value }
+export type Role = RolesRole
+export const Role = RolesRole
