@@ -11,6 +11,12 @@ import { State } from "./State"
 export class Demo {
 	private state = State.create(client)
 	componentWillLoad() {
+		this.state.userwidgets.roles.add([
+			{
+				permissions: (id: string) => `${id}.lasse.kongo`,
+				label: "Test role",
+			},
+		])
 		Object.assign(globalThis, { state: this.state })
 	}
 	render() {

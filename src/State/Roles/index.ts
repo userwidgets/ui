@@ -46,6 +46,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		return this.#value ?? this.default
 	}
 	set value(roles: Roles["value"]) {
+		console.log("set")
 		if (roles != this.#value)
 			this.#value = roles?.map(role => Role.translate(role, this.#translate))
 	}
@@ -58,6 +59,9 @@ export class Roles extends smoothly.StateBase<Roles> {
 	set default(roles: Roles["default"]) {
 		if (roles != this.#default)
 			this.#default = roles?.map(role => Role.translate(role, this.#translate))
+	}
+	add(roles: Role[]): void {
+		this.#value = [...(this.#value ?? []), ...roles]
 	}
 	private organization(permissions: string[]): void {
 		this.#organization = Role.from(permissions)
