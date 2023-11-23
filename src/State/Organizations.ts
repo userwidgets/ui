@@ -83,7 +83,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			!this.me.key || !id
 				? undefined
 				: await this.client.organization
-						.update(id, organization, options?.email && this.key ? this.key.audience : undefined)
+						.update(id, organization, options?.email && window.location.origin)
 						.then(response => (Response.update.is(response) ? response.organization : false))
 		if (result)
 			this.fetch()
