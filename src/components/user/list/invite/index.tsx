@@ -43,7 +43,7 @@ export class UserwidgetsUserListInvite {
 			const users = this.organization.users.includes(event.detail.user)
 				? this.organization.users.map(email => (email != form.user ? email : { ...form }))
 				: [...this.organization.users, { ...form }]
-			const response = await this.state.organizations.update({ users })
+			const response = await this.state.organizations.update({ users }, { email: true })
 			if (!response) {
 				const message = `${this.translate("Failed to invite")} ${form.user} ${this.translate("to")} ${
 					this.organization.name

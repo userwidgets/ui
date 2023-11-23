@@ -60,6 +60,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
 		super(client)
 	}
+
 	async fetch(): Promise<userwidgets.Organization[] | false> {
 		const promise = !this.me.key
 			? undefined
@@ -75,14 +76,14 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 
 	async update(
 		organization: userwidgets.Organization.Changeable,
-		options?: { id?: userwidgets.Organization.Identifier }
+		options?: { id?: userwidgets.Organization.Identifier; email?: true }
 	): Promise<userwidgets.Organization | false> {
 		const id = options?.id ?? (this.current || undefined)?.id
 		const result =
 			!this.me.key || !id
 				? undefined
 				: await this.client.organization
-						.update(id, organization)
+						.update(id, organization, options?.email && window.location.origin)
 						.then(response => (Response.update.is(response) ? response.organization : false))
 		if (result)
 			this.fetch()
