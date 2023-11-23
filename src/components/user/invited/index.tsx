@@ -27,7 +27,7 @@ export class UserwidgetsUserInvited {
 		if (!this.disabled && this.organization) {
 			this.disabled = true
 			const users = this.organization.users.map(email => (email != this.user.email ? email : { user: this.user.email }))
-			const response = await this.state.organizations.update({ users })
+			const response = await this.state.organizations.update({ users }, { email: true })
 			if (!response) {
 				const message = `${this.translate("Failed to re-invite")} ${this.user.email} ${this.translate("to")} ${
 					this.organization.name
