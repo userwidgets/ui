@@ -29,8 +29,8 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			if (value != this.#current)
 				this.listenable.current = value
 		} else if (!this.#current) {
-			if (value && value.length)
-				this.listenable.current = value.at(0)
+			if (value)
+				this.listenable.current = value.at(0) ?? false
 		} else {
 			const id = this.#current.id
 			const index = value.findIndex(organization => organization.id == id)
