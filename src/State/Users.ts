@@ -57,9 +57,9 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 					.list()
 					.then(response => (!userwidgets.User.type.array().is(response) ? false : response)))
 		const result = await promise
-		this.request = undefined
 		if (this.#value != result)
 			this.listenable.value = result
+		this.request = undefined
 		return result || false
 	}
 	async update(
