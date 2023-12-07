@@ -1,8 +1,9 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Host, Listen, Prop, State } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
+import { UserwidgetsLoginDialogCustomEvent } from "../../components"
 import { model } from "../../model"
 import { Me } from "../../State/Me"
 import * as translation from "./translation"
@@ -26,6 +27,7 @@ export class UserwidgetsLogin {
 	private request?: ReturnType<Me["login"]>
 	private onUnauthorized = () =>
 		new Promise<boolean>(resolve => (this.resolves ??= []).push(() => resolve(!this.request)))
+	private loginControls?: { clear: () => void }
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
@@ -47,6 +49,13 @@ export class UserwidgetsLogin {
 		} else
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
 	}
+
+	@Listen("userWidgetsLoginControls")
+	loginControlsHandler(event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) {
+		event.stopPropagation()
+		this.loginControls = event.detail
+	}
+
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await (this.request = this.state.me.login(event.detail))
@@ -60,6 +69,9 @@ export class UserwidgetsLogin {
 			this.resolves?.forEach(resolve => resolve())
 			this.resolves = undefined
 			this.loggedIn.emit()
+		} else {
+			this.notice.emit(smoothly.Notice.warn(this.translate("Wrong credentials")))
+			this.loginControls?.clear()
 		}
 		this.request = undefined
 	}

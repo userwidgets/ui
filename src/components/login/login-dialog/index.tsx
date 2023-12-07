@@ -15,10 +15,16 @@ export class UserwidgetsLoginDialog {
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
+	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
 	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
+		this.userWidgetsLoginControls.emit({
+			clear: () => {
+				console.log("test")
+			},
+		})
 	}
 	handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()

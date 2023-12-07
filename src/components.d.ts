@@ -446,6 +446,7 @@ declare namespace LocalJSX {
     interface UserwidgetsLoginDialog {
         "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
+        "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
         "state"?: model.State;
