@@ -5,4 +5,5 @@ export const sv = {
 	"Email": "E-post",
 	"Password": "Lösenord",
 	"Login": "Logga in",
+	"Wrong credentials": "Fel e-post eller lösenord"
 }

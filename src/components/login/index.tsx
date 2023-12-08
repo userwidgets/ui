@@ -28,7 +28,7 @@ export class UserwidgetsLogin {
 	private onUnauthorized = () =>
 		new Promise<boolean>(resolve => {
 			if (this.request) {
-				this.notice.emit(smoothly.Notice.warn(this.translate("Wrong credentials")))
+				this.notice.emit(smoothly.Notice.failed(this.translate("Wrong credentials")))
 				this.loginControls?.clear()
 			}
 			return (this.resolves ??= []).push(() => resolve(!this.request))
@@ -76,7 +76,7 @@ export class UserwidgetsLogin {
 			this.resolves = undefined
 			this.loggedIn.emit()
 		} else {
-			this.notice.emit(smoothly.Notice.warn(this.translate("Server not available")))
+			this.notice.emit(smoothly.Notice.failed(this.translate("Server not available")))
 			this.loginControls?.clear()
 		}
 		this.request = undefined
