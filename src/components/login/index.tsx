@@ -76,7 +76,7 @@ export class UserwidgetsLogin {
 			this.resolves = undefined
 			this.loggedIn.emit()
 		} else {
-			this.notice.emit(smoothly.Notice.warn(this.translate("Wrong credentials")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Server not available")))
 			this.loginControls?.clear()
 		}
 		this.request = undefined
