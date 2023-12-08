@@ -5,4 +5,5 @@ export const sv = {
 	"Email": "E-post",
 	"Password": "Lösenord",
 	"Login": "Logga in",
+	
 }
