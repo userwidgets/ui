@@ -65,7 +65,6 @@ export class UserwidgetsLogin {
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await (this.request = this.state.me.login(event.detail))
-	
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
