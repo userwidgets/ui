@@ -17,13 +17,12 @@ export class UserwidgetsLoginDialog {
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
 	@State() translate: langly.Translate = translation.create("en")
+	private passwordInput?: HTMLSmoothlyInputElement
 
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.userWidgetsLoginControls.emit({
-			clear: () => {
-				console.log("test")
-			},
+			clear: () => this.passwordInput?.clear(),
 		})
 	}
 	handleSubmit(event: CustomEvent<model.Data>) {
@@ -43,7 +42,7 @@ export class UserwidgetsLoginDialog {
 					<smoothly-input type="email" name="user">
 						{this.translate("Email")}
 					</smoothly-input>
-					<smoothly-input type="password" name="password">
+					<smoothly-input ref={e => (this.passwordInput = e)} type="password" name="password">
 						{this.translate("Password")}
 					</smoothly-input>
 					{this.invite && !this.invite.active ? (

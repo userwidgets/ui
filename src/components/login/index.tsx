@@ -26,7 +26,13 @@ export class UserwidgetsLogin {
 	@Event() notice: EventEmitter<smoothly.Notice>
 	private request?: ReturnType<Me["login"]>
 	private onUnauthorized = () =>
-		new Promise<boolean>(resolve => (this.resolves ??= []).push(() => resolve(!this.request)))
+		new Promise<boolean>(resolve => {
+			if (this.request) {
+				this.notice.emit(smoothly.Notice.warn(this.translate("Wrong credentials")))
+				this.loginControls?.clear()
+			}
+			return (this.resolves ??= []).push(() => resolve(!this.request))
+		})
 	private loginControls?: { clear: () => void }
 
 	componentWillLoad() {
@@ -59,6 +65,7 @@ export class UserwidgetsLogin {
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
 		const response = await (this.request = this.state.me.login(event.detail))
+	
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
