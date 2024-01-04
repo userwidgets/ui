@@ -1,3 +1,11 @@
+:host {
+	display: grid;
+	border: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	border-color: black;
+}
+
 p {
 	align-self: center;
 	margin-right: auto;
@@ -5,8 +13,6 @@ p {
 
 smoothly-form {
 	padding: 4rem 8rem 3rem 8rem;
-	background-color: rgba(var(--smoothly-color-contrast), 0.3);
-	border-radius: 3px;
 	margin: 0.7rem;
 }
 

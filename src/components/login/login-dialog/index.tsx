@@ -12,6 +12,7 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog {
 	@Prop() state: model.State
 	@Prop() invite?: userwidgets.User.Invite
+	@State() processing = false
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
@@ -27,18 +28,21 @@ export class UserwidgetsLoginDialog {
 	}
 	handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
+		this.processing = true
 		if (!userwidgets.User.Credentials.is(event.detail))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login.")))
 		else if (!event.detail.user.match(/^\S+@\S+$/))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email.")))
 		else
 			this.userwidgetsLogin.emit(event.detail)
+		this.processing = false
 	}
 
 	render() {
 		return (
 			<Host>
-				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<slot name={"logo"} />
+				<smoothly-form processing={this.processing} looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="email" name="user">
 						{this.translate("Email")}
 					</smoothly-input>
