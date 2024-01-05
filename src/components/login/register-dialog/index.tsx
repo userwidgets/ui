@@ -13,6 +13,7 @@ import * as translation from "./translation"
 export class UserwidgetsRegister {
 	@Prop() invite: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
+	@State() processing = false
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsRegister: EventEmitter<{
@@ -29,6 +30,7 @@ export class UserwidgetsRegister {
 	async handleSubmit(event: CustomEvent<model.Data>) {
 		event.preventDefault()
 		event.stopPropagation()
+		this.processing = true
 		const detail = {
 			...event.detail,
 			user: this.invite.email,
@@ -48,12 +50,14 @@ export class UserwidgetsRegister {
 				invite: this.invite,
 				credentials: detail,
 			})
+		this.processing = false
 	}
 
 	render() {
 		return (
 			<Host>
-				<smoothly-form looks="line" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<slot name={"logo"} />
+				<smoothly-form processing={this.processing} looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input class="email" type="text" name="user" readonly value={this.invite.email}>
 						{this.translate("Email")}
 					</smoothly-input>
@@ -78,7 +82,9 @@ export class UserwidgetsRegister {
 							{this.translate("Login")}
 						</a>
 					</p>
-					<smoothly-submit slot="submit">{this.translate("Register")}</smoothly-submit>
+					<smoothly-submit disabled={this.processing} color="primary" slot="submit">
+						{this.translate("Register")}
+					</smoothly-submit>
 				</smoothly-form>
 			</Host>
 		)

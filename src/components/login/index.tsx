@@ -102,27 +102,35 @@ export class UserwidgetsLogin {
 		return (
 			<Host>
 				{this.resolves ? (
-					<div class={"mask"}>
+					<div key="dialog" class={"mask"}>
 						{this.invite && !this.activeAccount ? (
 							<userwidgets-register-dialog
 								class={"dialog"}
 								state={this.state}
 								invite={this.invite}
 								onUserwidgetsRegister={event => this.registerHandler(event)}
-								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-							/>
+								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
+								<slot slot={"logo"} name={"logo"} />
+							</userwidgets-register-dialog>
 						) : (
 							<userwidgets-login-dialog
 								class={"dialog"}
 								state={this.state}
 								invite={this.invite}
 								onUserwidgetsLogin={event => this.loginHandler(event)}
-								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}
-							/>
+								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
+								<slot slot={"logo"} name={"logo"} />
+							</userwidgets-login-dialog>
 						)}
 					</div>
-				) : null}
-				<slot />
+				) : (
+					<div key="hidden" class="hidden">
+						<slot slot={"logo"} name={"logo"} />
+					</div>
+				)}
+				<div key="default">
+					<slot />
+				</div>
 			</Host>
 		)
 	}

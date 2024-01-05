@@ -18,6 +18,7 @@ export class Demo {
 			<Host>
 				<smoothly-notifier>
 					<userwidgets-login state={this.state.userwidgets}>
+						<img slot={"logo"} src="https://issuefab.com/logo/issuefab-l06.svg" alt="logo" />
 						<smoothly-app color="primary" label="Userwidgets ui demo">
 							<smoothly-app-room path={"/user"} label={"User"}>
 								<userwidgets-demo-user state={this.state.userwidgets} />
