@@ -5,6 +5,7 @@
 	border-radius: 3px;
 	border-color: black;
 	margin: 1rem;
+	background-color: rgba(var(--smoothly-default-tint));
 }
 
 p {
