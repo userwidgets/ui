@@ -102,7 +102,7 @@ export class UserwidgetsLogin {
 		return (
 			<Host>
 				{this.resolves ? (
-					<div key="not123" class={"mask"}>
+					<div key="dialog" class={"mask"}>
 						{this.invite && !this.activeAccount ? (
 							<userwidgets-register-dialog
 								class={"dialog"}
@@ -124,11 +124,11 @@ export class UserwidgetsLogin {
 						)}
 					</div>
 				) : (
-					<div key="123" class="hidden">
+					<div key="hidden" class="hidden">
 						<slot slot={"logo"} name={"logo"} />
 					</div>
 				)}
-				<div key="notOneOfTheOthers" class="notOneOfTheOthers" /* add css rule: display: contents; */>
+				<div key="default">
 					<slot />
 				</div>
 			</Host>
