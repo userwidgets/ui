@@ -59,7 +59,7 @@ export class UserwidgetsLoginDialog {
 							</a>
 						</p>
 					) : null}
-					<smoothly-submit color="primary" slot="submit">
+					<smoothly-submit disabled={this.processing} color="primary" slot="submit">
 						{this.translate("Login")}
 					</smoothly-submit>
 				</smoothly-form>

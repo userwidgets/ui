@@ -82,7 +82,7 @@ export class UserwidgetsRegister {
 							{this.translate("Login")}
 						</a>
 					</p>
-					<smoothly-submit color="primary" slot="submit">
+					<smoothly-submit disabled={this.processing} color="primary" slot="submit">
 						{this.translate("Register")}
 					</smoothly-submit>
 				</smoothly-form>
