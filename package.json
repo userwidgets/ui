@@ -83,9 +83,9 @@
     "cloudly-rest": "^0.1.3",
     "gracely": "^2.0.4",
     "isly": "^0.1.10",
-    "isoly": "^2.0.25",
+    "isoly": "^2.3.3",
     "langly": "^2.0.3",
-    "smoothly": "^1.0.0-alpha.125",
+    "smoothly": "^1.0.0-alpha.129",
     "urlpattern-polyfill": "^6.0.2"
   }
 }
