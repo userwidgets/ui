@@ -13,7 +13,6 @@ import * as translation from "./translation"
 export class UserwidgetsPasswordChange {
 	private form?: HTMLSmoothlyFormElement
 	@Prop() state: model.State
-	@Prop() user: userwidgets.User | undefined
 	@State() token?: userwidgets.User.Key | false
 	@State() change: Partial<userwidgets.User.Password.Change> = { old: "", new: "", repeat: "" }
 	@State() request?: ReturnType<typeof this.state.users.update>

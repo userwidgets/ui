@@ -73,7 +73,6 @@ export namespace Components {
     }
     interface UserwidgetsPasswordChange {
         "state": model.State;
-        "user": userwidgets.User | undefined;
     }
     interface UserwidgetsPermissionPicker {
         "default": boolean;
@@ -487,7 +486,6 @@ declare namespace LocalJSX {
     interface UserwidgetsPasswordChange {
         "onNotice"?: (event: UserwidgetsPasswordChangeCustomEvent<smoothly.Notice>) => void;
         "state"?: model.State;
-        "user"?: userwidgets.User | undefined;
     }
     interface UserwidgetsPermissionPicker {
         "default"?: boolean;
