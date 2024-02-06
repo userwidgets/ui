@@ -52,6 +52,7 @@
 						"authly",
 						"persistly",
 						"servly",
+						"webcomponent-qr-code",
 						"servly-azure",
 						"smoothly",
 						"^@?\\w",
