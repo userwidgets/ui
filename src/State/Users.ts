@@ -65,6 +65,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	async update(
 		email: userwidgets.Email,
 		user: userwidgets.User.Changeable,
+		twoFactor?: string,
 		options?: { entityTag?: string }
 	): Promise<userwidgets.User | false> {
 		const promise = !this.state.me.key
@@ -76,7 +77,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		if (result) {
 			this.fetch()
 			if (this.state.me.key && result.email == this.state.me.key.email)
-				this.state.me.login(this.state.me.key)
+				this.state.me.login(this.state.me.key, twoFactor)
 		}
 		return result || false
 	}

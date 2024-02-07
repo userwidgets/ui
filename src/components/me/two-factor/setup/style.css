@@ -1,0 +1,19 @@
+:host {
+	margin: auto;
+}
+
+:host>smoothly-display {
+	white-space: pre;
+}
+
+:host>* {
+	margin: auto;
+	display: flex;
+	justify-content: center;
+}
+
+:host>div>smoothly-input {
+	align-self: center;
+	width: 13em;
+	height: 3em;
+}
