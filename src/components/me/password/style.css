@@ -10,3 +10,7 @@ userwidgets-edit-button {
 :host smoothly-form smoothly-input {
 	flex-basis: 100%;
 }
+
+:host {
+	display: flex;
+}
