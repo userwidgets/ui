@@ -1,6 +1,13 @@
 :host {
 	white-space: pre;
-	margin: auto;
+}
+
+:host>:last-child {
+	padding-top: 2em;
+}
+
+:host>:first-child {
+	padding-bottom: 2em;
 }
 
 :host>div {
@@ -14,7 +21,6 @@
 }
 
 :host>* {
-	margin: auto;
 	display: flex;
 	justify-content: center;
 }

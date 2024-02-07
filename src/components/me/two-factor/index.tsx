@@ -11,7 +11,7 @@ import { model } from "../../../model"
 export class UserwidgetsTwoFactor {
 	@Prop() state: model.State
 	@State() copied: boolean
-	@State() recoveryCodes?: string[]
+	@State() recoveryCodes?: string[] = ["blabla"]
 	@State() key: false | userwidgets.User.Key | undefined
 	authenticateKey: string
 	componentWillLoad() {
@@ -35,17 +35,10 @@ export class UserwidgetsTwoFactor {
 			)) && (this.recoveryCodes = event.detail.user.twoFactor?.recoveryCodes)
 	}
 	render() {
-		return (
-			<smoothly-summary>
-				<h2 slot="summary">Two factor authentication</h2>
-				<form slot="content" onSubmit={e => e.preventDefault()}>
-					{!this.recoveryCodes ? (
-						<userwidgets-two-factor-setup userKey={this.key}></userwidgets-two-factor-setup>
-					) : (
-						<userwidgets-two-factor-recovery recoveryCodes={this.recoveryCodes}></userwidgets-two-factor-recovery>
-					)}
-				</form>
-			</smoothly-summary>
+		return !this.recoveryCodes ? (
+			<userwidgets-two-factor-setup userKey={this.key}></userwidgets-two-factor-setup>
+		) : (
+			<userwidgets-two-factor-recovery recoveryCodes={this.recoveryCodes}></userwidgets-two-factor-recovery>
 		)
 	}
 }
