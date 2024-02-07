@@ -65,20 +65,13 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	async update(
 		email: userwidgets.Email,
 		user: userwidgets.User.Changeable,
-		twoFactor?: string,
 		options?: { entityTag?: string }
 	): Promise<userwidgets.User | false> {
-		const promise = !this.state.me.key
+		const result = await (!this.state.me.key
 			? undefined
 			: this.client.user
 					.update(email, user, options)
-					.then(response => (!userwidgets.User.is(response) ? false : response))
-		const result = await promise
-		if (result) {
-			this.fetch()
-			if (this.state.me.key && result.email == this.state.me.key.email)
-				this.state.me.login(this.state.me.key, twoFactor)
-		}
+					.then(response => (!userwidgets.User.is(response) ? false : response)))
 		return result || false
 	}
 	static create(
