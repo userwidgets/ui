@@ -11,7 +11,7 @@ import { model } from "../../../model"
 export class UserwidgetsTwoFactor {
 	@Prop() state: model.State
 	@State() copied: boolean
-	@State() recoveryCodes?: string[] = ["blabla"]
+	@State() recoveryCodes?: string[]
 	@State() key: false | userwidgets.User.Key | undefined
 	authenticateKey: string
 	componentWillLoad() {
