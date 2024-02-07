@@ -26,13 +26,8 @@ export class UserwidgetsTwoFactor {
 	@Listen("twoFactor")
 	async twoFactorListener(event: CustomEvent<{ user: userwidgets.User.Changeable; code: string }>): Promise<void> {
 		if (this.key)
-			(await this.state.users.update(
-				this.key.email,
-				{
-					twoFactor: event.detail.user.twoFactor,
-				},
-				event.detail.code
-			)) && (this.recoveryCodes = event.detail.user.twoFactor?.recoveryCodes)
+			(await this.state.users.update(this.key.email, { twoFactor: event.detail.user.twoFactor })) &&
+				(this.recoveryCodes = event.detail.user.twoFactor?.recoveryCodes)
 	}
 	render() {
 		return !this.recoveryCodes ? (
