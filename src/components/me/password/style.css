@@ -2,15 +2,6 @@ input {
 	display: none;
 }
 
-userwidgets-edit-button {
-	margin-top: 1rem;
-	margin-right: 1rem;
-}
-
 :host smoothly-form smoothly-input {
 	flex-basis: 100%;
-}
-
-:host {
-	display: flex;
 }
