@@ -1,0 +1,32 @@
+:host {
+	white-space: pre;
+}
+
+:host>:last-child {
+	padding-top: 2em;
+}
+
+:host>:first-child {
+	padding-bottom: 2em;
+}
+
+:host>div {
+	gap: 0.2em;
+	display: flex;
+	align-items: center;
+}
+
+:host>div>smoothly-display {
+	height: fit-content;
+}
+
+:host>* {
+	display: flex;
+	justify-content: center;
+}
+
+:host>div>ul {
+	width: fit-content;
+	flex-direction: column;
+	padding-right: 1em;
+}
