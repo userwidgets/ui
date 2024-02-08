@@ -24,13 +24,21 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		this.#onUnauthorized = onUnauthorized
 		this.client.onUnauthorized = onUnauthorized
 	}
-	async login(user: userwidgets.User.Credentials | userwidgets.User.Key, twoFactor?: string): Promise<Me["key"]> {
-		console.log("twoFactor", twoFactor)
-		const result = await this.client.me
-			.login(user, twoFactor)
-			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result && this.#key != result)
-			this.listenable.key = result
+	async login(
+		user: userwidgets.User.Credentials | userwidgets.User.Key,
+		twoFactor?: string
+	): Promise<Me["key"] | userwidgets.User.Unauthenticated> {
+		let result: Me["key"] | userwidgets.User.Unauthenticated
+		const attempted = await this.client.me.login(user, twoFactor)
+		if (userwidgets.User.Key.is(attempted) && this.#key != attempted) {
+			this.listenable.key = attempted
+			result = attempted
+		} else if (userwidgets.User.Unauthenticated.is(attempted))
+			result = attempted
+		else {
+			result = false
+		}
+
 		return result
 	}
 	async register(
