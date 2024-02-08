@@ -20,6 +20,7 @@ export class UserwidgetsLogin {
 	@State() resolves?: (() => void)[]
 	@State() invite?: userwidgets.User.Invite
 	@State() activeAccount?: boolean
+	@State() credentials?: userwidgets.User.Credentials
 	@State() translate: langly.Translate = translation.create("en")
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
@@ -37,6 +38,7 @@ export class UserwidgetsLogin {
 
 	componentWillLoad() {
 		this.state.me.onUnauthorized = this.onUnauthorized
+		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
 	}
 	componentDidLoad() {
@@ -55,7 +57,11 @@ export class UserwidgetsLogin {
 		} else
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
 	}
-
+	@Listen("userwidgetsCancel")
+	cancelHandler(event: CustomEvent) {
+		event?.stopPropagation()
+		this.credentials = undefined
+	}
 	@Listen("userWidgetsLoginControls")
 	loginControlsHandler(event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) {
 		event.stopPropagation()
@@ -64,7 +70,10 @@ export class UserwidgetsLogin {
 
 	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
 		event.preventDefault()
-		const response = await (this.request = this.state.me.login(event.detail))
+		await this.login(event.detail)
+	}
+	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string) {
+		const response = await (this.request = this.state.me.login(credentials, twoFactor))
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
@@ -74,14 +83,24 @@ export class UserwidgetsLogin {
 			}
 			this.resolves?.forEach(resolve => resolve())
 			this.resolves = undefined
+			this.credentials = undefined
 			this.loggedIn.emit()
+		} else if (userwidgets.User.Unauthenticated.is(response)) {
+			this.credentials &&
+				this.notice.emit(smoothly.Notice.failed(this.translate("Invalid authenticator code, please try again.")))
+			this.credentials = credentials
 		} else {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Server not available")))
+			this.credentials = undefined
 			this.loginControls?.clear()
 		}
 		this.request = undefined
 	}
 
+	async authenticateHandler(event: CustomEvent<string>) {
+		event.preventDefault()
+		this.credentials && (await this.login(this.credentials, event.detail))
+	}
 	async activeAccountHandler(event: CustomEvent<boolean>) {
 		this.activeAccount = event.detail
 	}
@@ -112,11 +131,17 @@ export class UserwidgetsLogin {
 								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-register-dialog>
+						) : this.credentials ? (
+							<userwidgets-two-factor-dialog
+								class={"dialog"}
+								state={this.state}
+								onUserwidgetsAuthenticate={event => this.authenticateHandler(event)}>
+								<slot slot={"logo"} name={"logo"} />
+							</userwidgets-two-factor-dialog>
 						) : (
 							<userwidgets-login-dialog
 								class={"dialog"}
 								state={this.state}
-								invite={this.invite}
 								onUserwidgetsLogin={event => this.loginHandler(event)}
 								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
 								<slot slot={"logo"} name={"logo"} />

@@ -93,6 +93,10 @@ export namespace Components {
     interface UserwidgetsTwoFactor {
         "state": model.State;
     }
+    interface UserwidgetsTwoFactorDialog {
+        "credentials"?: userwidgets.User.Credentials;
+        "state": model.State;
+    }
     interface UserwidgetsTwoFactorRecovery {
         "recoveryCodes"?: string[];
     }
@@ -183,6 +187,10 @@ export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> 
 export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsSetPasswordElement;
+}
+export interface UserwidgetsTwoFactorDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsTwoFactorDialogElement;
 }
 export interface UserwidgetsTwoFactorSetupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -335,6 +343,12 @@ declare global {
         prototype: HTMLUserwidgetsTwoFactorElement;
         new (): HTMLUserwidgetsTwoFactorElement;
     };
+    interface HTMLUserwidgetsTwoFactorDialogElement extends Components.UserwidgetsTwoFactorDialog, HTMLStencilElement {
+    }
+    var HTMLUserwidgetsTwoFactorDialogElement: {
+        prototype: HTMLUserwidgetsTwoFactorDialogElement;
+        new (): HTMLUserwidgetsTwoFactorDialogElement;
+    };
     interface HTMLUserwidgetsTwoFactorRecoveryElement extends Components.UserwidgetsTwoFactorRecovery, HTMLStencilElement {
     }
     var HTMLUserwidgetsTwoFactorRecoveryElement: {
@@ -429,6 +443,7 @@ declare global {
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-two-factor": HTMLUserwidgetsTwoFactorElement;
+        "userwidgets-two-factor-dialog": HTMLUserwidgetsTwoFactorDialogElement;
         "userwidgets-two-factor-recovery": HTMLUserwidgetsTwoFactorRecoveryElement;
         "userwidgets-two-factor-setup": HTMLUserwidgetsTwoFactorSetupElement;
         "userwidgets-user": HTMLUserwidgetsUserElement;
@@ -549,6 +564,13 @@ declare namespace LocalJSX {
     interface UserwidgetsTwoFactor {
         "state"?: model.State;
     }
+    interface UserwidgetsTwoFactorDialog {
+        "credentials"?: userwidgets.User.Credentials;
+        "onNotice"?: (event: UserwidgetsTwoFactorDialogCustomEvent<smoothly.Notice>) => void;
+        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<string>) => void;
+        "onUserwidgetsCancel"?: (event: UserwidgetsTwoFactorDialogCustomEvent<any>) => void;
+        "state"?: model.State;
+    }
     interface UserwidgetsTwoFactorRecovery {
         "recoveryCodes"?: string[];
     }
@@ -633,6 +655,7 @@ declare namespace LocalJSX {
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-two-factor": UserwidgetsTwoFactor;
+        "userwidgets-two-factor-dialog": UserwidgetsTwoFactorDialog;
         "userwidgets-two-factor-recovery": UserwidgetsTwoFactorRecovery;
         "userwidgets-two-factor-setup": UserwidgetsTwoFactorSetup;
         "userwidgets-user": UserwidgetsUser;
@@ -672,6 +695,7 @@ declare module "@stencil/core" {
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-two-factor": LocalJSX.UserwidgetsTwoFactor & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorElement>;
+            "userwidgets-two-factor-dialog": LocalJSX.UserwidgetsTwoFactorDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorDialogElement>;
             "userwidgets-two-factor-recovery": LocalJSX.UserwidgetsTwoFactorRecovery & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorRecoveryElement>;
             "userwidgets-two-factor-setup": LocalJSX.UserwidgetsTwoFactorSetup & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorSetupElement>;
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;
