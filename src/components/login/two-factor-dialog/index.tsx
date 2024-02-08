@@ -37,7 +37,7 @@ export class UserwidgetsTwoFactorDialog {
 			<Host>
 				<slot name={"logo"} />
 				<smoothly-display>
-					Please enter a 6 digit code from your authenticator or a 8 digit recovery code.
+					{this.translate("Please enter a 6 digit code from your authenticator or a 8 digit recovery code.")}
 				</smoothly-display>
 				<smoothly-form processing={this.processing} looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="text" name="code" onSmoothlyInput={e => (this.code = e.detail.code)}>

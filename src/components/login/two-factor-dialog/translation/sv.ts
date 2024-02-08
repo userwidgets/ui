@@ -5,5 +5,6 @@ export const sv = {
 	"Password": "Lösenord",
 	"Login": "Logga in",
 	"Cancel": "Avbryt",
+	"Please enter a 6 digit code from your authenticator or a 8 digit recovery code.": "Vänligen mata in en 6 siffrig auktorisationskod eller en 8 siffrig återställningskod."
 	
 }
