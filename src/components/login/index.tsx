@@ -20,7 +20,7 @@ export class UserwidgetsLogin {
 	@State() resolves?: (() => void)[]
 	@State() invite?: userwidgets.User.Invite
 	@State() activeAccount?: boolean
-	@State() private credentials?: userwidgets.User.Credentials
+	@State() credentials?: userwidgets.User.Credentials
 	@State() translate: langly.Translate = translation.create("en")
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
