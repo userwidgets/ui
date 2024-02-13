@@ -31,10 +31,8 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 		} else if (!this.#current) {
 			const id = window.sessionStorage.getItem(this.storage.current)
 			if (value)
-				if (!id)
-					this.listenable.current = value.at(0) ?? false
-				else
-					this.listenable.current = value.find(organization => organization.id == id) ?? value.at(0) ?? false
+				this.listenable.current =
+					(!id ? undefined : value.find(organization => organization.id == id)) ?? value.at(0) ?? false
 		} else {
 			const id = this.#current.id
 			const index = value.findIndex(organization => organization.id == id)
