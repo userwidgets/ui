@@ -29,8 +29,12 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			if (value != this.#current)
 				this.listenable.current = value
 		} else if (!this.#current) {
+			const id = window.sessionStorage.getItem(this.storage.current)
 			if (value)
-				this.listenable.current = value.at(0) ?? false
+				if (!id)
+					this.listenable.current = value.at(0) ?? false
+				else
+					this.listenable.current = value.find(organization => organization.id == id)
 		} else {
 			const id = this.#current.id
 			const index = value.findIndex(organization => organization.id == id)
@@ -46,17 +50,22 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	set current(current: Organizations["current"]) {
 		this.#current = current
 		if (!current) {
+			window.sessionStorage.removeItem(this.storage.current)
 			if (current != this.#value)
 				this.listenable.value = current
-		} else if (this.#value && !this.#value.includes(current)) {
+		} else {
 			const id = current.id
-			const index = this.#value.findIndex(organization => organization.id == id)
-			if (index != -1)
-				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
-			else
-				this.listenable.value = [...this.#value, current]
+			window.sessionStorage.setItem(this.storage.current, id)
+			if (this.#value && !this.#value.includes(current)) {
+				const index = this.#value.findIndex(organization => organization.id == id)
+				if (index != -1)
+					this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
+				else
+					this.listenable.value = [...this.#value, current]
+			}
 		}
 	}
+	private storage = { current: "userwidgetsOrganization" }
 	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
 		super(client)
 	}
@@ -95,7 +104,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	): smoothly.WithListenable<Organizations> {
 		const backend = new this(client, me)
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key))
+		me.listen("key", key => (backend.key = key), { lazy: true })
 		return listenable
 	}
 }

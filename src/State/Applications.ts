@@ -39,7 +39,7 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 	): smoothly.WithListenable<Applications> {
 		const backend = new this(client, me)
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key))
+		me.listen("key", key => (backend.key = key), { lazy: true })
 		return listenable
 	}
 }
