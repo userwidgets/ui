@@ -67,12 +67,16 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		user: userwidgets.User.Changeable,
 		options?: { entityTag?: string }
 	): Promise<userwidgets.User | false> {
-		const result = await (!this.state.me.key
-			? undefined
-			: this.client.user
-					.update(email, user, options)
-					.then(response => (!userwidgets.User.is(response) ? false : response)))
-		return result || false
+		let result: userwidgets.User | false
+		const update = !this.state.me.key ? false : await this.client.user.update(email, user, options)
+		if (!userwidgets.User.is(update)) {
+			console.error("Userwidgets update: ", update)
+			result = false
+		} else {
+			this.fetch()
+			result = update
+		}
+		return result
 	}
 	static create(
 		client: userwidgets.ClientCollection,
