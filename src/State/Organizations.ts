@@ -50,17 +50,15 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			window.sessionStorage.removeItem(this.storage.current)
 			if (current != this.#value)
 				this.listenable.value = current
-		} else {
-			const id = current.id
-			window.sessionStorage.setItem(this.storage.current, id)
-			if (this.#value && !this.#value.includes(current)) {
-				const index = this.#value.findIndex(organization => organization.id == id)
-				if (index != -1)
-					this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
-				else
-					this.listenable.value = [...this.#value, current]
-			}
-		}
+		} else if (this.#value && !this.#value.includes(current)) {
+			window.sessionStorage.setItem(this.storage.current, current.id)
+			const index = this.#value.findIndex(organization => organization.id == current.id)
+			if (index != -1)
+				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
+			else
+				this.listenable.value = [...this.#value, current]
+		} else
+			window.sessionStorage.setItem(this.storage.current, current.id)
 	}
 	private storage = { current: "userwidgetsOrganization" }
 	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
