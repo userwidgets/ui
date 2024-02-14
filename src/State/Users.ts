@@ -85,8 +85,8 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	): smoothly.WithListenable<Users> {
 		const backend = new this(client, { me, organizations })
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key))
-		organizations.listen("current", organization => (backend.organization = organization))
+		me.listen("key", key => (backend.key = key), { lazy: true })
+		organizations.listen("current", organization => (backend.organization = organization), { lazy: true })
 		return listenable
 	}
 }
