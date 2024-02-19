@@ -22,15 +22,19 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
-		const promise = !this.me.key
-			? undefined
-			: (this.request ??= this.client.application
-					.fetch()
-					.then(response => (!userwidgets.Application.is(response) ? false : response)))
-		const result = await promise
-		if (this.#current != result)
-			this.listenable.current = result
-		this.request = undefined
+		let result: userwidgets.Application | false | undefined
+		if (this.request)
+			result = await this.request
+		else {
+			const request = !this.me.key
+				? false
+				: this.client.application.fetch().then(result => (!userwidgets.Application.is(result) ? false : result))
+			this.request = request || undefined
+			result = await request
+			this.request = undefined
+			if (this.#current != result)
+				this.listenable.current = result
+		}
 		return result || false
 	}
 	static create(

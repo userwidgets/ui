@@ -4,7 +4,7 @@ import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
 export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollection> {
-	private request?: Promise<Users["value"]>
+	private request?: Promise<Exclude<Users["value"], undefined>>
 	private set key(key: Me["key"]) {
 		if (this.value != undefined)
 			if (key != undefined)
@@ -51,15 +51,19 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
-		const promise = !this.state.me.key
-			? undefined
-			: (this.request ??= this.client.user
-					.list()
-					.then(response => (!userwidgets.User.type.array().is(response) ? false : response)))
-		const result = await promise
-		if (this.#value != result)
-			this.listenable.value = result
-		this.request = undefined
+		let result: userwidgets.User[] | false | undefined
+		if (this.request)
+			result = await this.request
+		else {
+			const request = !this.state.me.key
+				? false
+				: this.client.user.list().then(result => (!userwidgets.User.type.array().is(result) ? false : result))
+			this.request = request || undefined
+			result = await request
+			this.request = undefined
+			if (this.#value != result)
+				this.listenable.value = result
+		}
 		return result || false
 	}
 	async update(

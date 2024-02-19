@@ -29,7 +29,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			if (value != this.#current)
 				this.listenable.current = value
 		} else if (!this.#current) {
-			const id = window.sessionStorage.getItem(this.storage.current)
+			const id = window.localStorage.getItem(this.storage.current)
 			this.listenable.current =
 				(!id ? undefined : value.find(organization => organization.id == id)) ?? value.at(0) ?? false
 		} else {
@@ -47,18 +47,18 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	set current(current: Organizations["current"]) {
 		this.#current = current
 		if (!current) {
-			window.sessionStorage.removeItem(this.storage.current)
+			window.localStorage.removeItem(this.storage.current)
 			if (current != this.#value)
 				this.listenable.value = current
 		} else if (this.#value && !this.#value.includes(current)) {
-			window.sessionStorage.setItem(this.storage.current, current.id)
+			window.localStorage.setItem(this.storage.current, current.id)
 			const index = this.#value.findIndex(organization => organization.id == current.id)
 			if (index != -1)
 				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
 			else
 				this.listenable.value = [...this.#value, current]
 		} else
-			window.sessionStorage.setItem(this.storage.current, current.id)
+			window.localStorage.setItem(this.storage.current, current.id)
 	}
 	private storage = { current: "userwidgetsOrganization" }
 	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
@@ -66,15 +66,19 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		const promise = !this.me.key
-			? undefined
-			: (this.request ??= this.client.organization
-					.list()
-					.then(response => (Response.fetch.is(response) ? response : false)))
-		const result = await promise
-		if (this.#value != result)
-			this.listenable.value = result
-		this.request = undefined
+		let result: userwidgets.Organization[] | false | undefined
+		if (this.request)
+			result = await this.request
+		else {
+			const request = !this.me.key
+				? false
+				: this.client.organization.list().then(result => (!Response.fetch.is(result) ? false : result))
+			this.request = request || undefined
+			result = await request
+			this.request = undefined
+			if (this.#value != result)
+				this.listenable.value = result
+		}
 		return result || false
 	}
 
