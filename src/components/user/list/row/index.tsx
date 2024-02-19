@@ -2,6 +2,7 @@ import { Component, h, Host, Prop, State } from "@stencil/core"
 import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
+import { labels } from "./labels"
 import * as translation from "./translation"
 
 @Component({
@@ -22,6 +23,8 @@ export class UserwidgetsUserListRow {
 	}
 
 	render() {
+		const statuses: string[] = []
+		this.user.twoFactor && statuses.push("2fa")
 		return (
 			<Host>
 				<smoothly-table-expandable-row>
@@ -30,6 +33,16 @@ export class UserwidgetsUserListRow {
 					<smoothly-table-cell>{this.user.email}</smoothly-table-cell>
 					<slot name={`${this.user.email}-cell-end`} />
 					<smoothly-table-cell />
+					<smoothly-table-cell>
+						{statuses.map(s => {
+							const label = labels.find(l => l.name == s) ?? { name: s, description: "", hue: 360 }
+							return (
+								<smoothly-label hue={label.hue} description={label.description}>
+									{label.name}
+								</smoothly-label>
+							)
+						})}
+					</smoothly-table-cell>
 					<userwidgets-user
 						slot="detail"
 						state={this.state}
