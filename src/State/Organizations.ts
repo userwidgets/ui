@@ -11,14 +11,7 @@ namespace Response {
 }
 
 export class Organizations extends smoothly.StateBase<Organizations, userwidgets.ClientCollection> {
-	private request?: Promise<Organizations["value"]>
-	private set key(key: Me["key"]) {
-		if (this.value != undefined)
-			if (key != undefined)
-				(this.request = undefined), this.fetch()
-			else if (key == undefined)
-				this.listenable.value = undefined
-	}
+	private request?: Promise<Exclude<Organizations["value"], undefined>>
 	#value?: Organizations["value"]
 	get value(): userwidgets.Organization[] | false | undefined {
 		return this.#value ?? (this.fetch(), undefined)
@@ -66,7 +59,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		let result: userwidgets.Organization[] | false | undefined
+		let result: userwidgets.Organization[] | false
 		if (this.request)
 			result = await this.request
 		else {
@@ -97,13 +90,22 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			this.fetch()
 		return result || false
 	}
+	private subscriptions = {
+		key: (key: Me["key"]) => {
+			if (this.#value != undefined)
+				if (key != undefined)
+					(this.request = undefined), this.fetch()
+				else if (key == undefined)
+					this.listenable.value = undefined
+		},
+	}
 	static create(
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>
 	): smoothly.WithListenable<Organizations> {
 		const backend = new this(client, me)
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key), { lazy: true })
+		me.listen("key", key => backend.subscriptions.key(key), { lazy: true })
 		return listenable
 	}
 }

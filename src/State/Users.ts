@@ -6,14 +6,14 @@ import { Organizations } from "./Organizations"
 export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollection> {
 	private request?: Promise<Exclude<Users["value"], undefined>>
 	private set key(key: Me["key"]) {
-		if (this.value != undefined)
+		if (this.#value != undefined)
 			if (key != undefined)
 				(this.request = undefined), this.fetch()
 			else if (key == undefined)
 				this.listenable.value = undefined
 	}
 	private set organization(organization: Organizations["current"]) {
-		if (this.value != undefined)
+		if (this.#value != undefined)
 			if (organization != undefined)
 				(this.request = undefined), this.fetch()
 			else if (organization == undefined)
@@ -51,7 +51,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
-		let result: userwidgets.User[] | false | undefined
+		let result: userwidgets.User[] | false
 		if (this.request)
 			result = await this.request
 		else {
