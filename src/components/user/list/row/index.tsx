@@ -25,8 +25,6 @@ export class UserwidgetsUserListRow {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
-	}
-	componentWillRender() {
 		this.userWatcher()
 	}
 
