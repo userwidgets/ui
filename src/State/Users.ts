@@ -4,21 +4,7 @@ import { Me } from "./Me"
 import { Organizations } from "./Organizations"
 
 export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollection> {
-	private request?: Promise<Users["value"]>
-	private set key(key: Me["key"]) {
-		if (this.value != undefined)
-			if (key != undefined)
-				(this.request = undefined), this.fetch()
-			else if (key == undefined)
-				this.listenable.value = undefined
-	}
-	private set organization(organization: Organizations["current"]) {
-		if (this.value != undefined)
-			if (organization != undefined)
-				(this.request = undefined), this.fetch()
-			else if (organization == undefined)
-				this.listenable.value = undefined
-	}
+	private request?: Promise<Exclude<Users["value"], undefined>>
 	#value?: Users["value"]
 	get value(): userwidgets.User[] | false | undefined {
 		return this.#value ?? (this.fetch(), this.#value)
@@ -51,15 +37,19 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
-		const promise = !this.state.me.key
-			? undefined
-			: (this.request ??= this.client.user
-					.list()
-					.then(response => (!userwidgets.User.type.array().is(response) ? false : response)))
-		const result = await promise
-		if (this.#value != result)
-			this.listenable.value = result
-		this.request = undefined
+		let result: userwidgets.User[] | false
+		if (this.request)
+			result = await this.request
+		else {
+			const request = !this.state.me.key
+				? false
+				: this.client.user.list().then(result => (!userwidgets.User.type.array().is(result) ? false : result))
+			this.request = request || undefined
+			result = await request
+			this.request = undefined
+			if (this.#value != result)
+				this.listenable.value = result
+		}
 		return result || false
 	}
 	async update(
@@ -78,6 +68,22 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		}
 		return result
 	}
+	private subscriptions = {
+		key: (key: Me["key"]) => {
+			if (this.#value != undefined)
+				if (key != undefined)
+					(this.request = undefined), this.fetch()
+				else if (key == undefined)
+					this.listenable.value = undefined
+		},
+		organization: (organization: Organizations["current"]) => {
+			if (this.#value != undefined)
+				if (organization != undefined)
+					(this.request = undefined), this.fetch()
+				else if (organization == undefined)
+					this.listenable.value = undefined
+		},
+	}
 	static create(
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>,
@@ -85,8 +91,8 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	): smoothly.WithListenable<Users> {
 		const backend = new this(client, { me, organizations })
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key), { lazy: true })
-		organizations.listen("current", organization => (backend.organization = organization), { lazy: true })
+		me.listen("key", key => backend.subscriptions.key(key), { lazy: true })
+		organizations.listen("current", organization => backend.subscriptions.organization(organization), { lazy: true })
 		return listenable
 	}
 }
