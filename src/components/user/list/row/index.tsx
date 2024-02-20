@@ -19,7 +19,7 @@ export class UserwidgetsUserListRow {
 
 	@Watch("user")
 	userWatcher() {
-		this.user.twoFactor && (this.statuses = [labels["2fa"]])
+		this.statuses = this.user.twoFactor ? [labels["2fa"]] : []
 	}
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
