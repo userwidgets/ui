@@ -5,20 +5,6 @@ import { Organizations } from "./Organizations"
 
 export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollection> {
 	private request?: Promise<Exclude<Users["value"], undefined>>
-	private set key(key: Me["key"]) {
-		if (this.#value != undefined)
-			if (key != undefined)
-				(this.request = undefined), this.fetch()
-			else if (key == undefined)
-				this.listenable.value = undefined
-	}
-	private set organization(organization: Organizations["current"]) {
-		if (this.#value != undefined)
-			if (organization != undefined)
-				(this.request = undefined), this.fetch()
-			else if (organization == undefined)
-				this.listenable.value = undefined
-	}
 	#value?: Users["value"]
 	get value(): userwidgets.User[] | false | undefined {
 		return this.#value ?? (this.fetch(), this.#value)
@@ -82,6 +68,22 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		}
 		return result
 	}
+	private subscriptions = {
+		key: (key: Me["key"]) => {
+			if (this.#value != undefined)
+				if (key != undefined)
+					(this.request = undefined), this.fetch()
+				else if (key == undefined)
+					this.listenable.value = undefined
+		},
+		organization: (organization: Organizations["current"]) => {
+			if (this.#value != undefined)
+				if (organization != undefined)
+					(this.request = undefined), this.fetch()
+				else if (organization == undefined)
+					this.listenable.value = undefined
+		},
+	}
 	static create(
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>,
@@ -89,8 +91,8 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	): smoothly.WithListenable<Users> {
 		const backend = new this(client, { me, organizations })
 		const listenable = smoothly.Listenable.load(backend)
-		me.listen("key", key => (backend.key = key), { lazy: true })
-		organizations.listen("current", organization => (backend.organization = organization), { lazy: true })
+		me.listen("key", key => backend.subscriptions.key(key), { lazy: true })
+		organizations.listen("current", organization => backend.subscriptions.organization(organization), { lazy: true })
 		return listenable
 	}
 }
