@@ -26,6 +26,9 @@ export class UserwidgetsUserListRow {
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
+	componentWillRender() {
+		this.userWatcher()
+	}
 
 	render() {
 		return (
