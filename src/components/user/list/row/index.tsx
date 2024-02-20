@@ -11,6 +11,7 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsUserListRow {
+	statuses: string[] = []
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
@@ -21,10 +22,11 @@ export class UserwidgetsUserListRow {
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
+	componentWillRender() {
+		this.user.twoFactor && (this.statuses = this.statuses.concat("2fa"))
+	}
 
 	render() {
-		const statuses: string[] = []
-		this.user.twoFactor && statuses.push("2fa")
 		return (
 			<Host>
 				<smoothly-table-expandable-row>
@@ -34,8 +36,8 @@ export class UserwidgetsUserListRow {
 					<slot name={`${this.user.email}-cell-end`} />
 					<smoothly-table-cell />
 					<smoothly-table-cell>
-						{statuses.map(s => {
-							const label = labels.find(l => l.name == s) ?? { name: s, description: "", hue: 360 }
+						{this.statuses.map(s => {
+							const label = labels[s] ?? { name: s, description: "", hue: 360 }
 							return (
 								<smoothly-label hue={label.hue} description={label.description}>
 									{label.name}
