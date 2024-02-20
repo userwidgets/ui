@@ -1,7 +1,8 @@
-import { Component, h, Host, Prop, State } from "@stencil/core"
+import { Component, h, Host, Prop, State, Watch } from "@stencil/core"
 import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
+import { labels } from "./labels"
 import * as translation from "./translation"
 
 @Component({
@@ -10,11 +11,16 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsUserListRow {
+	statuses: { name: string; hue: number; description: string }[] = []
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() translate: langly.Translate = translation.create("en")
 
+	@Watch("user")
+	userWatcher() {
+		this.statuses = this.user.twoFactor ? [labels["2fa"]] : []
+	}
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
@@ -30,6 +36,13 @@ export class UserwidgetsUserListRow {
 					<smoothly-table-cell>{this.user.email}</smoothly-table-cell>
 					<slot name={`${this.user.email}-cell-end`} />
 					<smoothly-table-cell />
+					<smoothly-table-cell>
+						{this.statuses.map(s => (
+							<smoothly-label hue={s.hue} description={s.description}>
+								{s.name}
+							</smoothly-label>
+						))}
+					</smoothly-table-cell>
 					<userwidgets-user
 						slot="detail"
 						state={this.state}

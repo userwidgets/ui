@@ -37,6 +37,7 @@ export class UserwidgetsUserList {
 						<slot name="header-start" />
 						<smoothly-table-header>{this.translate("Name")}</smoothly-table-header>
 						<smoothly-table-header>{this.translate("Email")}</smoothly-table-header>
+						<smoothly-table-header>{"Status"}</smoothly-table-header>
 						<slot name="header-end" />
 						<userwidgets-user-list-invite-cell state={this.state} organization={this.organization || undefined}>
 							<slot slot="detail" name="detail" />
