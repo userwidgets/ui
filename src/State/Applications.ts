@@ -25,7 +25,7 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 			this.request = request || undefined
 			result = await request
 			this.request = undefined
-			if (this.#current != result)
+			if (this.#current !== result)
 				this.listenable.current = result
 		}
 		return result || false

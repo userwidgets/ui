@@ -19,7 +19,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	set value(value: Organizations["value"]) {
 		this.#value = value
 		if (!value) {
-			if (value != this.#current)
+			if (value !== this.#current)
 				this.listenable.current = value
 		} else if (!this.#current) {
 			const id = window.localStorage.getItem(this.storage.current)
@@ -29,7 +29,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			const id = this.#current.id
 			const index = value.findIndex(organization => organization.id == id)
 			const current = value.at(Math.max(index, 0))
-			if (current != this.#current)
+			if (current !== this.#current)
 				this.listenable.current = current
 		}
 	}
@@ -41,12 +41,12 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 		this.#current = current
 		if (!current) {
 			window.localStorage.removeItem(this.storage.current)
-			if (current != this.#value)
+			if (current !== this.#value)
 				this.listenable.value = current
 		} else if (this.#value && !this.#value.includes(current)) {
 			window.localStorage.setItem(this.storage.current, current.id)
 			const index = this.#value.findIndex(organization => organization.id == current.id)
-			if (index != -1)
+			if (index !== -1)
 				this.listenable.value = [...this.#value.slice(0, index), current, ...this.#value.slice(index + 1)]
 			else
 				this.listenable.value = [...this.#value, current]
@@ -69,7 +69,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			this.request = request || undefined
 			result = await request
 			this.request = undefined
-			if (this.#value != result)
+			if (this.#value !== result)
 				this.listenable.value = result
 		}
 		return result || false

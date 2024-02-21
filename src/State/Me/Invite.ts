@@ -22,7 +22,7 @@ export class Invite extends smoothly.StateBase<Invite, userwidgets.ClientCollect
 		const result = await promise
 		if (promise == this.request)
 			this.request = undefined
-		if (this.#value != result)
+		if (this.#value !== result)
 			this.listenable.value = result
 		return result || false
 	}

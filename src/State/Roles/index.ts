@@ -14,7 +14,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 	private set key(key: Me["key"]) {
 		this.#admin = !!(key && userwidgets.User.Permissions.check(key.permissions, "*", "user.edit"))
 		const roles = this.#admin ? this.#application : this.#organization
-		if (roles != this.#default)
+		if (roles !== this.#default)
 			this.listenable.default = roles
 	}
 	#translate: Role.Translate = {}
@@ -26,7 +26,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		const old = this.#translator.custom
 		this.#translator.custom = translator
 		this.#translate.custom = this.#language && this.#translator.custom?.(this.#language)
-		if (old != this.#translator.custom)
+		if (old !== this.#translator.custom)
 			this.listenable.value = this.#value
 	}
 	#language?: Roles["language"]
@@ -35,7 +35,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		this.#language = language
 		this.#translate.custom = this.#language && this.#translator.custom?.(this.#language)
 		this.#translate.default = this.#language && this.#translator.default?.(this.#language)
-		if (old != this.#language) {
+		if (old !== this.#language) {
 			this.listenable.default = this.#default
 			this.listenable.value = this.#value
 		}
@@ -46,7 +46,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		return this.#value ?? this.default
 	}
 	set value(roles: Roles["value"]) {
-		if (roles != this.#value)
+		if (roles !== this.#value)
 			this.#value = roles?.map(role => Role.translate(role, this.#translate))
 	}
 	#application?: Roles["default"]
@@ -56,7 +56,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		return this.#default
 	}
 	set default(roles: Roles["default"]) {
-		if (roles != this.#default)
+		if (roles !== this.#default)
 			this.#default = roles?.map(role => Role.translate(role, this.#translate))
 	}
 	private organization(permissions: string[]): void {

@@ -47,7 +47,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 			this.request = request || undefined
 			result = await request
 			this.request = undefined
-			if (this.#value != result)
+			if (this.#value !== result)
 				this.listenable.value = result
 		}
 		return result || false
