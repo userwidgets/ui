@@ -30,7 +30,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 	): Promise<Me["key"] | userwidgets.User.Unauthenticated> {
 		let result: Me["key"] | userwidgets.User.Unauthenticated
 		const attempted = await this.client.me.login(user, twoFactor)
-		if (userwidgets.User.Key.is(attempted) && this.#key != attempted) {
+		if (userwidgets.User.Key.is(attempted) && this.#key !== attempted) {
 			this.listenable.key = attempted
 			result = attempted
 		} else if (userwidgets.User.Unauthenticated.is(attempted))
@@ -48,7 +48,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		const result = await this.client.me
 			.register(invite, credentials)
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
-		if (result && this.#key != result) {
+		if (result && this.#key !== result) {
 			this.listenable.key = result
 			sessionStorage.setItem("token", result.token)
 		}
@@ -60,7 +60,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 			: await this.client.me
 					.join(invite)
 					.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
-		if (result && this.#key != result) {
+		if (result && this.#key !== result) {
 			this.listenable.key = result
 			sessionStorage.setItem("token", result.token)
 		}
