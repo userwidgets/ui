@@ -48,7 +48,6 @@ export class Roles extends smoothly.StateBase<Roles> {
 	}
 	#application?: Roles["application"] = undefined
 	get application(): Roles["default"] {
-		console.log("application getter")
 		return this.#application ?? (this.calculate.application(), undefined)
 	}
 	set application(roles: Roles["application"]) {
@@ -58,7 +57,6 @@ export class Roles extends smoothly.StateBase<Roles> {
 	}
 	#organization?: Roles["organization"] = undefined
 	get organization(): Roles["default"] {
-		console.log("organization getter")
 		return this.#organization ?? (this.calculate.organization(), undefined)
 	}
 	set organization(roles: Roles["organization"]) {
@@ -82,7 +80,6 @@ export class Roles extends smoothly.StateBase<Roles> {
 		}
 	) {
 		super()
-		this.state
 	}
 	private calculate = {
 		application: () => {
@@ -104,14 +101,15 @@ export class Roles extends smoothly.StateBase<Roles> {
 		me: (key: Me["key"]) => {
 			const roles = this.admin ? this.#application : this.#organization
 			if (roles !== undefined)
-				if (key !== undefined && roles !== this.default) {
+				if (key !== undefined && roles !== this.default)
 					this.listenable.default = roles
-				} else if (key === undefined)
+				else if (key === undefined)
 					this.listenable.value = undefined
 		},
 		organizations: () => this.#organization !== undefined && this.calculate.organization(),
 		application: () => this.#application !== undefined && this.calculate.application(),
-		default: (rules: Roles["default"]) => rules != this.#value && (this.listenable.value = this.#value),
+		default: (rules: Roles["default"]) =>
+			!this.#value === undefined && rules != this.#value && (this.listenable.value = this.#value),
 	}
 	static create(
 		locales: smoothly.WithListenable<Locales>,
