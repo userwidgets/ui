@@ -37,6 +37,7 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
+		console.log("users fetch")
 		let result: userwidgets.User[] | false
 		if (this.request)
 			result = await this.request
@@ -70,6 +71,9 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
+			// remove this check
+			if (this.#value === undefined)
+				return
 			if (key !== undefined)
 				(this.request = undefined), this.fetch()
 			else if (key === undefined)

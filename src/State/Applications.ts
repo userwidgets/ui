@@ -15,6 +15,7 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
+		console.log("application fetch")
 		let result: userwidgets.Application | false
 		if (this.request)
 			result = await this.request
@@ -32,10 +33,11 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			if (this.#current != undefined)
-				if (key != undefined)
+			console.log("Application key sub", key, this.#current)
+			if (this.#current !== undefined)
+				if (key !== undefined)
 					(this.request = undefined), this.fetch()
-				else if (key == undefined)
+				else if (key === undefined)
 					this.listenable.current = undefined
 		},
 	}

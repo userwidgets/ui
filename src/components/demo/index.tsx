@@ -9,15 +9,16 @@ import { State } from "./State"
 	scoped: true,
 })
 export class Demo {
-	private state = State.create(client)
+	private state = (console.log("creating state"), State.create(client))
 	componentWillLoad() {
 		Object.assign(globalThis, { state: this.state })
+		console.log("assigning state")
 	}
 	render() {
 		return (
 			<Host>
-				<smoothly-notifier>
-					<userwidgets-login state={this.state.userwidgets}>
+				{/* <smoothly-notifier> */}
+				{/* <userwidgets-login state={this.state.userwidgets}>
 						<img slot={"logo"} src="https://issuefab.com/logo/issuefab-l06.svg" alt="logo" />
 						<smoothly-app color="primary" label="Userwidgets ui demo">
 							<smoothly-app-room path={"/user"} label={"User"}>
@@ -35,8 +36,8 @@ export class Demo {
 								</smoothly-button>
 							</userwidgets-me-menu>
 						</smoothly-app>
-					</userwidgets-login>
-				</smoothly-notifier>
+					</userwidgets-login> */}
+				{/* </smoothly-notifier> */}
 			</Host>
 		)
 	}
