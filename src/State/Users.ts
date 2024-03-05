@@ -71,9 +71,6 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			// remove this check
-			if (this.#value === undefined)
-				return
 			if (key !== undefined)
 				(this.request = undefined), this.fetch()
 			else if (key === undefined)
