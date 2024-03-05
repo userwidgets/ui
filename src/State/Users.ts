@@ -37,7 +37,6 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.User[] | false> {
-		console.log("users fetch")
 		let result: userwidgets.User[] | false
 		if (this.request)
 			result = await this.request

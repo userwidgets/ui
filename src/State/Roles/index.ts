@@ -42,26 +42,27 @@ export class Roles extends smoothly.StateBase<Roles> {
 		return this.#value ?? (this.default || undefined)
 	}
 	set value(roles: Roles["value"]) {
-		if (roles !== this.#value)
+		if (roles !== undefined && roles !== this.#value) {
 			this.#value = roles?.map(role => Role.translate(role, this.#translate))
+		}
 	}
 	#application?: Roles["application"] = undefined
 	get application(): Roles["default"] {
+		console.log("application getter")
 		return this.#application ?? (this.calculate.application(), undefined)
 	}
 	set application(roles: Roles["application"]) {
 		this.#application = roles
-		console.log("set applicationRoles", roles)
 		if (this.admin)
 			this.listenable.default = this.#application
 	}
 	#organization?: Roles["organization"] = undefined
 	get organization(): Roles["default"] {
+		console.log("organization getter")
 		return this.#organization ?? (this.calculate.organization(), undefined)
 	}
 	set organization(roles: Roles["organization"]) {
 		this.#organization = roles
-		console.log("set organizationRoles", roles)
 		if (!this.admin)
 			this.listenable.default = roles
 	}
@@ -110,6 +111,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		},
 		organizations: () => this.#organization !== undefined && this.calculate.organization(),
 		application: () => this.#application !== undefined && this.calculate.application(),
+		default: (rules: Roles["default"]) => rules != this.#value && (this.listenable.value = this.#value),
 	}
 	static create(
 		locales: smoothly.WithListenable<Locales>,
@@ -123,6 +125,7 @@ export class Roles extends smoothly.StateBase<Roles> {
 		me.listen("key", key => backend.subscriptions.me(key), { lazy: true })
 		organizations.listen("value", () => backend.subscriptions.organizations(), { lazy: true })
 		applications.listen("current", () => backend.subscriptions.application(), { lazy: true })
+		listenable.listen("default", rules => backend.subscriptions.default(rules), { lazy: true })
 		return listenable
 	}
 }

@@ -16,7 +16,7 @@ export class Demo {
 	render() {
 		return (
 			<Host>
-				{/* <smoothly-notifier>
+				<smoothly-notifier>
 					<userwidgets-login state={this.state.userwidgets}>
 						<img slot={"logo"} src="https://issuefab.com/logo/issuefab-l06.svg" alt="logo" />
 						<smoothly-app color="primary" label="Userwidgets ui demo">
@@ -36,7 +36,7 @@ export class Demo {
 							</userwidgets-me-menu>
 						</smoothly-app>
 					</userwidgets-login>
-				</smoothly-notifier> */}
+				</smoothly-notifier>
 			</Host>
 		)
 	}

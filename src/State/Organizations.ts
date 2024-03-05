@@ -92,7 +92,6 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			console.log("organization key sub")
 			if (this.#value !== undefined)
 				if (key !== undefined)
 					(this.request = undefined), this.fetch()
