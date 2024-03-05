@@ -70,17 +70,16 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			if (this.#value != undefined)
-				if (key != undefined)
-					(this.request = undefined), this.fetch()
-				else if (key == undefined)
-					this.listenable.value = undefined
+			if (key !== undefined)
+				(this.request = undefined), this.fetch()
+			else if (key === undefined)
+				this.listenable.value = undefined
 		},
 		organization: (organization: Organizations["current"]) => {
-			if (this.#value != undefined)
-				if (organization != undefined)
+			if (this.#value !== undefined)
+				if (organization !== undefined)
 					(this.request = undefined), this.fetch()
-				else if (organization == undefined)
+				else if (organization === undefined)
 					this.listenable.value = undefined
 		},
 	}
