@@ -45,27 +45,29 @@ export class Roles extends smoothly.StateBase<Roles> {
 		if (roles !== this.#value)
 			this.#value = roles?.map(role => Role.translate(role, this.#translate))
 	}
-	#application?: Roles["application"]
+	#application?: Roles["application"] = undefined
 	get application(): Roles["default"] {
 		return this.#application ?? (this.calculate.application(), undefined)
 	}
-	set application(application: Roles["application"]) {
-		this.#application = application
+	set application(roles: Roles["application"]) {
+		this.#application = roles
+		console.log("set applicationRoles", roles)
 		if (this.admin)
-			console.log("setting default in application", application), (this.listenable.default = this.#application)
+			this.listenable.default = this.#application
 	}
-	#organization?: Roles["organization"]
+	#organization?: Roles["organization"] = undefined
 	get organization(): Roles["default"] {
 		return this.#organization ?? (this.calculate.organization(), undefined)
 	}
-	set organization(organization: Roles["organization"]) {
-		this.#organization = organization
+	set organization(roles: Roles["organization"]) {
+		this.#organization = roles
+		console.log("set organizationRoles", roles)
 		if (!this.admin)
-			console.log("setting default in organization", organization), (this.listenable.default = organization)
+			this.listenable.default = roles
 	}
 	#default?: Roles["default"]
 	get default(): Role[] | false | undefined {
-		return this.#default ?? (this.admin ? this.application : this.organization, undefined)
+		return this.#default ?? (this.admin ? this.application : this.organization)
 	}
 	set default(roles: Roles["default"]) {
 		if (roles !== this.#default)
@@ -84,17 +86,13 @@ export class Roles extends smoothly.StateBase<Roles> {
 	private calculate = {
 		application: () => {
 			if (!this.state.applications.current)
-				this.listenable.application = false
-			if (this.state.applications.current === undefined) {
-				this.listenable.application = undefined
-			} else if (this.state.applications.current)
-				this.listenable.application = Role.from((this.state.applications.current || undefined)?.permissions ?? [])
+				this.#application !== false && (this.listenable.application = false)
+			else
+				this.listenable.application = Role.from(this.state.applications.current.permissions)
 		},
 		organization: () => {
 			if (!this.state.organizations.value)
-				this.listenable.organization = false
-			if (this.state.organizations.value === undefined)
-				this.listenable.organization = undefined
+				this.#organization !== false && (this.listenable.organization = false)
 			else
 				this.listenable.organization = Role.from([
 					...new Set((this.state.organizations.value || []).flatMap(organization => organization.permissions)),
@@ -102,26 +100,16 @@ export class Roles extends smoothly.StateBase<Roles> {
 		},
 	}
 	private subscriptions = {
-		me: (key: Me["key"]): void => {
-			console.log("Roles key sub", key, this.#default)
-			if (this.#default !== undefined)
-				if (key !== undefined) {
-					const roles = this.admin ? this.#application : this.#organization
-					if (roles !== this.#default)
-						this.listenable.default = roles
+		me: (key: Me["key"]) => {
+			const roles = this.admin ? this.#application : this.#organization
+			if (roles !== undefined)
+				if (key !== undefined && roles !== this.default) {
+					this.listenable.default = roles
 				} else if (key === undefined)
 					this.listenable.value = undefined
 		},
-		organizations: (): void => {
-			console.log("Roles org sub", this.state.organizations.value, this.#default)
-			if (this.#default !== undefined)
-				console.log("calculating organization"), this.calculate.organization()
-		},
-		application: (): void => {
-			console.log("Roles app sub", this.state.applications.current, this.#default)
-			if (this.#default !== undefined)
-				console.log("calculating application"), this.calculate.application()
-		},
+		organizations: () => this.#organization !== undefined && this.calculate.organization(),
+		application: () => this.#application !== undefined && this.calculate.application(),
 	}
 	static create(
 		locales: smoothly.WithListenable<Locales>,
@@ -135,13 +123,6 @@ export class Roles extends smoothly.StateBase<Roles> {
 		me.listen("key", key => backend.subscriptions.me(key), { lazy: true })
 		organizations.listen("value", () => backend.subscriptions.organizations(), { lazy: true })
 		applications.listen("current", () => backend.subscriptions.application(), { lazy: true })
-		// me.listen("key", key => (listenable.key = key))
-		// applications.listen("current", application => listenable.application((application || undefined)?.permissions ?? []))
-		// organizations.listen("value", organizations =>
-		// 	listenable.organization([
-		// 		...new Set((organizations || undefined)?.flatMap(organizations => organizations.permissions)),
-		// 	])
-		// )
 		return listenable
 	}
 }

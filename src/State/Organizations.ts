@@ -59,7 +59,6 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 
 	async fetch(): Promise<userwidgets.Organization[] | false> {
-		console.log("organization fetch")
 		let result: userwidgets.Organization[] | false
 		if (this.request)
 			result = await this.request
@@ -93,7 +92,7 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			console.log("Organizations key sub", key, this.#value, this.#current)
+			console.log("organization key sub")
 			if (this.#value !== undefined)
 				if (key !== undefined)
 					(this.request = undefined), this.fetch()
