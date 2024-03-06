@@ -28,7 +28,7 @@ export class UserwidgetsPermissionPicker {
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() smoothlyInput: EventEmitter<smoothly.Data>
 	private subscriptions = {
-		default: (roles: model.State["roles"]["default"]) => (this.roles = roles),
+		default: (roles: model.State["roles"]["default"]) => (this.roles = roles || undefined),
 		value: (roles: model.State["roles"]["value"]) => (this.roles = roles),
 	}
 	@Watch("default")

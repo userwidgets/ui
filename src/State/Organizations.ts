@@ -92,10 +92,10 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			if (this.#value != undefined)
-				if (key != undefined)
+			if (this.#value !== undefined)
+				if (key !== undefined)
 					(this.request = undefined), this.fetch()
-				else if (key == undefined)
+				else if (key === undefined)
 					this.listenable.value = undefined
 		},
 	}

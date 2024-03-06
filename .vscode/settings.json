@@ -57,5 +57,4 @@
 		"userwidgets"
 	],
   "debug.javascript.autoAttachFilter": "disabled",
-	"liveServer.settings.root": "/dist"
 }

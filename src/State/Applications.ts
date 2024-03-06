@@ -32,10 +32,10 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
-			if (this.#current != undefined)
-				if (key != undefined)
+			if (this.#current !== undefined)
+				if (key !== undefined)
 					(this.request = undefined), this.fetch()
-				else if (key == undefined)
+				else if (key === undefined)
 					this.listenable.current = undefined
 		},
 	}

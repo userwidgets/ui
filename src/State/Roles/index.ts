@@ -10,12 +10,8 @@ import { Role } from "./Role"
 import * as translation from "./translation"
 
 export class Roles extends smoothly.StateBase<Roles> {
-	#admin = false
-	private set key(key: Me["key"]) {
-		this.#admin = !!(key && userwidgets.User.Permissions.check(key.permissions, "*", "user.edit"))
-		const roles = this.#admin ? this.#application : this.#organization
-		if (roles !== this.#default)
-			this.listenable.default = roles
+	private get admin(): boolean {
+		return !!(this.state.me.key && userwidgets.User.Permissions.check(this.state.me.key.permissions, "*", "user.edit"))
 	}
 	#translate: Role.Translate = {}
 	#translator: {
@@ -43,35 +39,77 @@ export class Roles extends smoothly.StateBase<Roles> {
 
 	#value?: Roles["value"]
 	get value(): Role[] | undefined {
-		return this.#value ?? this.default
+		return this.#value ?? (this.default || undefined)
 	}
 	set value(roles: Roles["value"]) {
-		if (roles !== this.#value)
+		if (roles !== undefined && roles !== this.#value) {
 			this.#value = roles?.map(role => Role.translate(role, this.#translate))
+		}
 	}
-	#application?: Roles["default"]
-	#organization?: Roles["default"]
+	#application?: Roles["application"] = undefined
+	get application(): Roles["default"] {
+		return this.#application ?? (this.calculate.application(), undefined)
+	}
+	set application(roles: Roles["application"]) {
+		this.#application = roles
+		if (this.admin)
+			this.listenable.default = this.#application
+	}
+	#organization?: Roles["organization"] = undefined
+	get organization(): Roles["default"] {
+		return this.#organization ?? (this.calculate.organization(), undefined)
+	}
+	set organization(roles: Roles["organization"]) {
+		this.#organization = roles
+		if (!this.admin)
+			this.listenable.default = roles
+	}
 	#default?: Roles["default"]
-	get default(): Role[] | undefined {
-		return this.#default
+	get default(): Role[] | false | undefined {
+		return this.#default ?? (this.admin ? this.application : this.organization)
 	}
 	set default(roles: Roles["default"]) {
 		if (roles !== this.#default)
-			this.#default = roles?.map(role => Role.translate(role, this.#translate))
+			this.#default = (roles || []).map(role => Role.translate(role, this.#translate))
 	}
-	private organization(permissions: string[]): void {
-		this.#organization = Role.from(permissions)
-		if (!this.#admin) {
-			this.listenable.default = this.#organization
-			this.#organization = this.#default
+	private constructor(
+		private state: {
+			me: smoothly.WithListenable<Me>
+			organizations: smoothly.WithListenable<Organizations>
+			applications: smoothly.WithListenable<Applications>
 		}
+	) {
+		super()
 	}
-	private application(permissions: string[]): void {
-		this.#application = Role.from(permissions)
-		if (this.#admin) {
-			this.listenable.default = this.#application
-			this.#application = this.#default
-		}
+	private calculate = {
+		application: () => {
+			if (!this.state.applications.current)
+				this.#application !== false && (this.listenable.application = false)
+			else
+				this.listenable.application = Role.from(this.state.applications.current.permissions)
+		},
+		organization: () => {
+			if (!this.state.organizations.value)
+				this.#organization !== false && (this.listenable.organization = false)
+			else
+				this.listenable.organization = Role.from([
+					...new Set((this.state.organizations.value || []).flatMap(organization => organization.permissions)),
+				])
+		},
+	}
+	private subscriptions = {
+		me: (key: Me["key"]) => {
+			const roles = this.admin ? this.#application : this.#organization
+			if (roles !== undefined)
+				if (key !== undefined && roles !== this.default)
+					this.listenable.default = roles
+				else if (key === undefined)
+					this.listenable.value = undefined
+		},
+		organizations: () => this.#organization !== undefined && this.calculate.organization(),
+		application: () => this.#application !== undefined && this.calculate.application(),
+		default: (rules: Roles["default"]) =>
+			!this.#value === undefined && rules != this.#value && (this.listenable.value = this.#value),
 	}
 	static create(
 		locales: smoothly.WithListenable<Locales>,
@@ -79,16 +117,13 @@ export class Roles extends smoothly.StateBase<Roles> {
 		applications: smoothly.WithListenable<Applications>,
 		organizations: smoothly.WithListenable<Organizations>
 	): smoothly.WithListenable<Roles> {
-		const backend = new this()
+		const backend = new this({ me, organizations, applications })
 		const listenable = smoothly.Listenable.load(backend)
 		locales.listen("language", language => (listenable.language = language))
-		me.listen("key", key => (listenable.key = key))
-		applications.listen("current", application => listenable.application((application || undefined)?.permissions ?? []))
-		organizations.listen("value", organizations =>
-			listenable.organization([
-				...new Set((organizations || undefined)?.flatMap(organizations => organizations.permissions)),
-			])
-		)
+		me.listen("key", key => backend.subscriptions.me(key), { lazy: true })
+		organizations.listen("value", () => backend.subscriptions.organizations(), { lazy: true })
+		applications.listen("current", () => backend.subscriptions.application(), { lazy: true })
+		listenable.listen("default", rules => backend.subscriptions.default(rules), { lazy: true })
 		return listenable
 	}
 }
