@@ -30,15 +30,18 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 	): Promise<Me["key"] | userwidgets.User.Unauthenticated> {
 		let result: Me["key"] | userwidgets.User.Unauthenticated
 		const attempted = await this.client.me.login(user, twoFactor)
+		console.log("login attempted", attempted)
 		if (userwidgets.User.Key.is(attempted) && this.#key !== attempted) {
+			console.log("attempt is User.Key.")
 			this.listenable.key = attempted
 			result = attempted
-		} else if (userwidgets.User.Unauthenticated.is(attempted))
+		} else if (userwidgets.User.Unauthenticated.is(attempted)) {
+			console.log("attempt is User.Unauthenticated.")
 			result = attempted
-		else {
+		} else {
+			console.log("attempt is unknown.")
 			result = false
 		}
-
 		return result
 	}
 	async register(

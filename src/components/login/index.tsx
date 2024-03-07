@@ -74,6 +74,7 @@ export class UserwidgetsLogin {
 	}
 	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string) {
 		const response = await (this.request = this.state.me.login(credentials, twoFactor))
+		console.log("login response", response)
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
