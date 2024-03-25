@@ -44,7 +44,7 @@ export class UserwidgetsUserListRow {
 					<smoothly-table-cell>
 						{this.statuses.map(s => (
 							<smoothly-label hue={s.hue} description={s.description}>
-								{s.icon && <smoothly-icon name={s.icon as any}></smoothly-icon>}
+								{s.icon && <smoothly-icon name={s.icon}></smoothly-icon>}
 								{s.name}
 							</smoothly-label>
 						))}

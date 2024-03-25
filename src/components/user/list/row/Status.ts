@@ -1,8 +1,10 @@
+import { smoothly } from "smoothly"
+
 export interface Status {
 	name: string
 	hue: number
 	description: string
-	icon?: string
+	icon?: smoothly.Icon
 }
 export namespace Status {
 	export const labels = {
@@ -11,7 +13,7 @@ export namespace Status {
 			name: "password",
 			hue: 225,
 			description: "User last changed their password on this date.",
-			icon: "lock-closed",
+			icon: "lock-closed" as const,
 		},
 	}
 }
