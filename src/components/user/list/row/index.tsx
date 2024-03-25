@@ -1,8 +1,9 @@
 import { Component, h, Host, Prop, State, Watch } from "@stencil/core"
+import { isoly } from "isoly"
 import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
-import { labels } from "./labels"
+import { Status } from "./Status"
 import * as translation from "./translation"
 
 @Component({
@@ -11,7 +12,7 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsUserListRow {
-	statuses: { name: string; hue: number; description: string }[] = []
+	statuses: Status[] = []
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
@@ -19,7 +20,11 @@ export class UserwidgetsUserListRow {
 
 	@Watch("user")
 	userWatcher() {
-		this.statuses = this.user.twoFactor ? [labels["2fa"]] : []
+		const statuses: Status[] = []
+		this.user.twoFactor && statuses.push(Status.labels["2fa"])
+		typeof this.user.modified == "object" &&
+			statuses.push({ ...Status.labels["password"], name: isoly.DateTime.getDate(this.user.modified.password) })
+		this.statuses = statuses
 	}
 	componentWillLoad() {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
@@ -39,6 +44,7 @@ export class UserwidgetsUserListRow {
 					<smoothly-table-cell>
 						{this.statuses.map(s => (
 							<smoothly-label hue={s.hue} description={s.description}>
+								{s.icon && <smoothly-icon name={s.icon}></smoothly-icon>}
 								{s.name}
 							</smoothly-label>
 						))}
