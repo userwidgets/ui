@@ -91,7 +91,7 @@ export class UserwidgetsLogin {
 				this.notice.emit(smoothly.Notice.failed(this.translate("Invalid authenticator code, please try again.")))
 			this.credentials = credentials
 		} else {
-			this.notice.emit(smoothly.Notice.failed(this.translate("Server not available")))
+			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to login, please try again later.")))
 			this.credentials = undefined
 			this.loginControls?.clear()
 		}
