@@ -41,7 +41,21 @@ export class UserwidgetsUser {
 		event.stopPropagation()
 		this.controls = event.detail
 	}
-
+	@Listen("smoothlyConfirm")
+	async remove2faHandler(event: CustomEvent<smoothly.Data>) {
+		event.stopPropagation()
+		console.log(event.detail)
+		if ("2fa" in event.detail) {
+			const result = await this.state.users.remove2fa(this.user.email)
+			if (!result) {
+				const message = `${this.translate("Failed to update user")}: ${this.user.email}`
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				const message = `${this.translate("Successfully updated user")}: ${this.user.email}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+			}
+		}
+	}
 	@Watch("user")
 	userChanged() {
 		this.editEndHandler()
@@ -125,21 +139,29 @@ export class UserwidgetsUser {
 					/>
 					<div slot="submit" class={"buttons"}>
 						{!this.key ||
-						!userwidgets.User.Permissions.check(
-							this.key.permissions,
-							this.organization?.id ?? "*",
-							"user.edit"
-						) ? null : (
-							<userwidgets-edit-button
-								state={this.state}
-								disabled={this.processing || this.change?.permissions == this.user.permissions}
-								changed={!!this.change}
-								onUserwidgetsEditStart={e => {
-									this.editStartHandler(e)
-								}}
-								onUserwidgetsEditEnd={e => this.editEndHandler(e)}
-							/>
-						)}
+						!userwidgets.User.Permissions.check(this.key.permissions, this.organization?.id ?? "*", "user.edit")
+							? null
+							: [
+									<userwidgets-edit-button
+										state={this.state}
+										disabled={this.processing || this.change?.permissions == this.user.permissions}
+										changed={!!this.change}
+										onUserwidgetsEditStart={e => {
+											this.editStartHandler(e)
+										}}
+										onUserwidgetsEditEnd={e => this.editEndHandler(e)}
+									/>,
+									this.user.twoFactor && (
+										<smoothly-button-confirm name="2fa" size="flexible" fill="solid" color="tertiary">
+											<smoothly-icon name="shield-checkmark-outline" size="small" />
+											<smoothly-icon
+												name="trash-outline"
+												size="small"
+												toolTip={this.translate("Disable two factor authentication")}
+											/>
+										</smoothly-button-confirm>
+									),
+							  ]}
 						{!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,

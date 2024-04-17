@@ -6,5 +6,6 @@ export const sv = {
 	"from": "från",
 	"Successfully removed": "Lyckades med att ta bort",
 	"Failed to update user": "Misslyckades med att updatera användaren",
-	"Successfully updated user": "Användaren uppdaterades"
+	"Successfully updated user": "Användaren uppdaterades",
+	"Disable two factor authentication": "Inaktivera tvåfaktorautentisering"
 }

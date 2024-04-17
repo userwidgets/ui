@@ -68,6 +68,18 @@ export class Users extends smoothly.StateBase<Users, userwidgets.ClientCollectio
 		}
 		return result
 	}
+	async remove2fa(email: userwidgets.Email): Promise<userwidgets.User | false> {
+		let result: userwidgets.User | false
+		const update = !this.state.me.key ? false : await this.client.user.remove2fa(email)
+		if (!userwidgets.User.is(update)) {
+			console.error("Userwidgets remove 2fa: ", update)
+			result = false
+		} else {
+			this.fetch()
+			result = update
+		}
+		return result
+	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
 			if (key !== undefined)
