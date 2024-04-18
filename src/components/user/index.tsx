@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Host, Listen, Prop, State, Watch } from "@stencil/core"
+import { Component, Element, Event, EventEmitter, Fragment, h, Host, Listen, Prop, State, Watch } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { Controls } from "smoothly/dist/types/components/picker/menu"
@@ -44,7 +44,6 @@ export class UserwidgetsUser {
 	@Listen("smoothlyConfirm")
 	async remove2faHandler(event: CustomEvent<smoothly.Data>) {
 		event.stopPropagation()
-		console.log(event.detail)
 		if ("2fa" in event.detail) {
 			const result = await this.state.users.remove2fa(this.user.email)
 			if (!result) {
@@ -139,29 +138,33 @@ export class UserwidgetsUser {
 					/>
 					<div slot="submit" class={"buttons"}>
 						{!this.key ||
-						!userwidgets.User.Permissions.check(this.key.permissions, this.organization?.id ?? "*", "user.edit")
-							? null
-							: [
-									<userwidgets-edit-button
-										state={this.state}
-										disabled={this.processing || this.change?.permissions == this.user.permissions}
-										changed={!!this.change}
-										onUserwidgetsEditStart={e => {
-											this.editStartHandler(e)
-										}}
-										onUserwidgetsEditEnd={e => this.editEndHandler(e)}
-									/>,
-									this.user.twoFactor && (
-										<smoothly-button-confirm name="2fa" size="flexible" fill="solid" color="tertiary">
-											<smoothly-icon name="shield-checkmark-outline" size="small" />
-											<smoothly-icon
-												name="trash-outline"
-												size="small"
-												toolTip={this.translate("Disable two factor authentication")}
-											/>
-										</smoothly-button-confirm>
-									),
-							  ]}
+						!userwidgets.User.Permissions.check(
+							this.key.permissions,
+							this.organization?.id ?? "*",
+							"user.edit"
+						) ? null : (
+							<Fragment>
+								<userwidgets-edit-button
+									state={this.state}
+									disabled={this.processing || this.change?.permissions == this.user.permissions}
+									changed={!!this.change}
+									onUserwidgetsEditStart={e => {
+										this.editStartHandler(e)
+									}}
+									onUserwidgetsEditEnd={e => this.editEndHandler(e)}
+								/>
+								{this.user.twoFactor && (
+									<smoothly-button-confirm name="2fa" size="flexible" fill="solid" color="tertiary">
+										<smoothly-icon name="shield-checkmark-outline" size="small" />
+										<smoothly-icon
+											name="trash-outline"
+											size="small"
+											toolTip={this.translate("Disable two factor authentication")}
+										/>
+									</smoothly-button-confirm>
+								)}
+							</Fragment>
+						)}
 						{!this.key ||
 						!userwidgets.User.Permissions.check(
 							this.key.permissions,
