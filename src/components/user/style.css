@@ -8,12 +8,23 @@
 	margin-top: 1rem;
 	margin-right: 1rem;
 }
-:host .button {
+:host .button, smoothly-button-confirm smoothly-button {
 	padding: 0.2rem;
 }
-:host .button smoothly-icon {
-	padding: 0.3rem;
-	width: 2.5rem;
-	height: 2.5rem;
-	box-sizing: border-box;
+smoothly-button-confirm {
+  display: flex;
+}
+:host .button, smoothly-button-confirm {
+	& smoothly-icon {
+		padding: 0.3rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		box-sizing: border-box;
+	}
+}
+smoothly-button-confirm:hover smoothly-icon:first-child {
+	display: none;
+}
+smoothly-button-confirm:not(:hover) smoothly-icon:last-child {
+	display: none;
 }
