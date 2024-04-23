@@ -40,7 +40,6 @@ export class UserwidgetsUserListRow {
 					<slot name={`${this.user.email}-cell-start`} />
 					<smoothly-table-cell>{`${this.user.name.first} ${this.user.name.last}`}</smoothly-table-cell>
 					<smoothly-table-cell>{this.user.email}</smoothly-table-cell>
-					<slot name={`${this.user.email}-cell-end`} />
 					<smoothly-table-cell>
 						{this.statuses.map(s => (
 							<smoothly-label hue={s.hue} description={s.description}>
@@ -49,6 +48,7 @@ export class UserwidgetsUserListRow {
 							</smoothly-label>
 						))}
 					</smoothly-table-cell>
+					<slot name={`${this.user.email}-cell-end`} />
 					<smoothly-table-cell />
 					<userwidgets-user
 						slot="detail"

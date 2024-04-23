@@ -8,9 +8,9 @@
 	margin-left: 0.5rem;
 	margin-right: 0.5rem;
 }
-:host::slotted(smoothly-table-expandable-cell > aside) {
+:host::slotted(smoothly-table-expandable-cell > div) {
 	justify-content: center;
 }
-:host::slotted(smoothly-table-expandable-cell > aside > smoothly-icon) {
+:host::slotted(smoothly-table-expandable-cell > div > smoothly-icon) {
 	display: none;
 }
