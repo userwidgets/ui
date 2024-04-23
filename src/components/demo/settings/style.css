@@ -1,8 +1,9 @@
-:host>* {
-	margin: 2rem;
-}
-
 :host {
 	flex-direction: column;
 	display: flex;
 }
+:host>* {
+	margin: 2rem;
+}
+
+
