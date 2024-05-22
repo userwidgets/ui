@@ -79,7 +79,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 		const key = window.sessionStorage.getItem("token")
 		if (key)
 			userwidgets.User.Key.Verifier.create(client.configuration.publicKey)
-				.verify(key)
+				.unpack(key)
 				.then(key => (listenable.key = key || false))
 		return listenable
 	}
