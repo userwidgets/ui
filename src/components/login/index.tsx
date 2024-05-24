@@ -45,7 +45,7 @@ export class UserwidgetsLogin {
 		this.userwidgetsLoginLoaded.emit()
 	}
 	async handleInvite(inviteToken: string) {
-		this.invite = await userwidgets.User.Invite.Verifier.create().verify(inviteToken)
+		this.invite = await userwidgets.User.Invite.Verifier.create().unpack(inviteToken)
 		if (this.invite) {
 			this.activeAccount = this.invite.active
 			if (this.invite.active) {
