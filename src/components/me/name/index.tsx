@@ -1,10 +1,12 @@
 import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
+// TODO use new form functionality and remove this
 interface Change {
 	name: {
 		first?: string
@@ -38,15 +40,18 @@ export class UserwidgetsMeName {
 		event?.stopPropagation()
 		this.change = undefined
 	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
+	inputHandler(event: SmoothlyFormCustomEvent<unknown>, data: smoothly.Data) {
+		event.stopPropagation()
 		if (this.change)
 			this.change = (({ name }) => ({ name }))({
 				...this.change,
-				name: { ...this.change.name, ...(typeof event.detail.name == "object" && event.detail.name) },
+				name: { ...this.change.name, ...(typeof data.name == "object" && data.name) },
 			})
 	}
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
-		this.inputHandler(event)
+	async submitHandler(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	) {
+		this.inputHandler(event, event.detail.value)
 		const name = userwidgets.User.Name.type.get(this.change?.name)
 		if (!name) {
 			const message = `${this.translate("Malformed name.")}`
@@ -71,7 +76,7 @@ export class UserwidgetsMeName {
 				<smoothly-form
 					processing={!!this.request}
 					looks="border"
-					onSmoothlyFormInput={e => this.inputHandler(e)}
+					onSmoothlyFormInput={e => this.inputHandler(e, e.detail)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<smoothly-input
