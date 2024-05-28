@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Host, Prop, State, VNode, Watch } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
@@ -38,13 +39,16 @@ export class UserwidgetsOrganization {
 		event?.stopPropagation()
 		this.change = undefined
 	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
+	inputHandler(event: SmoothlyFormCustomEvent<unknown>, data: smoothly.Data): void {
+		event.stopPropagation()
 		if (this.change)
-			this.change = (({ name }) => ({ name }))({ ...this.change, ...event.detail })
+			this.change = (({ name }) => ({ name }))({ ...this.change, ...data })
 	}
 
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
-		this.inputHandler(event)
+	async submitHandler(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	): Promise<void> {
+		this.inputHandler(event, event.detail.value)
 		const detail = {
 			name: this.change?.name,
 		}
@@ -59,11 +63,11 @@ export class UserwidgetsOrganization {
 		this.request = undefined
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host class={{ editing: !!this.change }}>
 				<smoothly-form
-					onSmoothlyFormInput={e => this.inputHandler(e)}
+					onSmoothlyFormInput={e => this.inputHandler(e, e.detail)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}
 					looks={"grid"}>
 					<smoothly-input
