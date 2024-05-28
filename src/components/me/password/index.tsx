@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -10,27 +11,30 @@ import * as translation from "./translation"
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsPasswordChange {
+export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	private form?: HTMLSmoothlyFormElement
 	@Prop() state: model.State
 	@State() token?: userwidgets.User.Key | false
+	// TODO remove change in favour of new smoothly form
 	@State() change: Partial<userwidgets.User.Password.Change> = { old: "", new: "", repeat: "" }
 	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
-	async componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
+	inputHandler(event: SmoothlyFormCustomEvent<unknown>, data: smoothly.Data) {
 		event.stopPropagation()
 		if (this.change)
-			this.change = { ...this.change, ...(typeof event.detail.password == "object" && event.detail.password) }
+			this.change = { ...this.change, ...(typeof data.password == "object" && data.password) }
 	}
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
+	async submitHandler(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	) {
 		event.stopPropagation()
-		this.inputHandler(event)
+		this.inputHandler(event, event.detail.value)
 		const password = userwidgets.User.Password.Change.type.get(this.change)
 		if (!password) {
 			const message = `${this.translate("Malformed name.")}`
@@ -50,7 +54,7 @@ export class UserwidgetsPasswordChange {
 		}
 		this.request = undefined
 	}
-	render() {
+	render(): VNode | VNode[] {
 		const submittable = this.change.new && this.change.repeat && this.change.new == this.change.repeat
 		return (
 			<Host>
@@ -58,7 +62,7 @@ export class UserwidgetsPasswordChange {
 					ref={e => (this.form = e)}
 					processing={!!this.request}
 					looks="border"
-					onSmoothlyFormInput={e => this.inputHandler(e)}
+					onSmoothlyFormInput={e => this.inputHandler(e, e.detail)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<input type="email" name="email" value={(this.token || undefined)?.email} />
