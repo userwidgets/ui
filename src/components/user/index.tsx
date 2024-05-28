@@ -1,11 +1,27 @@
-import { Component, Element, Event, EventEmitter, Fragment, h, Host, Listen, Prop, State, Watch } from "@stencil/core"
+import {
+	Component,
+	ComponentWillLoad,
+	Element,
+	Event,
+	EventEmitter,
+	Fragment,
+	h,
+	Host,
+	Listen,
+	Prop,
+	State,
+	VNode,
+	Watch,
+} from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { Controls } from "smoothly/dist/types/components/picker/menu"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
 
+// TODO use new smoothly-form functionality instead
 interface Change {
 	permissions: string
 }
@@ -14,7 +30,7 @@ interface Change {
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsUser {
+export class UserwidgetsUser implements ComponentWillLoad {
 	@Element() element: HTMLElement
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
@@ -26,23 +42,23 @@ export class UserwidgetsUser {
 	@Event() notice: EventEmitter<smoothly.Notice>
 	private controls?: Controls
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
-	componentDidRender() {
+	componentDidRender(): void {
 		Array.from(this.element?.children ?? []).map(detail => detail.removeAttribute("hidden"))
 	}
 
 	@Listen("smoothlyPickerLoaded")
-	pickerLoadedHandler(event: CustomEvent<Controls>) {
+	pickerLoadedHandler(event: CustomEvent<Controls>): void {
 		event.stopPropagation()
 		this.controls = event.detail
 	}
 	@Listen("smoothlyConfirm")
-	async remove2faHandler(event: CustomEvent<smoothly.Data>) {
+	async remove2faHandler(event: CustomEvent<smoothly.Data>): Promise<void> {
 		event.stopPropagation()
 		if ("2fa" in event.detail) {
 			const result = await this.state.users.remove2fa(this.user.email)
@@ -56,27 +72,29 @@ export class UserwidgetsUser {
 		}
 	}
 	@Watch("user")
-	userChanged() {
+	userChanged(): void {
 		this.editEndHandler()
 	}
-	editStartHandler(event: CustomEvent) {
+	editStartHandler(event: CustomEvent): void {
 		event.stopPropagation()
 		this.controls?.remember()
 		this.change = { permissions: this.user.permissions }
 	}
-	editEndHandler(event?: CustomEvent) {
+	editEndHandler(event?: CustomEvent): void {
 		event?.stopPropagation()
 		this.change = undefined
 		this.controls?.restore()
 	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
+	inputHandler(event: SmoothlyFormCustomEvent<unknown>, data: smoothly.Data): void {
 		event.stopPropagation()
 		if (this.change)
-			this.change = (({ permissions }) => ({ permissions }))({ ...this.change, ...event.detail })
+			this.change = (({ permissions }) => ({ permissions }))({ ...this.change, ...data })
 	}
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
+	async submitHandler(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	): Promise<void> {
 		event.stopPropagation()
-		this.inputHandler(event)
+		this.inputHandler(event, event.detail.value)
 		if (!this.processing) {
 			this.processing = true
 			const user = userwidgets.User.Changeable.type.get(this.change)
@@ -95,7 +113,7 @@ export class UserwidgetsUser {
 			this.processing = false
 		}
 	}
-	async remove() {
+	async remove(): Promise<void> {
 		if (!this.processing && this.organization) {
 			this.processing = true
 			const users = this.organization.users.filter(email => email != this.user.email)
@@ -114,14 +132,14 @@ export class UserwidgetsUser {
 			this.processing = false
 		}
 	}
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host class={{ editing: !!this.change }}>
 				<slot name={`${this.user.email}-detail-start`} />
 				<smoothly-form
 					looks="grid"
 					processing={this.processing}
-					onSmoothlyFormInput={e => this.inputHandler(e)}
+					onSmoothlyFormInput={e => this.inputHandler(e, e.detail)}
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input name={"name"} readonly value={`${this.user.name.first} ${this.user.name.last}`}>
 						{this.translate("Name")}
