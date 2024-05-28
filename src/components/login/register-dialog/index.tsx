@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -10,7 +11,7 @@ import * as translation from "./translation"
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsRegister {
+export class UserwidgetsRegister implements ComponentWillLoad {
 	@Prop() invite: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
 	@State() processing = false
@@ -23,16 +24,18 @@ export class UserwidgetsRegister {
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 
-	async componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
-	async handleSubmit(event: CustomEvent<model.Data>) {
+	async handleSubmit(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	): Promise<void> {
 		event.preventDefault()
 		event.stopPropagation()
 		this.processing = true
 		const detail = {
-			...event.detail,
+			...event.detail.value,
 			user: this.invite.email,
 		}
 		if (!userwidgets.User.Credentials.Register.is(detail)) {
@@ -53,7 +56,7 @@ export class UserwidgetsRegister {
 		this.processing = false
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
