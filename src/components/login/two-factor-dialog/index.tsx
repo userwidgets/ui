@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -9,7 +10,7 @@ import * as translation from "./translation"
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsTwoFactorDialog {
+export class UserwidgetsTwoFactorDialog implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop() credentials?: userwidgets.User.Credentials
 	@State() processing = false
@@ -19,20 +20,22 @@ export class UserwidgetsTwoFactorDialog {
 	@Event() userwidgetsCancel: EventEmitter
 	@State() translate: langly.Translate = translation.create("en")
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	handleSubmit(event: CustomEvent<any>) {
+	handleSubmit(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	): void {
 		event.preventDefault()
 		this.processing = true
-		if (!event.detail.code || !new RegExp(/^(\d{6}|\d{8})$/).test(event.detail.code))
+		if (typeof event.detail.value.code != "string" || !event.detail.value.code.match(/^(\d{6}|\d{8})$/))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Authentication code must consist of six or eight digits.")))
 		else
-			this.userwidgetsAuthenticate.emit(event.detail.code)
+			this.userwidgetsAuthenticate.emit(event.detail.value.code)
 		this.processing = false
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
