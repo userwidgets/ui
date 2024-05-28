@@ -1,15 +1,17 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
+
 @Component({
 	tag: "userwidgets-login-dialog",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsLoginDialog {
+export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop() invite?: userwidgets.User.Invite
 	@State() processing = false
@@ -20,25 +22,27 @@ export class UserwidgetsLoginDialog {
 	@State() translate: langly.Translate = translation.create("en")
 	private passwordInput?: HTMLSmoothlyInputElement
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.userWidgetsLoginControls.emit({
 			clear: () => this.passwordInput?.clear(),
 		})
 	}
-	handleSubmit(event: CustomEvent<model.Data>) {
+	handleSubmit(
+		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
+	): void {
 		event.preventDefault()
 		this.processing = true
-		if (!userwidgets.User.Credentials.is(event.detail))
+		if (!userwidgets.User.Credentials.is(event.detail.value))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login.")))
-		else if (!event.detail.user.match(/^\S+@\S+$/))
+		else if (!event.detail.value.user.match(/^\S+@\S+$/))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email.")))
 		else
-			this.userwidgetsLogin.emit(event.detail)
+			this.userwidgetsLogin.emit(event.detail.value)
 		this.processing = false
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
