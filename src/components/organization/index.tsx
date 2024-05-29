@@ -30,11 +30,15 @@ export class UserwidgetsOrganization implements ComponentWillLoad {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Malformed organization")))
 			console.error(userwidgets.Organization.flaw(event.detail.value))
 		} else {
-			if (!(await this.state.organizations.update(organization, { id: this.organization.id })))
+			const result = await this.state.organizations.update(organization, { id: this.organization.id })
+			if (!result)
 				this.notice.emit(smoothly.Notice.failed(this.translate("Failed to change organization")))
-			else
+			else {
 				this.notice.emit(smoothly.Notice.succeeded(this.translate("Changed organization")))
+				event.detail.result(true)
+			}
 		}
+		event.detail.result(false)
 	}
 
 	render(): VNode | VNode[] {
