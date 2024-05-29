@@ -6,13 +6,7 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO use new form functionality and remove this
-interface Change {
-	name: {
-		first?: string
-		last?: string
-	}
-}
+// TODO make adjustments and test when new smoothly changes to form are in
 
 @Component({
 	tag: "userwidgets-me-name",
@@ -23,7 +17,6 @@ export class UserwidgetsMeName {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User | undefined
 	@State() token?: userwidgets.User.Key | false
-	@State() change?: Partial<Change>
 	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
@@ -32,27 +25,10 @@ export class UserwidgetsMeName {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	editStart(event: CustomEvent) {
-		event.stopPropagation()
-		this.change = { name: this.user ? this.user.name : this.token ? this.token.name : undefined }
-	}
-	editEnd(event?: CustomEvent) {
-		event?.stopPropagation()
-		this.change = undefined
-	}
-	inputHandler(event: SmoothlyFormCustomEvent<unknown>, data: smoothly.Data) {
-		event.stopPropagation()
-		if (this.change)
-			this.change = (({ name }) => ({ name }))({
-				...this.change,
-				name: { ...this.change.name, ...(typeof data.name == "object" && data.name) },
-			})
-	}
 	async submitHandler(
 		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
 	) {
-		this.inputHandler(event, event.detail.value)
-		const name = userwidgets.User.Name.type.get(this.change?.name)
+		const name = userwidgets.User.Name.type.get(event.detail.value.name)
 		if (!name) {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
@@ -66,7 +42,6 @@ export class UserwidgetsMeName {
 		} else {
 			const message = `${this.translate("Your name has been updated")}`
 			this.notice.emit(smoothly.Notice.succeeded(message))
-			this.change = undefined
 		}
 		this.request = undefined
 	}
@@ -75,30 +50,24 @@ export class UserwidgetsMeName {
 			<Host>
 				<smoothly-form
 					processing={!!this.request}
-					looks="border"
-					onSmoothlyFormInput={e => this.inputHandler(e, e.detail)}
+					looks={"border"}
+					type={"update"}
+					readonly
 					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<smoothly-input
-						readonly={!this.change}
-						name="name.first"
+						name={"name.first"}
 						value={this.user ? this.user.name.first : this.token ? this.token.name.first : null}>
 						{this.translate("First name")}
 					</smoothly-input>
 					<smoothly-input
-						readonly={!this.change}
-						name="name.last"
+						name={"name.last"}
 						value={this.user ? this.user.name.last : this.token ? this.token.name.last : null}>
 						{this.translate("Last name")}
 					</smoothly-input>
-					<userwidgets-edit-button
-						slot="submit"
-						state={this.state}
-						disabled={!!this.request}
-						changed={!!this.change}
-						onUserwidgetsEditStart={e => this.editStart(e)}
-						onUserwidgetsEditEnd={e => this.editEnd(e)}
-					/>
+					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+					<smoothly-input-reset slot={"reset"} type={"form"} size={"icon"} color={"warning"} fill={"default"} />
+					<smoothly-input-submit slot={"submit"} size={"icon"} color={"success"} fill={"default"} />
 				</smoothly-form>
 			</Host>
 		)
