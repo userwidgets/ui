@@ -8,6 +8,7 @@ import { model } from "../../model"
 import { Me } from "../../State/Me"
 import * as translation from "./translation"
 
+// TODO test
 if (!("URLPattern" in globalThis))
 	Object.assign(globalThis, { URLPattern })
 @Component({
