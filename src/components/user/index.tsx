@@ -53,9 +53,7 @@ export class UserwidgetsUser implements ComponentWillLoad {
 			}
 		}
 	}
-	async submitHandler(
-		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
-	): Promise<void> {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		if (!this.processing) {
 			this.processing = true
@@ -99,12 +97,7 @@ export class UserwidgetsUser implements ComponentWillLoad {
 		return (
 			<Host>
 				<slot name={`${this.user.email}-detail-start`} />
-				<smoothly-form
-					looks={"grid"}
-					type={"update"}
-					readonly
-					processing={this.processing}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form looks={"grid"} type={"update"} readonly onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input name={"name"} readonly value={`${this.user.name.first} ${this.user.name.last}`}>
 						{this.translate("Name")}
 					</smoothly-input>
