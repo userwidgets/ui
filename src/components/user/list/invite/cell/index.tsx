@@ -2,7 +2,6 @@ import { Component, h, Host, Listen, Prop, State } from "@stencil/core"
 import { langly } from "langly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../../model"
-import { Events } from "../../../../edit-button"
 import * as translation from "./translation"
 
 @Component({
@@ -35,11 +34,6 @@ export class UserwidgetsUserListInviteCell {
 		event?.stopPropagation()
 		this.open = false
 		this.formControls?.clear()
-	}
-	@Listen("userwidgetsEditLoad")
-	editLoadHandler(event: CustomEvent<(event: Events, handler: () => void) => void>) {
-		event.stopPropagation()
-		event.detail("cancel", () => this.cancelHandler())
 	}
 	expandableChangeHandler(event: CustomEvent<boolean>) {
 		this.open = event.detail

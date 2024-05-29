@@ -7,7 +7,6 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { State } from "./State";
 import { model } from "./model";
-import { Events } from "./components/edit-button/index";
 import { smoothly } from "smoothly";
 import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
@@ -22,13 +21,6 @@ export namespace Components {
     }
     interface UserwidgetsDemoUser {
         "state": model.State;
-    }
-    interface UserwidgetsEditButton {
-        "changed": boolean;
-        "clearable": boolean;
-        "disabled": boolean;
-        "state": model.State;
-        "toggle": boolean;
     }
     interface UserwidgetsLogin {
         "state": model.State;
@@ -152,10 +144,6 @@ export namespace Components {
         "user": userwidgets.User;
     }
 }
-export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsEditButtonElement;
-}
 export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginElement;
@@ -240,12 +228,6 @@ declare global {
     var HTMLUserwidgetsDemoUserElement: {
         prototype: HTMLUserwidgetsDemoUserElement;
         new (): HTMLUserwidgetsDemoUserElement;
-    };
-    interface HTMLUserwidgetsEditButtonElement extends Components.UserwidgetsEditButton, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsEditButtonElement: {
-        prototype: HTMLUserwidgetsEditButtonElement;
-        new (): HTMLUserwidgetsEditButtonElement;
     };
     interface HTMLUserwidgetsLoginElement extends Components.UserwidgetsLogin, HTMLStencilElement {
     }
@@ -426,7 +408,6 @@ declare global {
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
         "userwidgets-demo-settings": HTMLUserwidgetsDemoSettingsElement;
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
-        "userwidgets-edit-button": HTMLUserwidgetsEditButtonElement;
         "userwidgets-login": HTMLUserwidgetsLoginElement;
         "userwidgets-login-button": HTMLUserwidgetsLoginButtonElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
@@ -469,19 +450,6 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsDemoUser {
         "state"?: model.State;
-    }
-    interface UserwidgetsEditButton {
-        "changed"?: boolean;
-        "clearable"?: boolean;
-        "disabled"?: boolean;
-        "onUserwidgetsEditCancel"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditClear"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditEnd"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditLoad"?: (event: UserwidgetsEditButtonCustomEvent<(event: Events, handler: () => void) => void>) => void;
-        "onUserwidgetsEditStart"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditSubmit"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "state"?: model.State;
-        "toggle"?: boolean;
     }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
@@ -640,7 +608,6 @@ declare namespace LocalJSX {
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
         "userwidgets-demo-settings": UserwidgetsDemoSettings;
         "userwidgets-demo-user": UserwidgetsDemoUser;
-        "userwidgets-edit-button": UserwidgetsEditButton;
         "userwidgets-login": UserwidgetsLogin;
         "userwidgets-login-button": UserwidgetsLoginButton;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
@@ -680,7 +647,6 @@ declare module "@stencil/core" {
             "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
             "userwidgets-demo-settings": LocalJSX.UserwidgetsDemoSettings & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoSettingsElement>;
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
-            "userwidgets-edit-button": LocalJSX.UserwidgetsEditButton & JSXBase.HTMLAttributes<HTMLUserwidgetsEditButtonElement>;
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
             "userwidgets-login-button": LocalJSX.UserwidgetsLoginButton & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginButtonElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
