@@ -13,10 +13,8 @@ import * as translation from "./translation"
 	scoped: true,
 })
 export class UserwidgetsPasswordChange implements ComponentWillLoad {
-	private form?: HTMLSmoothlyFormElement
 	@Prop() state: model.State
 	@State() token?: userwidgets.User.Key | false
-	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
@@ -34,20 +32,23 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
-		} else if (!(await (this.request = this.state.users.update(this.token.email, { password })))) {
-			const message = `${this.translate("Failed to update password")}`
-			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			const message = `${this.translate("Your password has been updated")}`
-			this.notice.emit(smoothly.Notice.succeeded(message))
-			this.form?.clear()
+			const result = await this.state.users.update(this.token.email, { password })
+			if (!result) {
+				const message = `${this.translate("Failed to update password")}`
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				const message = `${this.translate("Your password has been updated")}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+				event.detail.result(true)
+			}
+			event.detail.result(false)
 		}
-		this.request = undefined
 	}
 	render(): VNode | VNode[] {
 		return (
 			<Host>
-				<smoothly-form ref={e => (this.form = e)} looks={"border"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form looks={"border"} type={"create"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<input type={"email"} name={"email"} value={(this.token || undefined)?.email} />
 					<smoothly-input type={"password"} name={"password.old"}>
