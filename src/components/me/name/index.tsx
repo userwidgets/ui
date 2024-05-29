@@ -17,7 +17,6 @@ export class UserwidgetsMeName {
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User | undefined
 	@State() token?: userwidgets.User.Key | false
-	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
@@ -26,7 +25,8 @@ export class UserwidgetsMeName {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
-		const name = userwidgets.User.Name.type.get(event.detail.value.name)
+		event.stopPropagation()
+		const name = userwidgets.User.Name.type.get(event.detail.value)
 		if (!name) {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
@@ -34,14 +34,18 @@ export class UserwidgetsMeName {
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
-		} else if (!(await (this.request = this.state.users.update(this.user?.email ?? this.token.email, { name })))) {
-			const message = `${this.translate("Failed to update name")}`
-			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			const message = `${this.translate("Your name has been updated")}`
-			this.notice.emit(smoothly.Notice.succeeded(message))
+			const result = await this.state.users.update(this.user?.email ?? this.token.email, { name })
+			if (!result) {
+				const message = `${this.translate("Failed to update name")}`
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				const message = `${this.translate("Your name has been updated")}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+				event.detail.result(true)
+			}
 		}
-		this.request = undefined
+		event.detail.result(false)
 	}
 	render(): VNode | VNode[] {
 		return (
@@ -49,12 +53,12 @@ export class UserwidgetsMeName {
 				<smoothly-form looks={"border"} type={"update"} readonly onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<smoothly-input
-						name={"name.first"}
+						name={"first"}
 						value={this.user ? this.user.name.first : this.token ? this.token.name.first : null}>
 						{this.translate("First name")}
 					</smoothly-input>
 					<smoothly-input
-						name={"name.last"}
+						name={"last"}
 						value={this.user ? this.user.name.last : this.token ? this.token.name.last : null}>
 						{this.translate("Last name")}
 					</smoothly-input>
