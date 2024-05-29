@@ -96,6 +96,7 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 		} else {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to login, please try again later.")))
 			this.credentials = undefined
+			this.loginControls?.clear()
 			result = false
 		}
 		this.request = undefined
