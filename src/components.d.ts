@@ -578,7 +578,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsTwoFactorSetup {
         "onNotice"?: (event: UserwidgetsTwoFactorSetupCustomEvent<smoothly.Notice>) => void;
-        "onTwoFactor"?: (event: UserwidgetsTwoFactorSetupCustomEvent<{ user: userwidgets.User.Changeable; code: string }>) => void;
+        "onTwoFactor"?: (event: UserwidgetsTwoFactorSetupCustomEvent<Pick<smoothly.Submit, "result"> & { user: userwidgets.User.Changeable; code: string }>) => void;
         "state"?: model.State;
         "userKey"?: false | userwidgets.User.Key | undefined;
     }

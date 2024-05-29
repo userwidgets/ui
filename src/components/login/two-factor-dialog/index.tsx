@@ -27,9 +27,10 @@ export class UserwidgetsTwoFactorDialog implements ComponentWillLoad {
 	}
 	handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): void {
 		event.stopPropagation()
-		if (typeof event.detail.value.code != "string" || !event.detail.value.code.match(/^(\d{6}|\d{8})$/))
+		if (typeof event.detail.value.code != "string" || !event.detail.value.code.match(/^(\d{6}|\d{8})$/)) {
 			this.notice.emit(smoothly.Notice.warn(this.translate("Authentication code must consist of six or eight digits.")))
-		else
+			event.detail.result(false)
+		} else
 			this.userwidgetsAuthenticate.emit({ code: event.detail.value.code, result: event.detail.result })
 	}
 

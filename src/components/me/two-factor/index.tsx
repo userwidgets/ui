@@ -1,5 +1,6 @@
 import { Component, h, Listen, Prop, State } from "@stencil/core"
 import "webcomponent-qr-code"
+import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
@@ -24,10 +25,14 @@ export class UserwidgetsTwoFactor {
 		}
 	}
 	@Listen("twoFactor")
-	async twoFactorListener(event: CustomEvent<{ user: userwidgets.User.Changeable; code: string }>): Promise<void> {
-		if (this.key)
-			(await this.state.users.update(this.key.email, { twoFactor: event.detail.user.twoFactor })) &&
-				(this.recoveryCodes = event.detail.user.twoFactor?.recoveryCodes)
+	async twoFactorListener(
+		event: CustomEvent<Pick<smoothly.Submit, "result"> & { user: userwidgets.User.Changeable; code: string }>
+	): Promise<void> {
+		if (this.key && (await this.state.users.update(this.key.email, { twoFactor: event.detail.user.twoFactor }))) {
+			this.recoveryCodes = event.detail.user.twoFactor?.recoveryCodes
+			event.detail.result(true)
+		} else
+			event.detail.result(false)
 	}
 	render() {
 		return !this.recoveryCodes ? (
