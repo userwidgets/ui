@@ -64,9 +64,9 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 							</a>
 						</p>
 					) : null}
-					<smoothly-submit color="primary" slot="submit">
+					<smoothly-input-submit slot="submit" color="primary">
 						{this.translate("Login")}
-					</smoothly-submit>
+					</smoothly-input-submit>
 				</smoothly-form>
 			</Host>
 		)
