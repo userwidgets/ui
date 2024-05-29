@@ -1,4 +1,4 @@
-import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode, Watch } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
@@ -18,9 +18,9 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() invite?: userwidgets.User.Invite
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<
-		{
+		Pick<smoothly.Submit, "result"> & {
 			credentials: userwidgets.User.Credentials
-		} & Pick<smoothly.Submit, "result">
+		}
 	>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>

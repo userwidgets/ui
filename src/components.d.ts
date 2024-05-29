@@ -497,9 +497,9 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
-        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<{
+        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
 			credentials: userwidgets.User.Credentials
-		} & Pick<smoothly.Submit, "result">>) => void;
+		}>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsLogout {
@@ -552,11 +552,10 @@ declare namespace LocalJSX {
         "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
-        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
-		invite: userwidgets.User.Invite
-		credentials: userwidgets.User.Credentials.Register
-		result: (result: boolean) => void
-	}>) => void;
+        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
+			invite: userwidgets.User.Invite
+			credentials: userwidgets.User.Credentials.Register
+		}>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsSetPassword {
