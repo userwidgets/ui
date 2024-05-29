@@ -152,6 +152,7 @@ export class UserwidgetsLogin {
 							<userwidgets-login-dialog
 								class={"dialog"}
 								state={this.state}
+								invite={this.invite}
 								onUserwidgetsLogin={event => this.loginHandler(event)}
 								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
 								<slot slot={"logo"} name={"logo"} />
