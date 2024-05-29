@@ -6,7 +6,6 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO if-match issue
 @Component({
 	tag: "userwidgets-password-change",
 	styleUrl: "style.css",
