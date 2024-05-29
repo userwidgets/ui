@@ -6,7 +6,6 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
 import * as translation from "./translation"
 
-// TODO update to use new forms
 @Component({
 	tag: "userwidgets-user-list-invite",
 	styleUrl: "style.css",

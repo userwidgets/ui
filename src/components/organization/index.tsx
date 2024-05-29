@@ -6,8 +6,6 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
 
-// TODO make adjustments and test when new smoothly changes to form are in
-
 @Component({
 	tag: "userwidgets-organization",
 	styleUrl: "style.css",

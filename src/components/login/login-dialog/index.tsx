@@ -6,8 +6,6 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO test
-
 @Component({
 	tag: "userwidgets-login-dialog",
 	styleUrl: "style.css",
