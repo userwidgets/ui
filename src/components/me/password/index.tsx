@@ -6,7 +6,7 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO make adjustments and test when new smoothly changes to form are in
+// TODO if-match issue
 @Component({
 	tag: "userwidgets-password-change",
 	styleUrl: "style.css",
@@ -24,6 +24,7 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	}
 	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
+		console.log("event.detail.value: ", event.detail.value)
 		const password = userwidgets.User.Password.Change.type.get(event.detail.value)
 		if (!password) {
 			const message = `${this.translate("Malformed name.")}`
@@ -42,8 +43,8 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 				this.notice.emit(smoothly.Notice.succeeded(message))
 				event.detail.result(true)
 			}
-			event.detail.result(false)
 		}
+		event.detail.result(false)
 	}
 	render(): VNode | VNode[] {
 		return (
@@ -51,13 +52,13 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 				<smoothly-form looks={"border"} type={"create"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<input type={"email"} name={"email"} value={(this.token || undefined)?.email} />
-					<smoothly-input type={"password"} name={"password.old"}>
+					<smoothly-input type={"password"} name={"old"}>
 						{this.translate("Old password")}
 					</smoothly-input>
-					<smoothly-input type={"password"} name={"password.new"}>
+					<smoothly-input type={"password"} name={"new"}>
 						{this.translate("New password")}
 					</smoothly-input>
-					<smoothly-input type={"password"} name={"password.repeat"}>
+					<smoothly-input type={"password"} name={"repeat"}>
 						{this.translate("Repeat new password")}
 					</smoothly-input>
 					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />

@@ -6,7 +6,7 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO make adjustments and test when new smoothly changes to form are in
+// TODO if-match issue.
 
 @Component({
 	tag: "userwidgets-me-name",
