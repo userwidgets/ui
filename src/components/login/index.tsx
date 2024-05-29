@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Host, Listen, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Listen, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -15,7 +15,7 @@ if (!("URLPattern" in globalThis))
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsLogin {
+export class UserwidgetsLogin implements ComponentWillLoad {
 	@Prop() state: model.State
 	@State() resolves?: (() => void)[]
 	@State() invite?: userwidgets.User.Invite
@@ -36,15 +36,15 @@ export class UserwidgetsLogin {
 		})
 	private loginControls?: { clear: () => void }
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.me.onUnauthorized = this.onUnauthorized
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
 	}
-	componentDidLoad() {
+	componentDidLoad(): void {
 		this.userwidgetsLoginLoaded.emit()
 	}
-	async handleInvite(inviteToken: string) {
+	async handleInvite(inviteToken: string): Promise<void> {
 		this.invite = await userwidgets.User.Invite.Verifier.create().unpack(inviteToken)
 		if (this.invite) {
 			this.activeAccount = this.invite.active
@@ -58,19 +58,19 @@ export class UserwidgetsLogin {
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
 	}
 	@Listen("userwidgetsCancel")
-	cancelHandler(event: CustomEvent) {
+	cancelHandler(event: CustomEvent): void {
 		event?.stopPropagation()
 		this.credentials = undefined
 	}
 	@Listen("userWidgetsLoginControls")
-	loginControlsHandler(event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) {
+	loginControlsHandler(event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>): void {
 		event.stopPropagation()
 		this.loginControls = event.detail
 	}
 
 	async loginHandler(
 		event: CustomEvent<Pick<smoothly.Submit, "result"> & { credentials: userwidgets.User.Credentials }>
-	) {
+	): Promise<void> {
 		event.detail.result(await this.login(event.detail.credentials))
 	}
 	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string): Promise<boolean> {
@@ -102,10 +102,10 @@ export class UserwidgetsLogin {
 		return result
 	}
 
-	async authenticateHandler(event: CustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>) {
+	async authenticateHandler(event: CustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>): Promise<void> {
 		event.detail.result(!!(this.credentials && (await this.login(this.credentials, event.detail.code))))
 	}
-	async activeAccountHandler(event: CustomEvent<boolean>) {
+	async activeAccountHandler(event: CustomEvent<boolean>): Promise<void> {
 		this.activeAccount = event.detail
 	}
 
@@ -130,7 +130,7 @@ export class UserwidgetsLogin {
 		}
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host>
 				{this.resolves ? (
