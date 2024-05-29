@@ -27,7 +27,7 @@ export class UserwidgetsUserListInvite implements ComponentWillLoad {
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
-	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>) {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		if (!this.organization) {
 			const message = `${this.translate("No organization selected")}`
@@ -36,33 +36,39 @@ export class UserwidgetsUserListInvite implements ComponentWillLoad {
 			const message = `${this.translate("Invalid form")}`
 			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			const form = event.detail.value
+			const invite = event.detail.value
 			const users = this.organization.users.includes(event.detail.value.user)
-				? this.organization.users.map(email => (email != form.user ? email : { ...form }))
-				: [...this.organization.users, { ...form }]
+				? this.organization.users.map(email => (email != invite.user ? email : { ...invite }))
+				: [...this.organization.users, { ...invite }]
 			const response = await this.state.organizations.update({ users }, { email: true })
 			if (!response) {
-				const message = `${this.translate("Failed to invite")} ${form.user} ${this.translate("to")} ${
+				const message = `${this.translate("Failed to invite")} ${invite.user} ${this.translate("to")} ${
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.failed(message))
 			} else {
-				const message = `${this.translate("Successfully invited")} ${form.user} ${this.translate("to")} ${
+				const message = `${this.translate("Successfully invited")} ${invite.user} ${this.translate("to")} ${
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.succeeded(message))
+				event.detail.result(true)
 			}
 		}
+		event.detail.result(false)
 	}
 
 	render(): VNode | VNode[] {
 		return (
 			<Host>
-				<smoothly-form ref={e => (this.form = e)} looks="grid" onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form
+					ref={e => (this.form = e)}
+					looks={"grid"}
+					type={"create"}
+					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input type="email" name={"user"} value={this.invite?.user}>
 						{this.translate("Email")}
 					</smoothly-input>
-					<userwidgets-edit-button slot="submit" state={this.state} toggle={false} />
+					<smoothly-input-submit slot={"submit"} size={"icon"} color={"success"} fill={"default"} />
 				</smoothly-form>
 			</Host>
 		)
