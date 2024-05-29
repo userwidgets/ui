@@ -6,7 +6,7 @@ import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
 
-// TODO use new form
+// TODO test
 
 @Component({
 	tag: "userwidgets-two-factor-dialog",
