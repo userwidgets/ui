@@ -23,7 +23,6 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	}
 	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		console.log("event.detail.value: ", event.detail.value)
 		const password = userwidgets.User.Password.Change.type.get(event.detail.value)
 		if (!password) {
 			const message = `${this.translate("Malformed name.")}`
