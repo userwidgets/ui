@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
@@ -25,9 +25,7 @@ export class UserwidgetsMeName {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	async submitHandler(
-		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
-	) {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		const name = userwidgets.User.Name.type.get(event.detail.value.name)
 		if (!name) {
 			const message = `${this.translate("Malformed name.")}`
@@ -45,15 +43,10 @@ export class UserwidgetsMeName {
 		}
 		this.request = undefined
 	}
-	render() {
+	render(): VNode | VNode[] {
 		return (
 			<Host>
-				<smoothly-form
-					processing={!!this.request}
-					looks={"border"}
-					type={"update"}
-					readonly
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form looks={"border"} type={"update"} readonly onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<smoothly-input
 						name={"name.first"}
