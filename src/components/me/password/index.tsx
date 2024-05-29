@@ -24,9 +24,7 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	async submitHandler(
-		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
-	): Promise<void> {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		const password = userwidgets.User.Password.Change.type.get(event.detail.value)
 		if (!password) {
@@ -49,11 +47,7 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	render(): VNode | VNode[] {
 		return (
 			<Host>
-				<smoothly-form
-					ref={e => (this.form = e)}
-					processing={!!this.request}
-					looks={"border"}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form ref={e => (this.form = e)} looks={"border"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
 					<input type={"email"} name={"email"} value={(this.token || undefined)?.email} />
 					<smoothly-input type={"password"} name={"password.old"}>
