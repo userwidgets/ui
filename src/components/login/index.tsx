@@ -117,13 +117,17 @@ export class UserwidgetsLogin {
 				credentials: userwidgets.User.Credentials.Register
 			}
 		>
-	) {
+	): Promise<void> {
 		const response = await this.state.me.register(event.detail.invite, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {
 			this.invite = undefined
 			this.resolves.forEach(resolve => resolve())
 			this.resolves = undefined
 			this.loggedIn.emit()
+			event.detail.result(true)
+		} else {
+			event.detail.result(false)
+			this.notice.emit(smoothly.Notice.failed(this.translate(`Failed to register.`)))
 		}
 	}
 

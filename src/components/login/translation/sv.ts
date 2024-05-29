@@ -4,6 +4,7 @@ export const sv = {
 	"Server not available":"Servern är inte tillgänglig",
 	"Failed to login, please try again later.":"Inloggning misslyckades, vänligen försök igen om en liten stund.",
 	"Wrong credentials": "Fel e-post eller lösenord",
-	"Invalid authenticator code, please try again.": "Felaktig auktoriseringskod, vänligen försök igen."
+	"Invalid authenticator code, please try again.": "Felaktig auktoriseringskod, vänligen försök igen.",
+	"Failed to register.": "Misslyckades med registreringen."
 }
 

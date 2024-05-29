@@ -17,11 +17,12 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 	@State() key?: userwidgets.User.Key
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<smoothly.Notice>
-	@Event() userwidgetsRegister: EventEmitter<{
-		invite: userwidgets.User.Invite
-		credentials: userwidgets.User.Credentials.Register
-		result: (result: boolean) => void
-	}>
+	@Event() userwidgetsRegister: EventEmitter<
+		Pick<smoothly.Submit, "result"> & {
+			invite: userwidgets.User.Invite
+			credentials: userwidgets.User.Credentials.Register
+		}
+	>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
 
@@ -44,6 +45,7 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 				)
 			)
 			console.error(userwidgets.User.Credentials.Register.flaw(detail), detail)
+			event.detail.result(false)
 		} else
 			this.userwidgetsRegister.emit({
 				invite: this.invite,
