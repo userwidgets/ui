@@ -59,7 +59,9 @@ export class UserwidgetsUser implements ComponentWillLoad {
 			this.processing = true
 			await (event.detail.type == "remove" ? this.remove() : this.update(event.detail.value))
 			this.processing = false
+			event.detail.result(true)
 		}
+		event.detail.result(false)
 	}
 	async update(data: smoothly.Data): Promise<void> {
 		const change = (({ permissions }) => ({ permissions }))(data)
