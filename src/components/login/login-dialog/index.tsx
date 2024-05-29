@@ -36,9 +36,11 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): void {
 		event.stopPropagation()
 		if (!userwidgets.User.Credentials.is(event.detail.value))
-			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login."))) &&
+				event.detail.result(false)
 		else if (!event.detail.value.user.match(/^\S+@\S+$/))
-			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email.")))
+			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email."))) &&
+				event.detail.result(false)
 		else
 			this.userwidgetsLogin.emit({ credentials: event.detail.value, result: event.detail.result })
 	}
