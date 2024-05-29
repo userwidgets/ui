@@ -1,4 +1,4 @@
-import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode, Watch } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
 import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
