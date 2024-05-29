@@ -68,13 +68,14 @@ export class UserwidgetsLogin {
 		this.loginControls = event.detail
 	}
 
-	async loginHandler(event: CustomEvent<userwidgets.User.Credentials>) {
-		event.preventDefault()
-		await this.login(event.detail)
+	async loginHandler(
+		event: CustomEvent<Pick<smoothly.Submit, "result"> & { credentials: userwidgets.User.Credentials }>
+	) {
+		event.detail.result(await this.login(event.detail.credentials))
 	}
-	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string) {
+	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string): Promise<boolean> {
+		let result: Awaited<ReturnType<UserwidgetsLogin["login"]>>
 		const response = await (this.request = this.state.me.login(credentials, twoFactor))
-		console.log("login response", response)
 		if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
@@ -86,28 +87,35 @@ export class UserwidgetsLogin {
 			this.resolves = undefined
 			this.credentials = undefined
 			this.loggedIn.emit()
+			result = true
 		} else if (userwidgets.User.Unauthenticated.is(response)) {
 			this.credentials &&
 				this.notice.emit(smoothly.Notice.failed(this.translate("Invalid authenticator code, please try again.")))
 			this.credentials = credentials
+			result = false
 		} else {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to login, please try again later.")))
 			this.credentials = undefined
-			this.loginControls?.clear()
+			result = false
 		}
 		this.request = undefined
+		return result
 	}
 
-	async authenticateHandler(event: CustomEvent<string>) {
-		event.preventDefault()
-		this.credentials && (await this.login(this.credentials, event.detail))
+	async authenticateHandler(event: CustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>) {
+		event.detail.result(!!(this.credentials && (await this.login(this.credentials, event.detail.code))))
 	}
 	async activeAccountHandler(event: CustomEvent<boolean>) {
 		this.activeAccount = event.detail
 	}
 
 	async registerHandler(
-		event: CustomEvent<{ invite: userwidgets.User.Invite; credentials: userwidgets.User.Credentials.Register }>
+		event: CustomEvent<
+			Pick<smoothly.Submit, "result"> & {
+				invite: userwidgets.User.Invite
+				credentials: userwidgets.User.Credentials.Register
+			}
+		>
 	) {
 		const response = await this.state.me.register(event.detail.invite, event.detail.credentials)
 		if (userwidgets.User.Key.is(response) && this.resolves) {

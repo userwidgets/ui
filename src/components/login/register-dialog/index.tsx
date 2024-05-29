@@ -14,12 +14,12 @@ import * as translation from "./translation"
 export class UserwidgetsRegister implements ComponentWillLoad {
 	@Prop() invite: userwidgets.User.Invite
 	@State() key?: userwidgets.User.Key
-	@State() processing = false
 	@Prop() state: model.State
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsRegister: EventEmitter<{
 		invite: userwidgets.User.Invite
 		credentials: userwidgets.User.Credentials.Register
+		result: (result: boolean) => void
 	}>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@State() translate: langly.Translate = translation.create("en")
@@ -28,12 +28,8 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
-	async handleSubmit(
-		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
-	): Promise<void> {
-		event.preventDefault()
+	async handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		this.processing = true
 		const detail = {
 			...event.detail.value,
 			user: this.invite.email,
@@ -46,21 +42,20 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 					)
 				)
 			)
-			console.log(detail)
-			console.log(userwidgets.User.Credentials.Register.flaw(detail))
+			console.error(userwidgets.User.Credentials.Register.flaw(detail), detail)
 		} else
 			this.userwidgetsRegister.emit({
 				invite: this.invite,
 				credentials: detail,
+				result: event.detail.result,
 			})
-		this.processing = false
 	}
 
 	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
-				<smoothly-form processing={this.processing} looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input class="email" type="text" name="user" readonly value={this.invite.email}>
 						{this.translate("Email")}
 					</smoothly-input>
@@ -85,7 +80,7 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 							{this.translate("Login")}
 						</a>
 					</p>
-					<smoothly-submit disabled={this.processing} color="primary" slot="submit">
+					<smoothly-submit color="primary" slot="submit">
 						{this.translate("Register")}
 					</smoothly-submit>
 				</smoothly-form>

@@ -14,9 +14,12 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop() invite?: userwidgets.User.Invite
-	@State() processing = false
 	@Event() notice: EventEmitter<smoothly.Notice>
-	@Event() userwidgetsLogin: EventEmitter<userwidgets.User.Credentials>
+	@Event() userwidgetsLogin: EventEmitter<
+		{
+			credentials: userwidgets.User.Credentials
+		} & Pick<smoothly.Submit, "result">
+	>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
 	@State() translate: langly.Translate = translation.create("en")
@@ -28,25 +31,21 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 			clear: () => this.passwordInput?.clear(),
 		})
 	}
-	handleSubmit(
-		event: SmoothlyFormCustomEvent<{ type: "update" | "change" | "fetch" | "create" | "remove"; value: smoothly.Data }>
-	): void {
-		event.preventDefault()
-		this.processing = true
+	handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): void {
+		event.stopPropagation()
 		if (!userwidgets.User.Credentials.is(event.detail.value))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login.")))
 		else if (!event.detail.value.user.match(/^\S+@\S+$/))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Provided email is not an email.")))
 		else
-			this.userwidgetsLogin.emit(event.detail.value)
-		this.processing = false
+			this.userwidgetsLogin.emit({ credentials: event.detail.value, result: event.detail.result })
 	}
 
 	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
-				<smoothly-form processing={this.processing} looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
+				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
 					<smoothly-input type="email" name="user">
 						{this.translate("Email")}
 					</smoothly-input>
@@ -63,7 +62,7 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 							</a>
 						</p>
 					) : null}
-					<smoothly-submit disabled={this.processing} color="primary" slot="submit">
+					<smoothly-submit color="primary" slot="submit">
 						{this.translate("Login")}
 					</smoothly-submit>
 				</smoothly-form>

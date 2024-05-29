@@ -497,7 +497,9 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
-        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
+        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<{
+			credentials: userwidgets.User.Credentials
+		} & Pick<smoothly.Submit, "result">>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsLogout {
@@ -553,6 +555,7 @@ declare namespace LocalJSX {
         "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
 		invite: userwidgets.User.Invite
 		credentials: userwidgets.User.Credentials.Register
+		result: (result: boolean) => void
 	}>) => void;
         "state"?: model.State;
     }
@@ -567,7 +570,7 @@ declare namespace LocalJSX {
     interface UserwidgetsTwoFactorDialog {
         "credentials"?: userwidgets.User.Credentials;
         "onNotice"?: (event: UserwidgetsTwoFactorDialogCustomEvent<smoothly.Notice>) => void;
-        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<string>) => void;
+        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>) => void;
         "onUserwidgetsCancel"?: (event: UserwidgetsTwoFactorDialogCustomEvent<any>) => void;
         "state"?: model.State;
     }
