@@ -30,7 +30,6 @@ export class UserwidgetsUser implements ComponentWillLoad {
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() key?: userwidgets.User.Key
 	@State() translate: langly.Translate = translation.create("en")
-	@State() processing = false
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	componentWillLoad(): void {
@@ -54,31 +53,33 @@ export class UserwidgetsUser implements ComponentWillLoad {
 	}
 	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		if (!this.processing) {
-			this.processing = true
-			await (event.detail.type == "remove" ? this.remove() : this.update(event.detail.value))
-			this.processing = false
-			event.detail.result(true)
-		}
-		event.detail.result(false)
+		event.detail.result(await (event.detail.type == "remove" ? this.remove() : this.update(event.detail.value)))
 	}
-	async update(data: smoothly.Data): Promise<void> {
+	async update(data: smoothly.Data): Promise<boolean> {
+		let result: boolean
 		const change = (({ permissions }) => ({ permissions }))(data)
 		const user = userwidgets.User.Changeable.type.get(change)
 		if (!user) {
 			const message = `${this.translate("Malformed user")}`
 			console.error(change, userwidgets.User.Changeable.flaw(change))
 			this.notice.emit(smoothly.Notice.failed(message))
+			result = false
 		} else if (!(await this.state.users.update(this.user.email, user))) {
 			const message = `${this.translate("Failed to update user")}: ${this.user.email}`
 			this.notice.emit(smoothly.Notice.failed(message))
+			result = false
 		} else {
 			const message = `${this.translate("Successfully updated user")}: ${this.user.email}`
 			this.notice.emit(smoothly.Notice.succeeded(message))
+			result = true
 		}
+		return result
 	}
-	async remove(): Promise<void> {
-		if (this.organization) {
+	async remove(): Promise<boolean> {
+		let result: boolean
+		if (!this.organization)
+			result = false
+		else {
 			const users = this.organization.users.filter(email => email != this.user.email)
 			const response = await this.state.organizations.update({ users }, { id: this.organization.id })
 			if (!response) {
@@ -86,13 +87,16 @@ export class UserwidgetsUser implements ComponentWillLoad {
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.failed(message))
+				result = false
 			} else {
 				const message = `${this.translate("Successfully removed")} ${this.user.email} ${this.translate("from")} ${
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.succeeded(message))
+				result = true
 			}
 		}
+		return result
 	}
 	render(): VNode | VNode[] {
 		return (
