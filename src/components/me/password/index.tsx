@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -10,28 +11,19 @@ import * as translation from "./translation"
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsPasswordChange {
-	private form?: HTMLSmoothlyFormElement
+export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	@Prop() state: model.State
 	@State() token?: userwidgets.User.Key | false
-	@State() change: Partial<userwidgets.User.Password.Change> = { old: "", new: "", repeat: "" }
-	@State() request?: ReturnType<typeof this.state.users.update>
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
-	async componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		if (this.change)
-			this.change = { ...this.change, ...(typeof event.detail.password == "object" && event.detail.password) }
-	}
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
-		event.stopPropagation()
-		this.inputHandler(event)
-		const password = userwidgets.User.Password.Change.type.get(this.change)
+		const password = userwidgets.User.Password.Change.type.get(event.detail.value)
 		if (!password) {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
@@ -39,55 +31,37 @@ export class UserwidgetsPasswordChange {
 		} else if (!this.token) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
-		} else if (!(await (this.request = this.state.users.update(this.token.email, { password })))) {
-			const message = `${this.translate("Failed to update password")}`
-			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			const message = `${this.translate("Your password has been updated")}`
-			this.notice.emit(smoothly.Notice.succeeded(message))
-			this.change = { old: "", new: "", repeat: "" }
-			this.form?.clear()
+			const result = await this.state.users.update(this.token.email, { password })
+			if (!result) {
+				const message = `${this.translate("Failed to update password")}`
+				this.notice.emit(smoothly.Notice.failed(message))
+			} else {
+				const message = `${this.translate("Your password has been updated")}`
+				this.notice.emit(smoothly.Notice.succeeded(message))
+				event.detail.result(true)
+			}
 		}
-		this.request = undefined
+		event.detail.result(false)
 	}
-	render() {
-		const submittable = this.change.new && this.change.repeat && this.change.new == this.change.repeat
+	render(): VNode | VNode[] {
 		return (
 			<Host>
-				<smoothly-form
-					ref={e => (this.form = e)}
-					processing={!!this.request}
-					looks="border"
-					onSmoothlyFormInput={e => this.inputHandler(e)}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form looks={"border"} type={"create"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
-					<input type="email" name="email" value={(this.token || undefined)?.email} />
-					<smoothly-input type="password" name="password.old">
+					<input type={"email"} name={"email"} value={(this.token || undefined)?.email} />
+					<smoothly-input type={"password"} name={"old"}>
 						{this.translate("Old password")}
 					</smoothly-input>
-					<smoothly-input type="password" name="password.new">
+					<smoothly-input type={"password"} name={"new"}>
 						{this.translate("New password")}
 					</smoothly-input>
-					<smoothly-input type="password" name="password.repeat">
+					<smoothly-input type={"password"} name={"repeat"}>
 						{this.translate("Repeat new password")}
 					</smoothly-input>
-					<smoothly-input-clear
-						type="form"
-						color="danger"
-						fill="solid"
-						slot="clear"
-						disabled={!Object.values(this.change).some(v => v?.length > 0)}>
-						Clear
-					</smoothly-input-clear>
-					<smoothly-submit
-						title={!submittable ? "New and repeated passwords must match" : ""}
-						slot="submit"
-						color="success"
-						size="small"
-						fill="solid"
-						disabled={!submittable}>
-						Submit
-					</smoothly-submit>
+					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+					<smoothly-input-reset slot={"reset"} type={"form"} size={"icon"} color={"warning"} fill={"default"} />
+					<smoothly-input-submit slot={"submit"} size={"icon"} color={"success"} fill={"default"} />
 				</smoothly-form>
 			</Host>
 		)

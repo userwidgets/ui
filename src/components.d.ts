@@ -7,7 +7,6 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { State } from "./State";
 import { model } from "./model";
-import { Events } from "./components/edit-button/index";
 import { smoothly } from "smoothly";
 import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
@@ -22,13 +21,6 @@ export namespace Components {
     }
     interface UserwidgetsDemoUser {
         "state": model.State;
-    }
-    interface UserwidgetsEditButton {
-        "changed": boolean;
-        "clearable": boolean;
-        "disabled": boolean;
-        "state": model.State;
-        "toggle": boolean;
     }
     interface UserwidgetsLogin {
         "state": model.State;
@@ -85,10 +77,6 @@ export namespace Components {
     interface UserwidgetsRegisterDialog {
         "invite": userwidgets.User.Invite;
         "state": model.State;
-    }
-    interface UserwidgetsSetPassword {
-        "state": model.State;
-        "user": userwidgets.User;
     }
     interface UserwidgetsTwoFactor {
         "state": model.State;
@@ -152,10 +140,6 @@ export namespace Components {
         "user": userwidgets.User;
     }
 }
-export interface UserwidgetsEditButtonCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsEditButtonElement;
-}
 export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginElement;
@@ -183,10 +167,6 @@ export interface UserwidgetsPermissionPickerCustomEvent<T> extends CustomEvent<T
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsRegisterDialogElement;
-}
-export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsSetPasswordElement;
 }
 export interface UserwidgetsTwoFactorDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -240,12 +220,6 @@ declare global {
     var HTMLUserwidgetsDemoUserElement: {
         prototype: HTMLUserwidgetsDemoUserElement;
         new (): HTMLUserwidgetsDemoUserElement;
-    };
-    interface HTMLUserwidgetsEditButtonElement extends Components.UserwidgetsEditButton, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsEditButtonElement: {
-        prototype: HTMLUserwidgetsEditButtonElement;
-        new (): HTMLUserwidgetsEditButtonElement;
     };
     interface HTMLUserwidgetsLoginElement extends Components.UserwidgetsLogin, HTMLStencilElement {
     }
@@ -330,12 +304,6 @@ declare global {
     var HTMLUserwidgetsRegisterDialogElement: {
         prototype: HTMLUserwidgetsRegisterDialogElement;
         new (): HTMLUserwidgetsRegisterDialogElement;
-    };
-    interface HTMLUserwidgetsSetPasswordElement extends Components.UserwidgetsSetPassword, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsSetPasswordElement: {
-        prototype: HTMLUserwidgetsSetPasswordElement;
-        new (): HTMLUserwidgetsSetPasswordElement;
     };
     interface HTMLUserwidgetsTwoFactorElement extends Components.UserwidgetsTwoFactor, HTMLStencilElement {
     }
@@ -426,7 +394,6 @@ declare global {
         "userwidgets-demo-organization": HTMLUserwidgetsDemoOrganizationElement;
         "userwidgets-demo-settings": HTMLUserwidgetsDemoSettingsElement;
         "userwidgets-demo-user": HTMLUserwidgetsDemoUserElement;
-        "userwidgets-edit-button": HTMLUserwidgetsEditButtonElement;
         "userwidgets-login": HTMLUserwidgetsLoginElement;
         "userwidgets-login-button": HTMLUserwidgetsLoginButtonElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
@@ -441,7 +408,6 @@ declare global {
         "userwidgets-password-change": HTMLUserwidgetsPasswordChangeElement;
         "userwidgets-permission-picker": HTMLUserwidgetsPermissionPickerElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
-        "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-two-factor": HTMLUserwidgetsTwoFactorElement;
         "userwidgets-two-factor-dialog": HTMLUserwidgetsTwoFactorDialogElement;
         "userwidgets-two-factor-recovery": HTMLUserwidgetsTwoFactorRecoveryElement;
@@ -470,19 +436,6 @@ declare namespace LocalJSX {
     interface UserwidgetsDemoUser {
         "state"?: model.State;
     }
-    interface UserwidgetsEditButton {
-        "changed"?: boolean;
-        "clearable"?: boolean;
-        "disabled"?: boolean;
-        "onUserwidgetsEditCancel"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditClear"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditEnd"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditLoad"?: (event: UserwidgetsEditButtonCustomEvent<(event: Events, handler: () => void) => void>) => void;
-        "onUserwidgetsEditStart"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "onUserwidgetsEditSubmit"?: (event: UserwidgetsEditButtonCustomEvent<void>) => void;
-        "state"?: model.State;
-        "toggle"?: boolean;
-    }
     interface UserwidgetsLogin {
         "onLoggedIn"?: (event: UserwidgetsLoginCustomEvent<any>) => void;
         "onNotice"?: (event: UserwidgetsLoginCustomEvent<smoothly.Notice>) => void;
@@ -497,7 +450,9 @@ declare namespace LocalJSX {
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
-        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<userwidgets.User.Credentials>) => void;
+        "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
+			credentials: userwidgets.User.Credentials
+		}>) => void;
         "state"?: model.State;
     }
     interface UserwidgetsLogout {
@@ -550,16 +505,11 @@ declare namespace LocalJSX {
         "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
-        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<{
-		invite: userwidgets.User.Invite
-		credentials: userwidgets.User.Credentials.Register
-	}>) => void;
+        "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
+			invite: userwidgets.User.Invite
+			credentials: userwidgets.User.Credentials.Register
+		}>) => void;
         "state"?: model.State;
-    }
-    interface UserwidgetsSetPassword {
-        "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<smoothly.Notice>) => void;
-        "state"?: model.State;
-        "user"?: userwidgets.User;
     }
     interface UserwidgetsTwoFactor {
         "state"?: model.State;
@@ -567,7 +517,7 @@ declare namespace LocalJSX {
     interface UserwidgetsTwoFactorDialog {
         "credentials"?: userwidgets.User.Credentials;
         "onNotice"?: (event: UserwidgetsTwoFactorDialogCustomEvent<smoothly.Notice>) => void;
-        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<string>) => void;
+        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>) => void;
         "onUserwidgetsCancel"?: (event: UserwidgetsTwoFactorDialogCustomEvent<any>) => void;
         "state"?: model.State;
     }
@@ -576,7 +526,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsTwoFactorSetup {
         "onNotice"?: (event: UserwidgetsTwoFactorSetupCustomEvent<smoothly.Notice>) => void;
-        "onTwoFactor"?: (event: UserwidgetsTwoFactorSetupCustomEvent<{ user: userwidgets.User.Changeable; code: string }>) => void;
+        "onTwoFactor"?: (event: UserwidgetsTwoFactorSetupCustomEvent<Pick<smoothly.Submit, "result"> & { user: userwidgets.User.Changeable; code: string }>) => void;
         "state"?: model.State;
         "userKey"?: false | userwidgets.User.Key | undefined;
     }
@@ -638,7 +588,6 @@ declare namespace LocalJSX {
         "userwidgets-demo-organization": UserwidgetsDemoOrganization;
         "userwidgets-demo-settings": UserwidgetsDemoSettings;
         "userwidgets-demo-user": UserwidgetsDemoUser;
-        "userwidgets-edit-button": UserwidgetsEditButton;
         "userwidgets-login": UserwidgetsLogin;
         "userwidgets-login-button": UserwidgetsLoginButton;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
@@ -653,7 +602,6 @@ declare namespace LocalJSX {
         "userwidgets-password-change": UserwidgetsPasswordChange;
         "userwidgets-permission-picker": UserwidgetsPermissionPicker;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
-        "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-two-factor": UserwidgetsTwoFactor;
         "userwidgets-two-factor-dialog": UserwidgetsTwoFactorDialog;
         "userwidgets-two-factor-recovery": UserwidgetsTwoFactorRecovery;
@@ -678,7 +626,6 @@ declare module "@stencil/core" {
             "userwidgets-demo-organization": LocalJSX.UserwidgetsDemoOrganization & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoOrganizationElement>;
             "userwidgets-demo-settings": LocalJSX.UserwidgetsDemoSettings & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoSettingsElement>;
             "userwidgets-demo-user": LocalJSX.UserwidgetsDemoUser & JSXBase.HTMLAttributes<HTMLUserwidgetsDemoUserElement>;
-            "userwidgets-edit-button": LocalJSX.UserwidgetsEditButton & JSXBase.HTMLAttributes<HTMLUserwidgetsEditButtonElement>;
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
             "userwidgets-login-button": LocalJSX.UserwidgetsLoginButton & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginButtonElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
@@ -693,7 +640,6 @@ declare module "@stencil/core" {
             "userwidgets-password-change": LocalJSX.UserwidgetsPasswordChange & JSXBase.HTMLAttributes<HTMLUserwidgetsPasswordChangeElement>;
             "userwidgets-permission-picker": LocalJSX.UserwidgetsPermissionPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsPermissionPickerElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
-            "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-two-factor": LocalJSX.UserwidgetsTwoFactor & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorElement>;
             "userwidgets-two-factor-dialog": LocalJSX.UserwidgetsTwoFactorDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorDialogElement>;
             "userwidgets-two-factor-recovery": LocalJSX.UserwidgetsTwoFactorRecovery & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorRecoveryElement>;

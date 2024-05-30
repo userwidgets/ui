@@ -1,87 +1,54 @@
-import { Component, Event, EventEmitter, h, Host, Prop, State, Watch } from "@stencil/core"
+import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
-
-interface Change {
-	name: string
-}
 
 @Component({
 	tag: "userwidgets-organization",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsOrganization {
+export class UserwidgetsOrganization implements ComponentWillLoad {
 	@Prop() organization: userwidgets.Organization
 	@Prop() state: model.State
 	@State() translate: langly.Translate = translation.create("en")
-	@State() change?: Partial<Change>
-	@State() request?: ReturnType<typeof this.state.organizations.update>
 	@Event() notice: EventEmitter<smoothly.Notice>
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
-	@Watch("organization")
-	organizationChanged() {
-		this.editEnd()
-	}
-	editStart(event: CustomEvent) {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		this.change = { name: this.organization.name }
-	}
-	editEnd(event?: CustomEvent) {
-		event?.stopPropagation()
-		this.change = undefined
-	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
-		if (this.change)
-			this.change = (({ name }) => ({ name }))({ ...this.change, ...event.detail })
-	}
-
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
-		this.inputHandler(event)
-		const detail = {
-			name: this.change?.name,
-		}
-		const organization = userwidgets.Organization.Changeable.type.get(detail)
+		const organization = userwidgets.Organization.Changeable.type.get(event.detail.value)
 		if (!organization) {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Malformed organization")))
-			console.error(userwidgets.Organization.flaw(detail))
-		} else if (!(await (this.request = this.state.organizations.update(organization, { id: this.organization.id }))))
-			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to change organization")))
-		else
-			this.notice.emit(smoothly.Notice.succeeded(this.translate("Changed organization")))
-		this.request = undefined
+			console.error(userwidgets.Organization.flaw(event.detail.value))
+		} else {
+			const result = await this.state.organizations.update(organization, { id: this.organization.id })
+			if (!result)
+				this.notice.emit(smoothly.Notice.failed(this.translate("Failed to change organization")))
+			else {
+				this.notice.emit(smoothly.Notice.succeeded(this.translate("Changed organization")))
+				event.detail.result(true)
+			}
+		}
+		event.detail.result(false)
 	}
 
-	render() {
+	render(): VNode | VNode[] {
 		return (
-			<Host class={{ editing: !!this.change }}>
-				<smoothly-form
-					onSmoothlyFormInput={e => this.inputHandler(e)}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}
-					looks={"grid"}>
-					<smoothly-input
-						name="name"
-						readonly={!this.change}
-						value={this.change ? this.change.name : this.organization.name}>
+			<Host>
+				<smoothly-form looks={"grid"} type={"update"} readonly onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+					<smoothly-input name="name" value={this.organization.name}>
 						{this.translate("Name")}
 					</smoothly-input>
-					<userwidgets-edit-button
-						slot="submit"
-						state={this.state}
-						disabled={!!this.request || this.change?.name == this.organization.name}
-						changed={!!this.change}
-						onUserwidgetsEditStart={e => {
-							this.editStart(e)
-						}}
-						onUserwidgetsEditEnd={e => this.editEnd(e)}
-					/>
+					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+					<smoothly-input-reset slot={"reset"} type={"form"} size={"icon"} color={"warning"} fill={"default"} />
+					<smoothly-input-submit slot={"submit"} size={"icon"} color={"success"} fill={"default"} />
 				</smoothly-form>
 				<userwidgets-user-list-organization state={this.state} />
 			</Host>

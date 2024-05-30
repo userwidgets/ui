@@ -1,48 +1,44 @@
-import { Component, Element, Event, EventEmitter, Fragment, h, Host, Listen, Prop, State, Watch } from "@stencil/core"
+import {
+	Component,
+	ComponentWillLoad,
+	Element,
+	Event,
+	EventEmitter,
+	Fragment,
+	h,
+	Host,
+	Prop,
+	State,
+	VNode,
+} from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
-import { Controls } from "smoothly/dist/types/components/picker/menu"
+import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
 
-interface Change {
-	permissions: string
-}
 @Component({
 	tag: "userwidgets-user",
 	styleUrl: "style.css",
 	scoped: true,
 })
-export class UserwidgetsUser {
+export class UserwidgetsUser implements ComponentWillLoad {
 	@Element() element: HTMLElement
 	@Prop() state: model.State
 	@Prop() user: userwidgets.User
 	@Prop({ mutable: true }) organization?: userwidgets.Organization | null = null
 	@State() key?: userwidgets.User.Key
-	@State() change?: Partial<Change>
 	@State() translate: langly.Translate = translation.create("en")
-	@State() processing = false
 	@Event() notice: EventEmitter<smoothly.Notice>
-	private controls?: Controls
 
-	componentWillLoad() {
+	componentWillLoad(): void {
 		this.state.me.listen("key", key => (this.key = key || undefined))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		if (this.organization === null)
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
-	componentDidRender() {
-		Array.from(this.element?.children ?? []).map(detail => detail.removeAttribute("hidden"))
-	}
-
-	@Listen("smoothlyPickerLoaded")
-	pickerLoadedHandler(event: CustomEvent<Controls>) {
-		event.stopPropagation()
-		this.controls = event.detail
-	}
-	@Listen("smoothlyConfirm")
-	async remove2faHandler(event: CustomEvent<smoothly.Data>) {
+	async remove2faHandler(event: CustomEvent<smoothly.Data>): Promise<void> {
 		event.stopPropagation()
 		if ("2fa" in event.detail) {
 			const result = await this.state.users.remove2fa(this.user.email)
@@ -55,49 +51,35 @@ export class UserwidgetsUser {
 			}
 		}
 	}
-	@Watch("user")
-	userChanged() {
-		this.editEndHandler()
-	}
-	editStartHandler(event: CustomEvent) {
+	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
-		this.controls?.remember()
-		this.change = { permissions: this.user.permissions }
+		event.detail.result(await (event.detail.type == "remove" ? this.remove() : this.update(event.detail.value)))
 	}
-	editEndHandler(event?: CustomEvent) {
-		event?.stopPropagation()
-		this.change = undefined
-		this.controls?.restore()
-	}
-	inputHandler(event: CustomEvent<smoothly.Data>) {
-		event.stopPropagation()
-		if (this.change)
-			this.change = (({ permissions }) => ({ permissions }))({ ...this.change, ...event.detail })
-	}
-	async submitHandler(event: CustomEvent<smoothly.Data>) {
-		event.stopPropagation()
-		this.inputHandler(event)
-		if (!this.processing) {
-			this.processing = true
-			const user = userwidgets.User.Changeable.type.get(this.change)
-			if (!user) {
-				const message = `${this.translate("Malformed user")}`
-				console.error(this.change, userwidgets.User.Changeable.flaw(this.change))
-				this.notice.emit(smoothly.Notice.failed(message))
-			} else if (!(await this.state.users.update(this.user.email, user))) {
-				const message = `${this.translate("Failed to update user")}: ${this.user.email}`
-				this.notice.emit(smoothly.Notice.failed(message))
-			} else {
-				const message = `${this.translate("Successfully updated user")}: ${this.user.email}`
-				this.notice.emit(smoothly.Notice.succeeded(message))
-				this.change = undefined
-			}
-			this.processing = false
+	async update(data: smoothly.Data): Promise<boolean> {
+		let result: boolean
+		const change = (({ permissions }) => ({ permissions }))(data)
+		const user = userwidgets.User.Changeable.type.get(change)
+		if (!user) {
+			const message = `${this.translate("Malformed user")}`
+			console.error(change, userwidgets.User.Changeable.flaw(change))
+			this.notice.emit(smoothly.Notice.failed(message))
+			result = false
+		} else if (!(await this.state.users.update(this.user.email, user))) {
+			const message = `${this.translate("Failed to update user")}: ${this.user.email}`
+			this.notice.emit(smoothly.Notice.failed(message))
+			result = false
+		} else {
+			const message = `${this.translate("Successfully updated user")}: ${this.user.email}`
+			this.notice.emit(smoothly.Notice.succeeded(message))
+			result = true
 		}
+		return result
 	}
-	async remove() {
-		if (!this.processing && this.organization) {
-			this.processing = true
+	async remove(): Promise<boolean> {
+		let result: boolean
+		if (!this.organization)
+			result = false
+		else {
 			const users = this.organization.users.filter(email => email != this.user.email)
 			const response = await this.state.organizations.update({ users }, { id: this.organization.id })
 			if (!response) {
@@ -105,24 +87,22 @@ export class UserwidgetsUser {
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.failed(message))
+				result = false
 			} else {
 				const message = `${this.translate("Successfully removed")} ${this.user.email} ${this.translate("from")} ${
 					this.organization.name
 				}`
 				this.notice.emit(smoothly.Notice.succeeded(message))
+				result = true
 			}
-			this.processing = false
 		}
+		return result
 	}
-	render() {
+	render(): VNode | VNode[] {
 		return (
-			<Host class={{ editing: !!this.change }}>
+			<Host>
 				<slot name={`${this.user.email}-detail-start`} />
-				<smoothly-form
-					looks="grid"
-					processing={this.processing}
-					onSmoothlyFormInput={e => this.inputHandler(e)}
-					onSmoothlyFormSubmit={e => this.submitHandler(e)}>
+				<smoothly-form looks={"grid"} type={"update"} readonly onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<smoothly-input name={"name"} readonly value={`${this.user.name.first} ${this.user.name.last}`}>
 						{this.translate("Name")}
 					</smoothly-input>
@@ -134,7 +114,6 @@ export class UserwidgetsUser {
 						state={this.state}
 						user={this.user}
 						organization={this.organization || undefined}
-						readonly={!this.change}
 					/>
 					<div slot="submit" class={"buttons"}>
 						{!this.key ||
@@ -144,17 +123,17 @@ export class UserwidgetsUser {
 							"user.edit"
 						) ? null : (
 							<Fragment>
-								<userwidgets-edit-button
-									state={this.state}
-									disabled={this.processing || this.change?.permissions == this.user.permissions}
-									changed={!!this.change}
-									onUserwidgetsEditStart={e => {
-										this.editStartHandler(e)
-									}}
-									onUserwidgetsEditEnd={e => this.editEndHandler(e)}
-								/>
+								<smoothly-input-edit type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+								<smoothly-input-reset type={"form"} size={"icon"} color={"warning"} fill={"default"} />
+								<smoothly-input-submit size={"icon"} color={"danger"} fill={"default"} delete />
+								<smoothly-input-submit size={"icon"} color={"success"} fill={"default"} />
 								{this.user.twoFactor && (
-									<smoothly-button-confirm name="2fa" size="flexible" fill="solid" color="tertiary">
+									<smoothly-button-confirm
+										name="2fa"
+										size="flexible"
+										fill="solid"
+										color="tertiary"
+										onSmoothlyConfirm={e => this.remove2faHandler(e)}>
 										<smoothly-icon name="shield-checkmark-outline" size="small" />
 										<smoothly-icon
 											name="trash-outline"
@@ -164,23 +143,6 @@ export class UserwidgetsUser {
 									</smoothly-button-confirm>
 								)}
 							</Fragment>
-						)}
-						{!this.key ||
-						!userwidgets.User.Permissions.check(
-							this.key.permissions,
-							this.organization?.id ?? "*",
-							"org.edit"
-						) ? null : (
-							<smoothly-button
-								slot="submit"
-								class="button"
-								size="flexible"
-								color="danger"
-								type="button"
-								disabled={this.processing}
-								onClick={() => this.remove()}>
-								<smoothly-icon name="person-remove-outline" size="small" />
-							</smoothly-button>
 						)}
 					</div>
 				</smoothly-form>
