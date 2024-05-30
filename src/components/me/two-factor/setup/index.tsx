@@ -75,7 +75,7 @@ export class UserwidgetsTwoFactorSetup {
 							{"Authentication Code"}
 						</smoothly-input>
 						<smoothly-input-submit slot={"submit"} disabled={!this.initialCode?.match(/^\d{6}$/)}>
-							{"Finalise"}
+							<span>{"Finalize"}</span>
 						</smoothly-input-submit>
 					</smoothly-form>
 				</div>

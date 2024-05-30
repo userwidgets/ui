@@ -83,7 +83,7 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 						</a>
 					</p>
 					<smoothly-input-submit slot="submit" color="primary">
-						{this.translate("Register")}
+						<span>{this.translate("Register")}</span>
 					</smoothly-input-submit>
 				</smoothly-form>
 			</Host>

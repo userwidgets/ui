@@ -49,7 +49,7 @@ export class UserwidgetsTwoFactorDialog implements ComponentWillLoad {
 					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />
 					<smoothly-input-reset slot={"reset"} type={"form"} size={"icon"} color={"warning"} fill={"default"} />
 					<smoothly-input-submit slot={"submit"} disabled={!this.code?.match(/^(\d{6}|\d{8})$/)} color={"primary"}>
-						{this.translate("Login")}
+						<span>{this.translate("Login")}</span>
 					</smoothly-input-submit>
 				</smoothly-form>
 			</Host>
