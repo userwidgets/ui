@@ -78,10 +78,6 @@ export namespace Components {
         "invite": userwidgets.User.Invite;
         "state": model.State;
     }
-    interface UserwidgetsSetPassword {
-        "state": model.State;
-        "user": userwidgets.User;
-    }
     interface UserwidgetsTwoFactor {
         "state": model.State;
     }
@@ -171,10 +167,6 @@ export interface UserwidgetsPermissionPickerCustomEvent<T> extends CustomEvent<T
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsRegisterDialogElement;
-}
-export interface UserwidgetsSetPasswordCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsSetPasswordElement;
 }
 export interface UserwidgetsTwoFactorDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -313,12 +305,6 @@ declare global {
         prototype: HTMLUserwidgetsRegisterDialogElement;
         new (): HTMLUserwidgetsRegisterDialogElement;
     };
-    interface HTMLUserwidgetsSetPasswordElement extends Components.UserwidgetsSetPassword, HTMLStencilElement {
-    }
-    var HTMLUserwidgetsSetPasswordElement: {
-        prototype: HTMLUserwidgetsSetPasswordElement;
-        new (): HTMLUserwidgetsSetPasswordElement;
-    };
     interface HTMLUserwidgetsTwoFactorElement extends Components.UserwidgetsTwoFactor, HTMLStencilElement {
     }
     var HTMLUserwidgetsTwoFactorElement: {
@@ -422,7 +408,6 @@ declare global {
         "userwidgets-password-change": HTMLUserwidgetsPasswordChangeElement;
         "userwidgets-permission-picker": HTMLUserwidgetsPermissionPickerElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
-        "userwidgets-set-password": HTMLUserwidgetsSetPasswordElement;
         "userwidgets-two-factor": HTMLUserwidgetsTwoFactorElement;
         "userwidgets-two-factor-dialog": HTMLUserwidgetsTwoFactorDialogElement;
         "userwidgets-two-factor-recovery": HTMLUserwidgetsTwoFactorRecoveryElement;
@@ -526,11 +511,6 @@ declare namespace LocalJSX {
 		}>) => void;
         "state"?: model.State;
     }
-    interface UserwidgetsSetPassword {
-        "onNotice"?: (event: UserwidgetsSetPasswordCustomEvent<smoothly.Notice>) => void;
-        "state"?: model.State;
-        "user"?: userwidgets.User;
-    }
     interface UserwidgetsTwoFactor {
         "state"?: model.State;
     }
@@ -622,7 +602,6 @@ declare namespace LocalJSX {
         "userwidgets-password-change": UserwidgetsPasswordChange;
         "userwidgets-permission-picker": UserwidgetsPermissionPicker;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
-        "userwidgets-set-password": UserwidgetsSetPassword;
         "userwidgets-two-factor": UserwidgetsTwoFactor;
         "userwidgets-two-factor-dialog": UserwidgetsTwoFactorDialog;
         "userwidgets-two-factor-recovery": UserwidgetsTwoFactorRecovery;
@@ -661,7 +640,6 @@ declare module "@stencil/core" {
             "userwidgets-password-change": LocalJSX.UserwidgetsPasswordChange & JSXBase.HTMLAttributes<HTMLUserwidgetsPasswordChangeElement>;
             "userwidgets-permission-picker": LocalJSX.UserwidgetsPermissionPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsPermissionPickerElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
-            "userwidgets-set-password": LocalJSX.UserwidgetsSetPassword & JSXBase.HTMLAttributes<HTMLUserwidgetsSetPasswordElement>;
             "userwidgets-two-factor": LocalJSX.UserwidgetsTwoFactor & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorElement>;
             "userwidgets-two-factor-dialog": LocalJSX.UserwidgetsTwoFactorDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorDialogElement>;
             "userwidgets-two-factor-recovery": LocalJSX.UserwidgetsTwoFactorRecovery & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorRecoveryElement>;
