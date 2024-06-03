@@ -5,7 +5,6 @@ import { userwidgets } from "@userwidgets/model"
 import { URLPattern } from "urlpattern-polyfill"
 import { UserwidgetsLoginDialogCustomEvent } from "../../components"
 import { model } from "../../model"
-import { Me } from "../../State/Me"
 import * as translation from "./translation"
 
 if (!("URLPattern" in globalThis))
@@ -25,16 +24,19 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Event() notice: EventEmitter<smoothly.Notice>
-	private request?: ReturnType<Me["login"]>
+	private loginControls?: { clear: () => void }
+	private request?: Promise<unknown>
+	private spinner?: (result: false) => void
 	private onUnauthorized = () =>
 		new Promise<boolean>(resolve => {
 			if (this.request) {
 				this.notice.emit(smoothly.Notice.failed(this.translate("Wrong credentials")))
 				this.loginControls?.clear()
+				this.spinner?.(false)
+				this.spinner = undefined
 			}
 			return (this.resolves ??= []).push(() => resolve(!this.request))
 		})
-	private loginControls?: { clear: () => void }
 
 	componentWillLoad(): void {
 		this.state.me.onUnauthorized = this.onUnauthorized
@@ -71,12 +73,18 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	async loginHandler(
 		event: CustomEvent<Pick<smoothly.Submit, "result"> & { credentials: userwidgets.User.Credentials }>
 	): Promise<void> {
+		event.stopPropagation()
+		this.spinner?.(false)
+		this.spinner = event.detail.result
 		event.detail.result(await this.login(event.detail.credentials))
 	}
 	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string): Promise<boolean> {
 		let result: Awaited<ReturnType<UserwidgetsLogin["login"]>>
-		const response = await (this.request = this.state.me.login(credentials, twoFactor))
-		if (userwidgets.User.Key.is(response)) {
+		const request = (this.request = this.state.me.login(credentials, twoFactor))
+		const response = await request
+		if (request != this.request)
+			result = false
+		else if (userwidgets.User.Key.is(response)) {
 			if (this.invite) {
 				const invite = this.invite
 				this.invite = undefined
@@ -87,6 +95,7 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			this.resolves = undefined
 			this.credentials = undefined
 			this.loggedIn.emit()
+			this.request = undefined
 			result = true
 		} else if (userwidgets.User.Unauthenticated.is(response)) {
 			this.credentials &&
@@ -99,7 +108,6 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			this.loginControls?.clear()
 			result = false
 		}
-		this.request = undefined
 		return result
 	}
 
