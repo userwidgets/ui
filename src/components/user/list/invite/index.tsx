@@ -1,7 +1,6 @@
 import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
 import * as translation from "./translation"
@@ -26,7 +25,7 @@ export class UserwidgetsUserListInvite implements ComponentWillLoad {
 			this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	}
 
-	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
+	async submitHandler(event: CustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		if (!this.organization) {
 			const message = `${this.translate("No organization selected")}`

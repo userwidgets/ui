@@ -1,7 +1,6 @@
 import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -21,7 +20,7 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 		this.state.me.listen("key", key => (this.token = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
+	async submitHandler(event: CustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		const password = userwidgets.User.Password.Change.type.get(event.detail.value)
 		if (!password) {

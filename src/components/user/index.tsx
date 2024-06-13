@@ -13,7 +13,6 @@ import {
 } from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../model"
 import * as translation from "./translation"
@@ -51,7 +50,7 @@ export class UserwidgetsUser implements ComponentWillLoad {
 			}
 		}
 	}
-	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
+	async submitHandler(event: CustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		event.detail.result(await (event.detail.type == "remove" ? this.remove() : this.update(event.detail.value)))
 	}

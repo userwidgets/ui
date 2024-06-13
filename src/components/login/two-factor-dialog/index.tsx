@@ -1,7 +1,6 @@
 import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -23,7 +22,7 @@ export class UserwidgetsTwoFactorDialog implements ComponentWillLoad {
 	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
-	handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): void {
+	handleSubmit(event: CustomEvent<smoothly.Submit>): void {
 		event.stopPropagation()
 		if (typeof event.detail.value.code != "string" || !event.detail.value.code.match(/^(\d{6}|\d{8})$/)) {
 			this.notice.emit(smoothly.Notice.warn(this.translate("Authentication code must consist of six or eight digits.")))
