@@ -3,7 +3,6 @@ import { cryptly } from "cryptly"
 import { isoly } from "isoly"
 import "webcomponent-qr-code"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../../model"
 
@@ -30,7 +29,7 @@ export class UserwidgetsTwoFactorSetup {
 			result = cryptly.authenticator.toQrCode(this.authenticateKey, this.userKey.audience, this.userKey.email)
 		return result
 	}
-	async submitHandler(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
+	async submitHandler(event: CustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		const now = isoly.DateTime.now()
 		if (

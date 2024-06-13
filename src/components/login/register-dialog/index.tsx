@@ -1,7 +1,6 @@
 import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -29,7 +28,7 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 
-	async handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): Promise<void> {
+	async handleSubmit(event: CustomEvent<smoothly.Submit>): Promise<void> {
 		event.stopPropagation()
 		const detail = {
 			...event.detail.value,

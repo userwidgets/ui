@@ -1,7 +1,6 @@
 import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Prop, State, VNode } from "@stencil/core"
 import * as langly from "langly"
 import { smoothly } from "smoothly"
-import { SmoothlyFormCustomEvent } from "smoothly/dist/types/components"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 import * as translation from "./translation"
@@ -31,7 +30,7 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 			clear: () => this.passwordInput?.clear(),
 		})
 	}
-	handleSubmit(event: SmoothlyFormCustomEvent<smoothly.Submit>): void {
+	handleSubmit(event: CustomEvent<smoothly.Submit>): void {
 		event.stopPropagation()
 		if (!userwidgets.User.Credentials.is(event.detail.value))
 			this.notice.emit(smoothly.Notice.warn(this.translate("Both email and password is required to login."))) &&
