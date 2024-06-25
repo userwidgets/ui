@@ -12,12 +12,12 @@ import * as translation from "./translation"
 })
 export class UserwidgetsPasswordChange implements ComponentWillLoad {
 	@Prop() state: model.State
-	@State() token?: userwidgets.User.Key | false
+	@State() key?: userwidgets.User.Key | false
 	@State() translate: langly.Translate = translation.create(document.documentElement)
 	@Event() notice: EventEmitter<smoothly.Notice>
 
 	componentWillLoad(): void {
-		this.state.me.listen("key", key => (this.token = key))
+		this.state.me.listen("key", key => (this.key = key))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 	}
 	async submitHandler(event: CustomEvent<smoothly.Submit>): Promise<void> {
@@ -27,11 +27,11 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 			const message = `${this.translate("Malformed name.")}`
 			this.notice.emit(smoothly.Notice.failed(message))
 			console.log("password flaw", userwidgets.User.Password.Change.flaw(password))
-		} else if (!this.token) {
+		} else if (!this.key) {
 			const message = `${this.translate("Need a token")}`
 			this.notice.emit(smoothly.Notice.failed(message))
 		} else {
-			const result = await this.state.users.update(this.token.email, { password })
+			const result = await this.state.users.update(this.key.email, { password })
 			if (!result) {
 				const message = `${this.translate("Failed to update password")}`
 				this.notice.emit(smoothly.Notice.failed(message))
@@ -48,7 +48,6 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 			<Host>
 				<smoothly-form looks={"border"} type={"create"} onSmoothlyFormSubmit={e => this.submitHandler(e)}>
 					<slot />
-					<input type={"email"} name={"email"} value={(this.token || undefined)?.email} />
 					<smoothly-input type={"password"} name={"old"}>
 						{this.translate("Old password")}
 					</smoothly-input>

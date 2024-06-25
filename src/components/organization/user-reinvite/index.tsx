@@ -9,7 +9,7 @@ export class UserwidgetsOrganizationUserReinvite {
 	render() {
 		return (
 			<smoothly-form looks="line">
-				<smoothly-button class={"button"}>
+				<smoothly-button>
 					<slot></slot>
 				</smoothly-button>
 			</smoothly-form>

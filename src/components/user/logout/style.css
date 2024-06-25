@@ -1,7 +1,3 @@
-smoothly-icon {
-	margin-left: auto;
-	margin-right: auto;
-}
 :host {
 	display: flex;
 	justify-content: center;
@@ -11,7 +7,11 @@ smoothly-icon {
 	width: 100%;
 	height: 2.5rem;
 }
-smoothly-button {
+:host > smoothly-button smoothly-button {
 	flex: auto;
 	height: 100%;
+}
+:host > smoothly-button smoothly-icon {
+	margin-left: auto;
+	margin-right: auto;
 }

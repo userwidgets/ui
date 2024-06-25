@@ -2,29 +2,24 @@
 	display: flex;
 	flex-direction: column;
 }
-:host .buttons {
+:host > smoothly-form div.buttons {
 	display: flex;
 	gap: 1rem;
 	margin-top: 1rem;
 	margin-right: 1rem;
-}
-:host .button, smoothly-button-confirm smoothly-button {
-	padding: 0.2rem;
-}
-smoothly-button-confirm {
-  display: flex;
-}
-:host .button, smoothly-button-confirm {
-	& smoothly-icon {
-		padding: 0.3rem;
-		width: 2.5rem;
-		height: 2.5rem;
-		box-sizing: border-box;
+	& > smoothly-button-confirm {
+		display: flex;
+		& smoothly-icon {
+			padding: 0.3rem;
+			width: 2.5rem;
+			height: 2.5rem;
+			box-sizing: border-box;
+		}
+		&:hover > smoothly-button:last-child > button > smoothly-icon:first-child {
+			display: none;
+		}
+		&:not(:hover) > smoothly-button:last-child > button > smoothly-icon:last-child {
+			display: none;
+		}
 	}
-}
-smoothly-button-confirm:hover smoothly-icon:first-child {
-	display: none;
-}
-smoothly-button-confirm:not(:hover) smoothly-icon:last-child {
-	display: none;
 }

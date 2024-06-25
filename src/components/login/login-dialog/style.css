@@ -8,17 +8,17 @@
 	background-color: rgba(var(--smoothly-default-tint));
 }
 
-p {
+:host > smoothly-form p {
 	align-self: center;
 	margin-right: auto;
 }
 
-smoothly-form {
+:host > smoothly-form {
 	margin: 0.7rem;
 }
 
 @media (max-width: 600px) {
-	smoothly-form {
+	:host > smoothly-form {
 		margin: 0.7rem;
 	}
 }

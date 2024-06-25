@@ -1,4 +1,4 @@
-.mask {
+:host > div.mask {
 	inset:0;
 	position: fixed;
 	display: flex;
@@ -8,6 +8,6 @@
 	z-index: 10;
 	
 }
-div.hidden {
+:host > div.hidden {
 	display:none;
 }

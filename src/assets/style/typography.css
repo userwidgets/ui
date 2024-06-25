@@ -19,7 +19,7 @@ smoothly-app > smoothly-notifier {
 body {
 	background-color: rgb(var(--smoothly-default-tint));
 }
-smoothly-app > smoothly-notifier > main > main > * {
+smoothly-app > smoothly-notifier > main > div > * {
 	max-width: 80em;
 	margin: 0 auto;
 }
