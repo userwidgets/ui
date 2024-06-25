@@ -36,6 +36,9 @@
 :host > div > userwidgets-organization-picker {
 	width: 100%;
 	border: none;
+	& > smoothly-picker > smoothly-picker-menu {
+		left: unset;
+	}
 }
 :host > div > div.actions {
 	display: flex;
