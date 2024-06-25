@@ -4,3 +4,6 @@
 	flex-direction: column;
 	gap: 2rem;
 }
+:host > * {
+	width: 100%;
+}

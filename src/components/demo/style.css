@@ -9,6 +9,6 @@ smoothly-room {
 	height: 2.5rem;
 } 
 
-img {
+:host > smoothly-notifier userwidgets-login  img {
 	margin: auto;
 }

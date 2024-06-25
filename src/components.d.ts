@@ -10,6 +10,11 @@ import { model } from "./model";
 import { smoothly } from "smoothly";
 import { userwidgets } from "@userwidgets/model";
 import { CustomOption } from "./components/user/permission-update/index";
+export { State } from "./State";
+export { model } from "./model";
+export { smoothly } from "smoothly";
+export { userwidgets } from "@userwidgets/model";
+export { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsDemo {
     }
@@ -221,7 +226,20 @@ declare global {
         prototype: HTMLUserwidgetsDemoUserElement;
         new (): HTMLUserwidgetsDemoUserElement;
     };
+    interface HTMLUserwidgetsLoginElementEventMap {
+        "loggedIn": any;
+        "userwidgetsLoginLoaded": any;
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsLoginElement extends Components.UserwidgetsLogin, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsLoginElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginElement, ev: UserwidgetsLoginCustomEvent<HTMLUserwidgetsLoginElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsLoginElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginElement, ev: UserwidgetsLoginCustomEvent<HTMLUserwidgetsLoginElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsLoginElement: {
         prototype: HTMLUserwidgetsLoginElement;
@@ -233,7 +251,23 @@ declare global {
         prototype: HTMLUserwidgetsLoginButtonElement;
         new (): HTMLUserwidgetsLoginButtonElement;
     };
+    interface HTMLUserwidgetsLoginDialogElementEventMap {
+        "notice": smoothly.Notice;
+        "userwidgetsLogin": Pick<smoothly.Submit, "result"> & {
+			credentials: userwidgets.User.Credentials
+		};
+        "userwidgetsActiveAccount": boolean;
+        "userWidgetsLoginControls": { clear: () => void };
+    }
     interface HTMLUserwidgetsLoginDialogElement extends Components.UserwidgetsLoginDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsLoginDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginDialogElement, ev: UserwidgetsLoginDialogCustomEvent<HTMLUserwidgetsLoginDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsLoginDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginDialogElement, ev: UserwidgetsLoginDialogCustomEvent<HTMLUserwidgetsLoginDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsLoginDialogElement: {
         prototype: HTMLUserwidgetsLoginDialogElement;
@@ -251,13 +285,35 @@ declare global {
         prototype: HTMLUserwidgetsMeMenuElement;
         new (): HTMLUserwidgetsMeMenuElement;
     };
+    interface HTMLUserwidgetsMeNameElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsMeNameElement extends Components.UserwidgetsMeName, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsMeNameElementEventMap>(type: K, listener: (this: HTMLUserwidgetsMeNameElement, ev: UserwidgetsMeNameCustomEvent<HTMLUserwidgetsMeNameElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsMeNameElementEventMap>(type: K, listener: (this: HTMLUserwidgetsMeNameElement, ev: UserwidgetsMeNameCustomEvent<HTMLUserwidgetsMeNameElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsMeNameElement: {
         prototype: HTMLUserwidgetsMeNameElement;
         new (): HTMLUserwidgetsMeNameElement;
     };
+    interface HTMLUserwidgetsOrganizationElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsOrganizationElement extends Components.UserwidgetsOrganization, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsOrganizationElementEventMap>(type: K, listener: (this: HTMLUserwidgetsOrganizationElement, ev: UserwidgetsOrganizationCustomEvent<HTMLUserwidgetsOrganizationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsOrganizationElementEventMap>(type: K, listener: (this: HTMLUserwidgetsOrganizationElement, ev: UserwidgetsOrganizationCustomEvent<HTMLUserwidgetsOrganizationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsOrganizationElement: {
         prototype: HTMLUserwidgetsOrganizationElement;
@@ -287,19 +343,57 @@ declare global {
         prototype: HTMLUserwidgetsOrganizationUserRemoveElement;
         new (): HTMLUserwidgetsOrganizationUserRemoveElement;
     };
+    interface HTMLUserwidgetsPasswordChangeElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsPasswordChangeElement extends Components.UserwidgetsPasswordChange, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsPasswordChangeElementEventMap>(type: K, listener: (this: HTMLUserwidgetsPasswordChangeElement, ev: UserwidgetsPasswordChangeCustomEvent<HTMLUserwidgetsPasswordChangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsPasswordChangeElementEventMap>(type: K, listener: (this: HTMLUserwidgetsPasswordChangeElement, ev: UserwidgetsPasswordChangeCustomEvent<HTMLUserwidgetsPasswordChangeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsPasswordChangeElement: {
         prototype: HTMLUserwidgetsPasswordChangeElement;
         new (): HTMLUserwidgetsPasswordChangeElement;
     };
+    interface HTMLUserwidgetsPermissionPickerElementEventMap {
+        "smoothlyInput": smoothly.Data;
+    }
     interface HTMLUserwidgetsPermissionPickerElement extends Components.UserwidgetsPermissionPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsPermissionPickerElementEventMap>(type: K, listener: (this: HTMLUserwidgetsPermissionPickerElement, ev: UserwidgetsPermissionPickerCustomEvent<HTMLUserwidgetsPermissionPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsPermissionPickerElementEventMap>(type: K, listener: (this: HTMLUserwidgetsPermissionPickerElement, ev: UserwidgetsPermissionPickerCustomEvent<HTMLUserwidgetsPermissionPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsPermissionPickerElement: {
         prototype: HTMLUserwidgetsPermissionPickerElement;
         new (): HTMLUserwidgetsPermissionPickerElement;
     };
+    interface HTMLUserwidgetsRegisterDialogElementEventMap {
+        "notice": smoothly.Notice;
+        "userwidgetsRegister": Pick<smoothly.Submit, "result"> & {
+			invite: userwidgets.User.Invite
+			credentials: userwidgets.User.Credentials.Register
+		};
+        "userwidgetsActiveAccount": boolean;
+    }
     interface HTMLUserwidgetsRegisterDialogElement extends Components.UserwidgetsRegisterDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsRegisterDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsRegisterDialogElement, ev: UserwidgetsRegisterDialogCustomEvent<HTMLUserwidgetsRegisterDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsRegisterDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsRegisterDialogElement, ev: UserwidgetsRegisterDialogCustomEvent<HTMLUserwidgetsRegisterDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsRegisterDialogElement: {
         prototype: HTMLUserwidgetsRegisterDialogElement;
@@ -311,7 +405,20 @@ declare global {
         prototype: HTMLUserwidgetsTwoFactorElement;
         new (): HTMLUserwidgetsTwoFactorElement;
     };
+    interface HTMLUserwidgetsTwoFactorDialogElementEventMap {
+        "notice": smoothly.Notice;
+        "userwidgetsAuthenticate": Pick<smoothly.Submit, "result"> & { code: string };
+        "userwidgetsCancel": any;
+    }
     interface HTMLUserwidgetsTwoFactorDialogElement extends Components.UserwidgetsTwoFactorDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsTwoFactorDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorDialogElement, ev: UserwidgetsTwoFactorDialogCustomEvent<HTMLUserwidgetsTwoFactorDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsTwoFactorDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorDialogElement, ev: UserwidgetsTwoFactorDialogCustomEvent<HTMLUserwidgetsTwoFactorDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsTwoFactorDialogElement: {
         prototype: HTMLUserwidgetsTwoFactorDialogElement;
@@ -323,25 +430,70 @@ declare global {
         prototype: HTMLUserwidgetsTwoFactorRecoveryElement;
         new (): HTMLUserwidgetsTwoFactorRecoveryElement;
     };
+    interface HTMLUserwidgetsTwoFactorSetupElementEventMap {
+        "notice": smoothly.Notice;
+        "twoFactor": Pick<smoothly.Submit, "result"> & { user: userwidgets.User.Changeable; code: string };
+    }
     interface HTMLUserwidgetsTwoFactorSetupElement extends Components.UserwidgetsTwoFactorSetup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsTwoFactorSetupElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorSetupElement, ev: UserwidgetsTwoFactorSetupCustomEvent<HTMLUserwidgetsTwoFactorSetupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsTwoFactorSetupElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorSetupElement, ev: UserwidgetsTwoFactorSetupCustomEvent<HTMLUserwidgetsTwoFactorSetupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsTwoFactorSetupElement: {
         prototype: HTMLUserwidgetsTwoFactorSetupElement;
         new (): HTMLUserwidgetsTwoFactorSetupElement;
     };
+    interface HTMLUserwidgetsUserElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsUserElement extends Components.UserwidgetsUser, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsUserElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserElement, ev: UserwidgetsUserCustomEvent<HTMLUserwidgetsUserElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsUserElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserElement, ev: UserwidgetsUserCustomEvent<HTMLUserwidgetsUserElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserElement: {
         prototype: HTMLUserwidgetsUserElement;
         new (): HTMLUserwidgetsUserElement;
     };
+    interface HTMLUserwidgetsUserInvitedElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsUserInvitedElement extends Components.UserwidgetsUserInvited, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsUserInvitedElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserInvitedElement, ev: UserwidgetsUserInvitedCustomEvent<HTMLUserwidgetsUserInvitedElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsUserInvitedElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserInvitedElement, ev: UserwidgetsUserInvitedCustomEvent<HTMLUserwidgetsUserInvitedElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserInvitedElement: {
         prototype: HTMLUserwidgetsUserInvitedElement;
         new (): HTMLUserwidgetsUserInvitedElement;
     };
+    interface HTMLUserwidgetsUserInvitedListElementEventMap {
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsUserInvitedListElement extends Components.UserwidgetsUserInvitedList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsUserInvitedListElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserInvitedListElement, ev: UserwidgetsUserInvitedListCustomEvent<HTMLUserwidgetsUserInvitedListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsUserInvitedListElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserInvitedListElement, ev: UserwidgetsUserInvitedListCustomEvent<HTMLUserwidgetsUserInvitedListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserInvitedListElement: {
         prototype: HTMLUserwidgetsUserInvitedListElement;
@@ -359,7 +511,19 @@ declare global {
         prototype: HTMLUserwidgetsUserListElement;
         new (): HTMLUserwidgetsUserListElement;
     };
+    interface HTMLUserwidgetsUserListInviteElementEventMap {
+        "userwidgetsFormControls": { clear: () => void };
+        "notice": smoothly.Notice;
+    }
     interface HTMLUserwidgetsUserListInviteElement extends Components.UserwidgetsUserListInvite, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsUserListInviteElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserListInviteElement, ev: UserwidgetsUserListInviteCustomEvent<HTMLUserwidgetsUserListInviteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsUserListInviteElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserListInviteElement, ev: UserwidgetsUserListInviteCustomEvent<HTMLUserwidgetsUserListInviteElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserListInviteElement: {
         prototype: HTMLUserwidgetsUserListInviteElement;
@@ -383,7 +547,18 @@ declare global {
         prototype: HTMLUserwidgetsUserListRowElement;
         new (): HTMLUserwidgetsUserListRowElement;
     };
+    interface HTMLUserwidgetsUserPermissionsUpdateElementEventMap {
+        "userPermissionUpdated": userwidgets.User.Permissions;
+    }
     interface HTMLUserwidgetsUserPermissionsUpdateElement extends Components.UserwidgetsUserPermissionsUpdate, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsUserPermissionsUpdateElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserPermissionsUpdateElement, ev: UserwidgetsUserPermissionsUpdateCustomEvent<HTMLUserwidgetsUserPermissionsUpdateElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsUserPermissionsUpdateElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserPermissionsUpdateElement, ev: UserwidgetsUserPermissionsUpdateCustomEvent<HTMLUserwidgetsUserPermissionsUpdateElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserPermissionsUpdateElement: {
         prototype: HTMLUserwidgetsUserPermissionsUpdateElement;

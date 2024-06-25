@@ -1,6 +1,6 @@
 :host {
 	display: contents;
 }
-:host smoothly-picker {
+:host > smoothly-picker {
 	width: 100%;
 }

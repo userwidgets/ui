@@ -70,7 +70,7 @@ export class UserwidgetsUserInvited {
 						{this.translate("Email")}
 					</smoothly-input>
 					<div class={"buttons"} slot="submit">
-						<smoothly-button class={"button"} size={"flexible"} color={"success"} onClick={() => this.reInvite()}>
+						<smoothly-button size={"flexible"} color={"success"} onClick={() => this.reInvite()}>
 							<smoothly-icon
 								class={"size-override"}
 								name={"paper-plane-outline"}
@@ -79,7 +79,7 @@ export class UserwidgetsUserInvited {
 								toolTip={`${this.translate("Re-invite")}: ${this.user.email}`}
 							/>
 						</smoothly-button>
-						<smoothly-button class={"button"} size={"flexible"} color={"danger"} onClick={() => this.remove()}>
+						<smoothly-button size={"flexible"} color={"danger"} onClick={() => this.remove()}>
 							<smoothly-icon
 								class={"size-override"}
 								name={"person-remove-outline"}

@@ -8,18 +8,14 @@
 	background-color: rgba(var(--smoothly-default-tint));
 }
 
-smoothly-form {
+:host > smoothly-form {
 	margin: 0.7rem;
 }
 
-smoothly-form + smoothly-form {
-	margin-top: 2rem;
-}
-
-.email {
+:host > smoothly-form smoothly-input.email {
 	flex-basis: 100%;
 }
-p {
+:host > smoothly-form p {
 	align-self: center;
 	margin-right: auto;
 }

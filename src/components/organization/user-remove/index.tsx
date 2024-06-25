@@ -15,7 +15,7 @@ export class UserwidgetsOrganizationUserRemove {
 	render() {
 		return (
 			<smoothly-form looks="line" onSmoothlyFormSubmit={event => event.preventDefault()}>
-				<smoothly-button class={"button"}>
+				<smoothly-button>
 					<slot></slot>
 				</smoothly-button>
 			</smoothly-form>

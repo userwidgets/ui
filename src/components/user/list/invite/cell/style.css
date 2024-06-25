@@ -1,16 +1,16 @@
 :host {
 	display: contents;
 }
-:host smoothly-table-expandable-cell {
+:host > smoothly-table-expandable-cell {
 	width: 1px;
 }
-:host smoothly-button {
+:host > smoothly-table-expandable-cell smoothly-button {
 	margin-left: 0.5rem;
 	margin-right: 0.5rem;
 }
-:host::slotted(smoothly-table-expandable-cell > div) {
+:host > smoothly-table-expandable-cell > div {
 	justify-content: center;
 }
-:host::slotted(smoothly-table-expandable-cell > div > smoothly-icon) {
+:host > smoothly-table-expandable-cell > div > smoothly-icon {
 	display: none;
 }

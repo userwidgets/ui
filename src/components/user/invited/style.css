@@ -2,16 +2,16 @@
 	display: flex;
 	flex-direction: column;
 }
-.buttons {
+:host > smoothly-form div.buttons {
 	display: flex;
 	gap: 1rem;
 	margin-top: 1rem;
 	margin-right: 1rem;
 }
-.button {
+:host > smoothly-from smoothly-button {
 	padding: 0.2rem;
 }
-.button smoothly-icon {
+:host > smoothly-form smoothly-button smoothly-icon {
 	padding: 0.3rem;
 	width: 2.5rem;
 	height: 2.5rem;
