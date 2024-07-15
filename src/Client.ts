@@ -7,7 +7,7 @@ const url = new URL(window.location.href)
 const backend =
 	url.searchParams.get("backend") ??
 	(["localhost", "127.0.0.1"].includes(url.hostname) ? "http://localhost:8788" : "https://api.userwidgets.com")
-const token = window.sessionStorage.getItem("token") ?? undefined
+const token = window.localStorage.getItem("token") ?? undefined
 /**
  * This class works as an example how to put userwidgets.ClientCollection in a Rest-client for your app.
  */
