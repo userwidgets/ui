@@ -11,10 +11,10 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 	set key(key: Me["key"]) {
 		this.#key = key
 		if (key) {
-			sessionStorage.setItem("token", key.token)
+			localStorage.setItem("token", key.token)
 			this.client.key = key.token
 		} else
-			sessionStorage.removeItem("token")
+			localStorage.removeItem("token")
 	}
 	#onUnauthorized: Me["onUnauthorized"]
 	get onUnauthorized(): (() => Promise<boolean>) | undefined {
@@ -48,7 +48,7 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 			.then(response => (!userwidgets.User.Key.is(response) ? false : response))
 		if (result && this.#key !== result) {
 			this.listenable.key = result
-			sessionStorage.setItem("token", result.token)
+			localStorage.setItem("token", result.token)
 		}
 		return result
 	}
@@ -60,18 +60,18 @@ export class Me extends smoothly.StateBase<Me, userwidgets.ClientCollection> {
 					.then(response => ("issuer" in response ? response : response.status == 410 ? this.#key : false))
 		if (result && this.#key !== result) {
 			this.listenable.key = result
-			sessionStorage.setItem("token", result.token)
+			localStorage.setItem("token", result.token)
 		}
 		return result
 	}
 	logout(): void {
 		this.listenable.key = undefined
-		window.sessionStorage.clear()
+		window.localStorage.clear()
 	}
 	static create(client: userwidgets.ClientCollection): smoothly.WithListenable<Me> {
 		const backend = new this(client)
 		const listenable = smoothly.Listenable.load(backend)
-		const key = window.sessionStorage.getItem("token")
+		const key = window.localStorage.getItem("token")
 		if (key)
 			userwidgets.User.Key.Verifier.create(client.configuration.publicKey)
 				.unpack(key)
