@@ -36,6 +36,7 @@ export namespace Components {
     interface UserwidgetsLoginDialog {
         "invite"?: userwidgets.User.Invite;
         "state": model.State;
+        "twoFactor": boolean;
     }
     interface UserwidgetsLogout {
         "color": smoothly.Color;
@@ -257,6 +258,7 @@ declare global {
 			credentials: userwidgets.User.Credentials
 		};
         "userwidgetsActiveAccount": boolean;
+        "clearCredentials": any;
         "userWidgetsLoginControls": { clear: () => void };
     }
     interface HTMLUserwidgetsLoginDialogElement extends Components.UserwidgetsLoginDialog, HTMLStencilElement {
@@ -622,6 +624,7 @@ declare namespace LocalJSX {
     }
     interface UserwidgetsLoginDialog {
         "invite"?: userwidgets.User.Invite;
+        "onClearCredentials"?: (event: UserwidgetsLoginDialogCustomEvent<any>) => void;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
         "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
@@ -629,6 +632,7 @@ declare namespace LocalJSX {
 			credentials: userwidgets.User.Credentials
 		}>) => void;
         "state"?: model.State;
+        "twoFactor"?: boolean;
     }
     interface UserwidgetsLogout {
         "color"?: smoothly.Color;

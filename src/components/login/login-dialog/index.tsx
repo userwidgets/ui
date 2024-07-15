@@ -13,6 +13,7 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop() invite?: userwidgets.User.Invite
+	@Prop({ mutable: true }) twoFactor: boolean = false
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<
 		Pick<smoothly.Submit, "result"> & {
@@ -20,6 +21,7 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 		}
 	>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
+	@Event() clearCredentials: EventEmitter
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
 	@State() translate: langly.Translate = translation.create("en")
 	private passwordInput?: HTMLSmoothlyInputElement
@@ -41,16 +43,23 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 		else
 			this.userwidgetsLogin.emit({ credentials: event.detail.value, result: event.detail.result })
 	}
-
+	clear() {
+		this.twoFactor = false
+		this.clearCredentials.emit()
+	}
 	render(): VNode | VNode[] {
 		return (
 			<Host>
 				<slot name={"logo"} />
 				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-					<smoothly-input type="email" name="user">
+					<smoothly-input type="email" name="user" onSmoothlyInput={() => this.clear()}>
 						{this.translate("Email")}
 					</smoothly-input>
-					<smoothly-input ref={e => (this.passwordInput = e)} type="password" name="password">
+					<smoothly-input
+						ref={e => (this.passwordInput = e)}
+						type="password"
+						name="password"
+						onSmoothlyInput={() => this.clear()}>
 						{this.translate("Password")}
 					</smoothly-input>
 					{this.invite && !this.invite.active ? (
@@ -63,6 +72,11 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 							</a>
 						</p>
 					) : null}
+					{this.twoFactor && (
+						<smoothly-input type="text" name="code">
+							{this.translate("Authentication Code")}
+						</smoothly-input>
+					)}
 					<smoothly-input-submit slot="submit" color="primary">
 						<span>{this.translate("Login")}</span>
 					</smoothly-input-submit>

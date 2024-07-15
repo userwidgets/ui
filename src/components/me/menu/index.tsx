@@ -20,7 +20,6 @@ export class UserwidgetsMeMenu {
 	}
 	@Listen("click", { target: "window" })
 	clickHandler(event: MouseEvent) {
-		console.log(event.composedPath().includes(this.element))
 		!event.composedPath().includes(this.element) && (this.open = false)
 	}
 	render() {
