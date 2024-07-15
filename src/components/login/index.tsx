@@ -71,12 +71,19 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	}
 
 	async loginHandler(
-		event: CustomEvent<Pick<smoothly.Submit, "result"> & { credentials: userwidgets.User.Credentials }>
+		event: CustomEvent<
+			Pick<smoothly.Submit, "result"> & { credentials: userwidgets.User.Credentials & { code?: string } }
+		>
 	): Promise<void> {
 		event.stopPropagation()
 		this.spinner?.(false)
 		this.spinner = event.detail.result
-		event.detail.result(await this.login(event.detail.credentials))
+		event.detail.result(
+			await this.login(
+				{ user: event.detail.credentials.user, password: event.detail.credentials.password },
+				event.detail.credentials.code
+			)
+		)
 	}
 	private async login(credentials: userwidgets.User.Credentials, twoFactor?: string): Promise<boolean> {
 		let result: Awaited<ReturnType<UserwidgetsLogin["login"]>>
@@ -98,9 +105,10 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			this.request = undefined
 			result = true
 		} else if (userwidgets.User.Unauthenticated.is(response)) {
+			console.log("diwaidhwaoi")
 			this.credentials &&
 				this.notice.emit(smoothly.Notice.failed(this.translate("Invalid authenticator code, please try again.")))
-			this.credentials = credentials
+			this.credentials = { ...credentials }
 			result = false
 		} else {
 			this.notice.emit(smoothly.Notice.failed(this.translate("Failed to login, please try again later.")))
@@ -153,19 +161,14 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-register-dialog>
-						) : this.credentials ? (
-							<userwidgets-two-factor-dialog
-								class={"dialog"}
-								state={this.state}
-								onUserwidgetsAuthenticate={event => this.authenticateHandler(event)}>
-								<slot slot={"logo"} name={"logo"} />
-							</userwidgets-two-factor-dialog>
 						) : (
 							<userwidgets-login-dialog
 								class={"dialog"}
+								twoFactor={!!this.credentials}
 								state={this.state}
 								invite={this.invite}
 								onUserwidgetsLogin={event => this.loginHandler(event)}
+								onClearCredentials={() => (this.credentials = undefined)}
 								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-login-dialog>
