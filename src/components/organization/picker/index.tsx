@@ -29,15 +29,15 @@ export class UserwidgetsOrganizationPicker {
 		return (
 			<Host>
 				{this.organization ? (
-					<smoothly-picker name="organization" onSmoothlyInput={e => this.inputHandler(e)}>
+					<smoothly-input-select name="organization" looks="border" onSmoothlyInput={e => this.inputHandler(e)}>
 						<span slot="label">{this.translate("Organization")}</span>
 						<span slot="search">{this.translate("Search")}</span>
 						{this.organizations?.map(organization => (
-							<smoothly-picker-option selected={organization.id == this.organization?.id} value={organization.id}>
+							<smoothly-item selected={organization.id == this.organization?.id} value={organization.id}>
 								{organization.name}
-							</smoothly-picker-option>
+							</smoothly-item>
 						))}
-					</smoothly-picker>
+					</smoothly-input-select>
 				) : null}
 			</Host>
 		)

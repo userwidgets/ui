@@ -93,7 +93,7 @@
 		"isly": "^0.1.16",
 		"isoly": "^2.3.10",
 		"langly": "^2.0.9",
-		"smoothly": "1.1.1-alpha.10",
+		"smoothly": "1.1.1-alpha.40",
 		"urlpattern-polyfill": "^8.0.2",
 		"webcomponent-qr-code": "^1.2.0"
 	}

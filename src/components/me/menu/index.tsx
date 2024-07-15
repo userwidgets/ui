@@ -1,4 +1,4 @@
-import { Component, Fragment, h, Host, Prop, State } from "@stencil/core"
+import { Component, Element, Fragment, h, Host, Listen, Prop, State } from "@stencil/core"
 import { userwidgets } from "@userwidgets/model"
 import { model } from "../../../model"
 
@@ -8,6 +8,7 @@ import { model } from "../../../model"
 	scoped: true,
 })
 export class UserwidgetsMeMenu {
+	@Element() element: HTMLUserwidgetsMeMenuElement
 	@Prop() state: model.State
 	@Prop({ mutable: true, reflect: true }) visible = false
 	@Prop({ mutable: true, reflect: true }) open = false
@@ -17,7 +18,11 @@ export class UserwidgetsMeMenu {
 	async componentWillLoad() {
 		this.state.me.listen("key", key => (this.token = key))
 	}
-
+	@Listen("click", { target: "window" })
+	clickHandler(event: MouseEvent) {
+		console.log(event.composedPath().includes(this.element))
+		!event.composedPath().includes(this.element) && (this.open = false)
+	}
 	render() {
 		return (
 			<Host>

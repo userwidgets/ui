@@ -1,13 +1,7 @@
 :host {
-	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 	display: flex;
 }
-:host > smoothly-picker {
+
+:host>smoothly-input-select {
 	width: 100%;
-}
-:host > smoothly-picker > smoothly-picker-menu {
-	border: rgb(var(--smoothly-color-contrast)) solid 1px;
-}
-:host > smoothly-picker > smoothly-picker-menu > div.controls {
-	border: rgb(var(--smoothly-color-contrast)) solid 1px;
 }

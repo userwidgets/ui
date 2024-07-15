@@ -2,23 +2,24 @@
 	display: flex;
 	height: 100%;
 	align-items: center;
+	--smoothly-button-focus-border: var(--smoothly-button-hover);
 }
 
-:host > div.closed {
+:host>div.closed {
 	display: none;
 }
-:host > smoothly-button {
+
+:host>smoothly-button {
 	height: 100%;
 	padding: 0.5rem;
 	border-radius: 0;
 }
-:host > div > div > userwidgets-logout {
+
+:host>div>div>userwidgets-logout {
 	width: 2.5rem;
 }
-:host > smoothly-button:hover {
-	background-color: rgb(var(--smoothly-color-tint));
-}
-:host > div {
+
+:host>div {
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -33,30 +34,35 @@
 	padding: 1rem;
 }
 
-:host > div > userwidgets-organization-picker {
+:host>div>userwidgets-organization-picker {
 	width: 100%;
 	border: none;
-	& > smoothly-picker > smoothly-picker-menu {
+
+	&>smoothly-picker>smoothly-picker-menu {
 		left: unset;
 	}
 }
-:host > div > div.actions {
+
+:host>div>div.actions {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-around;
 	width: 100%;
 }
+
 @media screen and (max-width: 900px) {
-	:host > div > div.spacer {
+	:host>div>div.spacer {
 		height: 2px;
 		width: calc(100% - 1rem);
 		background-color: rgb(var(--smoothly-color-shade));
 	}
-	:host > smoothly-button {
+
+	:host>smoothly-button {
 		display: none;
-	} 
-	:host > div.closed  {
+	}
+
+	:host>div.closed {
 		display: flex;
 	}
 }

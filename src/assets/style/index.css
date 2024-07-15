@@ -1,5 +1,7 @@
 @import "./common.css";
+@import "./mapping.css";
 @import "./typography.css";
+
 :root {
 	--smoothly-semitransparent: .8;
 
@@ -45,9 +47,9 @@
 
 	--smoothly-dark-color: 52, 58, 64;
 	--smoothly-dark-contrast: 196, 196, 196;
-	--smoothly-dark-shade:	0, 0, 0;
+	--smoothly-dark-shade: 0, 0, 0;
 	--smoothly-dark-tint: 123, 135, 148;
-	
+
 	--smoothly-light-color: 248, 249, 250;
 	--smoothly-light-contrast: 0, 0, 0;
 	--smoothly-light-shade: 219, 224, 229;
@@ -57,8 +59,9 @@
 	--smoothly-shadow-strong: 0 0 4px 4px rgba(var(--smoothly-light-color), 0.25);
 
 }
-smoothly-app > header > h1 > a,
-smoothly-app > smoothly-notifier > header > h1 > a {
+
+smoothly-app>header>h1>a,
+smoothly-app>smoothly-notifier>header>h1>a {
 	color: transparent;
 	width: 10em;
 	background-image: url("https://issuefab.com/logo/issuefab-l06.svg");
