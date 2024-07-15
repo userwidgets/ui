@@ -21,7 +21,7 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 		}
 	>
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
-	@Event() clearCredentials: EventEmitter<boolean>
+	@Event() clearCredentials: EventEmitter
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
 	@State() translate: langly.Translate = translation.create("en")
 	private passwordInput?: HTMLSmoothlyInputElement

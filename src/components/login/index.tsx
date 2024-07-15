@@ -105,7 +105,6 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			this.request = undefined
 			result = true
 		} else if (userwidgets.User.Unauthenticated.is(response)) {
-			console.log("diwaidhwaoi")
 			this.credentials &&
 				this.notice.emit(smoothly.Notice.failed(this.translate("Invalid authenticator code, please try again.")))
 			this.credentials = { ...credentials }
