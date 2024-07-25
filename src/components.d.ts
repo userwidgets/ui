@@ -87,10 +87,6 @@ export namespace Components {
     interface UserwidgetsTwoFactor {
         "state": model.State;
     }
-    interface UserwidgetsTwoFactorDialog {
-        "credentials"?: userwidgets.User.Credentials;
-        "state": model.State;
-    }
     interface UserwidgetsTwoFactorRecovery {
         "recoveryCodes"?: string[];
     }
@@ -173,10 +169,6 @@ export interface UserwidgetsPermissionPickerCustomEvent<T> extends CustomEvent<T
 export interface UserwidgetsRegisterDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsRegisterDialogElement;
-}
-export interface UserwidgetsTwoFactorDialogCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsTwoFactorDialogElement;
 }
 export interface UserwidgetsTwoFactorSetupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -407,25 +399,6 @@ declare global {
         prototype: HTMLUserwidgetsTwoFactorElement;
         new (): HTMLUserwidgetsTwoFactorElement;
     };
-    interface HTMLUserwidgetsTwoFactorDialogElementEventMap {
-        "notice": smoothly.Notice;
-        "userwidgetsAuthenticate": Pick<smoothly.Submit, "result"> & { code: string };
-        "userwidgetsCancel": any;
-    }
-    interface HTMLUserwidgetsTwoFactorDialogElement extends Components.UserwidgetsTwoFactorDialog, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLUserwidgetsTwoFactorDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorDialogElement, ev: UserwidgetsTwoFactorDialogCustomEvent<HTMLUserwidgetsTwoFactorDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLUserwidgetsTwoFactorDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsTwoFactorDialogElement, ev: UserwidgetsTwoFactorDialogCustomEvent<HTMLUserwidgetsTwoFactorDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLUserwidgetsTwoFactorDialogElement: {
-        prototype: HTMLUserwidgetsTwoFactorDialogElement;
-        new (): HTMLUserwidgetsTwoFactorDialogElement;
-    };
     interface HTMLUserwidgetsTwoFactorRecoveryElement extends Components.UserwidgetsTwoFactorRecovery, HTMLStencilElement {
     }
     var HTMLUserwidgetsTwoFactorRecoveryElement: {
@@ -586,7 +559,6 @@ declare global {
         "userwidgets-permission-picker": HTMLUserwidgetsPermissionPickerElement;
         "userwidgets-register-dialog": HTMLUserwidgetsRegisterDialogElement;
         "userwidgets-two-factor": HTMLUserwidgetsTwoFactorElement;
-        "userwidgets-two-factor-dialog": HTMLUserwidgetsTwoFactorDialogElement;
         "userwidgets-two-factor-recovery": HTMLUserwidgetsTwoFactorRecoveryElement;
         "userwidgets-two-factor-setup": HTMLUserwidgetsTwoFactorSetupElement;
         "userwidgets-user": HTMLUserwidgetsUserElement;
@@ -693,13 +665,6 @@ declare namespace LocalJSX {
     interface UserwidgetsTwoFactor {
         "state"?: model.State;
     }
-    interface UserwidgetsTwoFactorDialog {
-        "credentials"?: userwidgets.User.Credentials;
-        "onNotice"?: (event: UserwidgetsTwoFactorDialogCustomEvent<smoothly.Notice>) => void;
-        "onUserwidgetsAuthenticate"?: (event: UserwidgetsTwoFactorDialogCustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>) => void;
-        "onUserwidgetsCancel"?: (event: UserwidgetsTwoFactorDialogCustomEvent<any>) => void;
-        "state"?: model.State;
-    }
     interface UserwidgetsTwoFactorRecovery {
         "recoveryCodes"?: string[];
     }
@@ -782,7 +747,6 @@ declare namespace LocalJSX {
         "userwidgets-permission-picker": UserwidgetsPermissionPicker;
         "userwidgets-register-dialog": UserwidgetsRegisterDialog;
         "userwidgets-two-factor": UserwidgetsTwoFactor;
-        "userwidgets-two-factor-dialog": UserwidgetsTwoFactorDialog;
         "userwidgets-two-factor-recovery": UserwidgetsTwoFactorRecovery;
         "userwidgets-two-factor-setup": UserwidgetsTwoFactorSetup;
         "userwidgets-user": UserwidgetsUser;
@@ -820,7 +784,6 @@ declare module "@stencil/core" {
             "userwidgets-permission-picker": LocalJSX.UserwidgetsPermissionPicker & JSXBase.HTMLAttributes<HTMLUserwidgetsPermissionPickerElement>;
             "userwidgets-register-dialog": LocalJSX.UserwidgetsRegisterDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsRegisterDialogElement>;
             "userwidgets-two-factor": LocalJSX.UserwidgetsTwoFactor & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorElement>;
-            "userwidgets-two-factor-dialog": LocalJSX.UserwidgetsTwoFactorDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorDialogElement>;
             "userwidgets-two-factor-recovery": LocalJSX.UserwidgetsTwoFactorRecovery & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorRecoveryElement>;
             "userwidgets-two-factor-setup": LocalJSX.UserwidgetsTwoFactorSetup & JSXBase.HTMLAttributes<HTMLUserwidgetsTwoFactorSetupElement>;
             "userwidgets-user": LocalJSX.UserwidgetsUser & JSXBase.HTMLAttributes<HTMLUserwidgetsUserElement>;
