@@ -1,5 +1,6 @@
 import { Component, h, Host } from "@stencil/core"
 import "smoothly"
+import { smoothly } from "smoothly"
 import { client } from "../../Client"
 import { State } from "./State"
 
@@ -30,7 +31,7 @@ export class Demo {
 								<userwidgets-demo-settings state={this.state.userwidgets} />
 							</smoothly-app-room>
 							<userwidgets-me-menu slot="nav-end" state={this.state.userwidgets}>
-								<smoothly-button slot="action" type="link" link={"/settings"} fill="solid" size="flexible">
+								<smoothly-button slot="action" size="flexible" onClick={() => smoothly.redirect("/settings")}>
 									<smoothly-icon name="settings-outline" size="medium" />
 								</smoothly-button>
 							</userwidgets-me-menu>

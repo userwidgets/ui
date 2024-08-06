@@ -25,9 +25,9 @@ export class UserwidgetsMeMenu {
 	render() {
 		return (
 			<Host>
-				<smoothly-button size="flexible" onClick={() => (this.open = !this.open)}>
+				<span onClick={() => (this.open = !this.open)}>
 					<smoothly-icon size="medium" name="person" />
-				</smoothly-button>
+				</span>
 				<div class={this.open ? "open" : "closed"}>
 					<div class="spacer"></div>
 					{this.token ? (
