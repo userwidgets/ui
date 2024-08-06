@@ -2,17 +2,32 @@
 	display: flex;
 	height: 100%;
 	align-items: center;
-	--smoothly-button-focus-border: var(--smoothly-button-hover);
+	--smoothly-button-focus-border: var(--smoothly-button-hover-background);
+}
+
+header:has(smoothly-burger[visible])>nav.menu-open>ul>div>:host>span {
+	display: none;
+}
+
+:host>span:has(smoothly-icon) {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding: 1.5rem;
+	border-radius: 0;
+	border: none;
+}
+
+:host>span:has(smoothly-icon):hover {
+	cursor: pointer;
+	color: rgb(var(--smoothly-color-contrast));
+	background-color: rgb(var(--smoothly-color-tint));
+	transition: 0.2s;
+	border: none;
 }
 
 :host>div.closed {
 	display: none;
-}
-
-:host>smoothly-button {
-	height: 100%;
-	padding: 0.5rem;
-	border-radius: 0;
 }
 
 :host>div>div>userwidgets-logout {
@@ -32,6 +47,7 @@
 	background-color: rgb(var(--smoothly-color));
 	right: 0;
 	padding: 1rem;
+	box-shadow: 1px -1px 0 0 rgb(var(--smoothly-color-shade)) inset;
 }
 
 :host>div>userwidgets-organization-picker {
