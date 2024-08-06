@@ -19,8 +19,8 @@ export class UserwidgetsMeMenu {
 		this.state.me.listen("key", key => (this.token = key))
 	}
 	@Listen("click", { target: "window" })
-	clickHandler(event: MouseEvent) {
-		!event.composedPath().includes(this.element) && (this.open = false)
+	clickHandler(event?: MouseEvent) {
+		;(event == undefined || !event.composedPath().includes(this.element)) && (this.open = false)
 	}
 	render() {
 		return (
@@ -36,11 +36,14 @@ export class UserwidgetsMeMenu {
 							<userwidgets-organization-picker state={this.state} />
 							<div class="actions">
 								<slot name="action" />
-								<userwidgets-logout state={this.state} />
+								<userwidgets-logout onClick={() => this.clickHandler()} state={this.state} />
 							</div>
 						</Fragment>
 					) : (
 						<Fragment>
+							<div class="actions">
+								<slot name="action" />
+							</div>
 							<userwidgets-login-button state={this.state} />
 						</Fragment>
 					)}
