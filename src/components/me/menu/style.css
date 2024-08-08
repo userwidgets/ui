@@ -42,7 +42,7 @@ header:has(smoothly-burger[visible])>nav.menu-open>ul>div>:host>span {
 	gap: 1rem;
 	position: absolute;
 	top: 100%;
-	width: 50dvw;
+	width: 100%;
 	max-width: 15rem;
 	background-color: rgb(var(--smoothly-color));
 	right: 0;
