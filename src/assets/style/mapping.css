@@ -31,7 +31,7 @@ smoothly-color {
 	--smoothly-input-selected-foreground: var(--smoothly-primary-contrast);
 	/* smoothly-button */
 	--smoothly-button-background: var(--smoothly-color);
-	--smoothly-button-foreground: var(--smoothly-color-shade);
+	--smoothly-button-foreground: var(--smoothly-color-contrast);
 	--smoothly-button-hover-background: var(--smoothly-color-tint);
 	--smoothly-button-focus-border: var(--smoothly-color-shade);
 }
