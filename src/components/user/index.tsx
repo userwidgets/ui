@@ -122,7 +122,7 @@ export class UserwidgetsUser implements ComponentWillLoad {
 							"user.edit"
 						) ? null : (
 							<Fragment>
-								<smoothly-input-edit type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+								<smoothly-input-edit type={"form"} size={"icon"} color={"primary"} fill={"default"} />
 								<smoothly-input-reset type={"form"} size={"icon"} color={"warning"} fill={"default"} />
 								<smoothly-input-submit size={"icon"} color={"danger"} fill={"default"} delete />
 								<smoothly-input-submit size={"icon"} color={"success"} fill={"default"} />

@@ -57,7 +57,7 @@ export class UserwidgetsPasswordChange implements ComponentWillLoad {
 					<smoothly-input type={"password"} name={"repeat"}>
 						{this.translate("Repeat new password")}
 					</smoothly-input>
-					<smoothly-input-edit slot={"edit"} type={"button"} size={"icon"} color={"primary"} fill={"default"} />
+					<smoothly-input-edit slot={"edit"} type={"form"} size={"icon"} color={"primary"} fill={"default"} />
 					<smoothly-input-reset slot={"reset"} type={"form"} size={"icon"} color={"warning"} fill={"default"} />
 					<smoothly-input-submit slot={"submit"} size={"icon"} color={"success"} fill={"default"} />
 				</smoothly-form>
