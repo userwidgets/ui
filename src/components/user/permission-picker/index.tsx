@@ -64,7 +64,7 @@ export class UserwidgetsPermissionPicker {
 	render() {
 		return (
 			<Host>
-				<smoothly-picker
+				<smoothly-input-select
 					key={this.organization?.id + "" + this.roles?.map(role => role.label).join(" ")}
 					name={this.name}
 					mutable={false}
@@ -79,16 +79,16 @@ export class UserwidgetsPermissionPicker {
 							: (organization => {
 									const permissions = role.permissions(organization.id)
 									return (
-										<smoothly-picker-option
+										<smoothly-item
 											key={permissions}
 											selected={userwidgets.User.Permissions.check(this.user.permissions, permissions)}
 											value={permissions}>
 											{role.label}
-										</smoothly-picker-option>
+										</smoothly-item>
 									)
 							  })(this.organization)
 					)}
-				</smoothly-picker>
+				</smoothly-input-select>
 			</Host>
 		)
 	}
