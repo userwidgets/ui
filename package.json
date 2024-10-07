@@ -85,15 +85,15 @@
 		"tslib": "^2.6.3"
 	},
 	"dependencies": {
-		"@userwidgets/model": "0.8.30",
+		"@userwidgets/model": "0.8.31",
 		"cloudly-http": "^0.1.7",
 		"cloudly-rest": "^0.1.4",
-		"cryptly": "4.0.5",
+		"cryptly": "4.0.6",
 		"gracely": "^2.0.8",
-		"isly": "^0.1.16",
+		"isly": "^0.1.20",
 		"isoly": "^2.3.10",
 		"langly": "^2.0.9",
-		"smoothly": "1.1.1-alpha.139",
+		"smoothly": "1.1.1-alpha.142",
 		"urlpattern-polyfill": "^8.0.2",
 		"webcomponent-qr-code": "^1.2.0"
 	}
