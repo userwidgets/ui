@@ -11,7 +11,7 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 	set current(current: Applications["current"]) {
 		this.#current = current
 	}
-	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
+	private constructor(client: userwidgets.ClientCollection) {
 		super(client)
 	}
 	async fetch(): Promise<userwidgets.Application | false> {
@@ -19,9 +19,9 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 		if (this.request)
 			result = await this.request
 		else {
-			const request = !this.me.key
-				? false
-				: this.client.application.fetch().then(result => (!userwidgets.Application.is(result) ? false : result))
+			const request = this.client.application
+				.fetch()
+				.then(result => (!userwidgets.Application.is(result) ? false : result))
 			this.request = request || undefined
 			result = await request
 			this.request = undefined
@@ -43,7 +43,7 @@ export class Applications extends smoothly.StateBase<Applications, userwidgets.C
 		client: userwidgets.ClientCollection,
 		me: smoothly.WithListenable<Me>
 	): smoothly.WithListenable<Applications> {
-		const backend = new this(client, me)
+		const backend = new this(client)
 		const listenable = smoothly.Listenable.load(backend)
 		me.listen("key", key => backend.subscriptions.key(key), { lazy: true })
 		return listenable

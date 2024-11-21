@@ -23,11 +23,13 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@Event() clearCredentials: EventEmitter
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
+	@State() application?: userwidgets.Application
 	@State() translate: langly.Translate = translation.create("en")
 	private passwordInput?: HTMLSmoothlyInputElement
 
 	componentWillLoad(): void {
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
+		this.state.applications.listen("current", application => (this.application = application || undefined))
 		this.userWidgetsLoginControls.emit({
 			clear: () => this.passwordInput?.clear(),
 		})
