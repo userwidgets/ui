@@ -21,7 +21,8 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 			credentials: userwidgets.User.Credentials.Register
 		}
 	>
-	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
+	// @Event() userwidgetsActiveAccount: EventEmitter<boolean>
+	@Event() userwidgetsLoginMode: EventEmitter<{ mode: "login" | "register" | "sign" }>
 	@State() translate: langly.Translate = translation.create("en")
 
 	componentWillLoad(): void {
@@ -51,6 +52,11 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 				result: event.detail.result,
 			})
 	}
+	loginModeHandler(event: MouseEvent, mode: "login" | "register" | "sign"): void {
+		console.log("emitting mode change", mode)
+		event.preventDefault()
+		this.userwidgetsLoginMode.emit({ mode })
+	}
 
 	render(): VNode | VNode[] {
 		return (
@@ -75,9 +81,7 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 
 					<p slot="submit">
 						{this.translate("Already have an account? ")}
-						<a
-							href={window.origin}
-							onClick={async e => (e.preventDefault(), this.invite && this.userwidgetsActiveAccount.emit(true))}>
+						<a href={window.origin} onClick={e => this.loginModeHandler(e, "login")}>
 							{this.translate("Login")}
 						</a>
 					</p>

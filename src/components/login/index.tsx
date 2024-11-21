@@ -1,4 +1,16 @@
-import { Component, ComponentWillLoad, Event, EventEmitter, h, Host, Listen, Prop, State, VNode } from "@stencil/core"
+import {
+	Component,
+	ComponentWillLoad,
+	Event,
+	EventEmitter,
+	h,
+	Host,
+	Listen,
+	Prop,
+	State,
+	VNode,
+	Watch,
+} from "@stencil/core"
 import { langly } from "langly"
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
@@ -18,9 +30,10 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	@Prop() state: model.State
 	@State() resolves?: (() => void)[]
 	@State() invite?: userwidgets.User.Invite
-	@State() activeAccount?: boolean
 	@State() credentials?: userwidgets.User.Credentials
 	@State() translate: langly.Translate = translation.create("en")
+	@State() application?: userwidgets.Application
+	@State() mode: "login" | "register" | "sign" = "login"
 	@Event() loggedIn: EventEmitter
 	@Event() userwidgetsLoginLoaded: EventEmitter
 	@Event() notice: EventEmitter<smoothly.Notice>
@@ -40,6 +53,7 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 
 	componentWillLoad(): void {
 		this.state.me.onUnauthorized = this.onUnauthorized
+		this.state.applications.listen("current", application => (this.application = application || undefined))
 		this.state.locales.listen("language", language => language && (this.translate = translation.create(language)))
 		this.state.me.invite.listen("value", value => value && this.handleInvite(value))
 	}
@@ -49,7 +63,6 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	async handleInvite(inviteToken: string): Promise<void> {
 		this.invite = await userwidgets.User.Invite.Verifier.create().unpack(inviteToken)
 		if (this.invite) {
-			this.activeAccount = this.invite.active
 			if (this.invite.active) {
 				const invite = this.invite
 				this.invite = undefined
@@ -58,6 +71,10 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			}
 		} else
 			this.notice.emit(smoothly.Notice.warn(this.translate("Used invite is not valid.")))
+	}
+	@Watch("invite")
+	inviteChanged(): void {
+		this.mode = this.invite ? "register" : "login"
 	}
 	@Listen("userwidgetsCancel")
 	cancelHandler(event: CustomEvent): void {
@@ -121,8 +138,9 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 	async authenticateHandler(event: CustomEvent<Pick<smoothly.Submit, "result"> & { code: string }>): Promise<void> {
 		event.detail.result(!!(this.credentials && (await this.login(this.credentials, event.detail.code))))
 	}
-	async activeAccountHandler(event: CustomEvent<boolean>): Promise<void> {
-		this.activeAccount = event.detail
+	loginModeHandler(event: CustomEvent<{ mode: "login" | "sign" | "register" }>): void {
+		console.log("caught mode change", event.detail.mode)
+		this.mode = event.detail.mode
 	}
 
 	async registerHandler(
@@ -151,15 +169,19 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 			<Host>
 				{this.resolves ? (
 					<div key="dialog" class={"mask"}>
-						{this.invite && !this.activeAccount ? (
+						{this.mode == "register" && !this.invite?.active ? (
 							<userwidgets-register-dialog
 								class={"dialog"}
 								state={this.state}
 								invite={this.invite}
 								onUserwidgetsRegister={event => this.registerHandler(event)}
-								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
+								onUserwidgetsLoginMode={e => this.loginModeHandler(e)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-register-dialog>
+						) : this.mode === "sign" ? (
+							<userwidgets-login-self-sign-on onUserwidgetsLoginMode={e => this.loginModeHandler(e)}>
+								<slot slot={"logo"} name={"logo"} />
+							</userwidgets-login-self-sign-on>
 						) : (
 							<userwidgets-login-dialog
 								class={"dialog"}
@@ -168,7 +190,7 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 								invite={this.invite}
 								onUserwidgetsLogin={event => this.loginHandler(event)}
 								onClearCredentials={() => (this.credentials = undefined)}
-								onUserwidgetsActiveAccount={event => this.activeAccountHandler(event)}>
+								onUserwidgetsLoginMode={e => this.loginModeHandler(e)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-login-dialog>
 						)}

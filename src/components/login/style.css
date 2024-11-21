@@ -1,13 +1,23 @@
-:host > div.mask {
-	inset:0;
+:host>div.mask {
+	inset: 0;
 	position: fixed;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: rgba(var(--smoothly-default-tint), 0.7);
 	z-index: 10;
-	
+
+	&>* {
+		width: max-content;
+		border: solid;
+		border-width: 1px;
+		border-radius: 3px;
+		border-color: black;
+		margin: 1rem;
+		background-color: rgba(var(--smoothly-default-tint));
+	}
 }
-:host > div.hidden {
-	display:none;
+
+:host>div.hidden {
+	display: none;
 }

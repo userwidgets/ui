@@ -1,11 +1,5 @@
 :host {
 	display: grid;
-	border: solid;
-	border-width: 1px;
-	border-radius: 3px;
-	border-color: black;
-	margin: 1rem;
-	background-color: rgba(var(--smoothly-default-tint));
 }
 
 :host > smoothly-form {

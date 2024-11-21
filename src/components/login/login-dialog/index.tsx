@@ -12,19 +12,20 @@ import * as translation from "./translation"
 })
 export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() state: model.State
-	@Prop() invite?: userwidgets.User.Invite
 	@Prop({ mutable: true }) twoFactor: boolean = false
+	// @Prop() active?: boolean
+	@Prop() invite?: userwidgets.User.Invite
+	@State() application?: userwidgets.Application
+	@State() translate: langly.Translate = translation.create("en")
 	@Event() notice: EventEmitter<smoothly.Notice>
 	@Event() userwidgetsLogin: EventEmitter<
 		Pick<smoothly.Submit, "result"> & {
 			credentials: userwidgets.User.Credentials
 		}
 	>
-	@Event() userwidgetsActiveAccount: EventEmitter<boolean>
 	@Event() clearCredentials: EventEmitter
 	@Event() userWidgetsLoginControls: EventEmitter<{ clear: () => void }>
-	@State() application?: userwidgets.Application
-	@State() translate: langly.Translate = translation.create("en")
+	@Event() userwidgetsLoginMode: EventEmitter<{ mode: "login" | "sign" | "register" }>
 	private passwordInput?: HTMLSmoothlyInputElement
 
 	componentWillLoad(): void {
@@ -49,7 +50,13 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 		this.twoFactor = false
 		this.clearCredentials.emit()
 	}
+	loginModeHandler(event: MouseEvent, mode: "login" | "sign" | "register"): void {
+		event.preventDefault()
+		this.userwidgetsLoginMode.emit({ mode })
+		console.log("toggle", mode)
+	}
 	render(): VNode | VNode[] {
+		// console.log("invite is active?", this.active)
 		return (
 			<Host>
 				<slot name={"logo"} />
@@ -67,13 +74,19 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 					{this.invite && !this.invite.active ? (
 						<p slot="submit">
 							{this.translate("Don't have an account? ")}
-							<a
-								href={window.location.href}
-								onClick={e => (e.preventDefault(), this.userwidgetsActiveAccount.emit(false))}>
+							<a href={window.location.href} onClick={e => this.loginModeHandler(e, "register")}>
 								{this.translate("Register")}
 							</a>
 						</p>
-					) : null}
+					) : (
+						this.application?.selfSignOn && (
+							<p slot={"submit"}>
+								<a href={window.location.href} onClick={e => this.loginModeHandler(e, "sign")}>
+									{this.translate("Register")}
+								</a>
+							</p>
+						)
+					)}
 					{this.twoFactor && (
 						<smoothly-input type="text" name="code">
 							{this.translate("Authentication Code")}

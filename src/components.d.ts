@@ -38,6 +38,8 @@ export namespace Components {
         "state": model.State;
         "twoFactor": boolean;
     }
+    interface UserwidgetsLoginSelfSignOn {
+    }
     interface UserwidgetsLogout {
         "color": smoothly.Color;
         "state": model.State;
@@ -150,6 +152,10 @@ export interface UserwidgetsLoginDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsLoginDialogElement;
 }
+export interface UserwidgetsLoginSelfSignOnCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserwidgetsLoginSelfSignOnElement;
+}
 export interface UserwidgetsMeNameCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsMeNameElement;
@@ -249,9 +255,9 @@ declare global {
         "userwidgetsLogin": Pick<smoothly.Submit, "result"> & {
 			credentials: userwidgets.User.Credentials
 		};
-        "userwidgetsActiveAccount": boolean;
         "clearCredentials": any;
         "userWidgetsLoginControls": { clear: () => void };
+        "userwidgetsLoginMode": { mode: "login" | "sign" | "register" };
     }
     interface HTMLUserwidgetsLoginDialogElement extends Components.UserwidgetsLoginDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLUserwidgetsLoginDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginDialogElement, ev: UserwidgetsLoginDialogCustomEvent<HTMLUserwidgetsLoginDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -266,6 +272,23 @@ declare global {
     var HTMLUserwidgetsLoginDialogElement: {
         prototype: HTMLUserwidgetsLoginDialogElement;
         new (): HTMLUserwidgetsLoginDialogElement;
+    };
+    interface HTMLUserwidgetsLoginSelfSignOnElementEventMap {
+        "userwidgetsLoginMode": { mode: "login" | "sign" | "register" };
+    }
+    interface HTMLUserwidgetsLoginSelfSignOnElement extends Components.UserwidgetsLoginSelfSignOn, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserwidgetsLoginSelfSignOnElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginSelfSignOnElement, ev: UserwidgetsLoginSelfSignOnCustomEvent<HTMLUserwidgetsLoginSelfSignOnElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserwidgetsLoginSelfSignOnElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginSelfSignOnElement, ev: UserwidgetsLoginSelfSignOnCustomEvent<HTMLUserwidgetsLoginSelfSignOnElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLUserwidgetsLoginSelfSignOnElement: {
+        prototype: HTMLUserwidgetsLoginSelfSignOnElement;
+        new (): HTMLUserwidgetsLoginSelfSignOnElement;
     };
     interface HTMLUserwidgetsLogoutElement extends Components.UserwidgetsLogout, HTMLStencilElement {
     }
@@ -377,7 +400,7 @@ declare global {
 			invite: userwidgets.User.Invite
 			credentials: userwidgets.User.Credentials.Register
 		};
-        "userwidgetsActiveAccount": boolean;
+        "userwidgetsLoginMode": { mode: "login" | "register" | "sign" };
     }
     interface HTMLUserwidgetsRegisterDialogElement extends Components.UserwidgetsRegisterDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLUserwidgetsRegisterDialogElementEventMap>(type: K, listener: (this: HTMLUserwidgetsRegisterDialogElement, ev: UserwidgetsRegisterDialogCustomEvent<HTMLUserwidgetsRegisterDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -547,6 +570,7 @@ declare global {
         "userwidgets-login": HTMLUserwidgetsLoginElement;
         "userwidgets-login-button": HTMLUserwidgetsLoginButtonElement;
         "userwidgets-login-dialog": HTMLUserwidgetsLoginDialogElement;
+        "userwidgets-login-self-sign-on": HTMLUserwidgetsLoginSelfSignOnElement;
         "userwidgets-logout": HTMLUserwidgetsLogoutElement;
         "userwidgets-me-menu": HTMLUserwidgetsMeMenuElement;
         "userwidgets-me-name": HTMLUserwidgetsMeNameElement;
@@ -599,12 +623,15 @@ declare namespace LocalJSX {
         "onClearCredentials"?: (event: UserwidgetsLoginDialogCustomEvent<any>) => void;
         "onNotice"?: (event: UserwidgetsLoginDialogCustomEvent<smoothly.Notice>) => void;
         "onUserWidgetsLoginControls"?: (event: UserwidgetsLoginDialogCustomEvent<{ clear: () => void }>) => void;
-        "onUserwidgetsActiveAccount"?: (event: UserwidgetsLoginDialogCustomEvent<boolean>) => void;
         "onUserwidgetsLogin"?: (event: UserwidgetsLoginDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
 			credentials: userwidgets.User.Credentials
 		}>) => void;
+        "onUserwidgetsLoginMode"?: (event: UserwidgetsLoginDialogCustomEvent<{ mode: "login" | "sign" | "register" }>) => void;
         "state"?: model.State;
         "twoFactor"?: boolean;
+    }
+    interface UserwidgetsLoginSelfSignOn {
+        "onUserwidgetsLoginMode"?: (event: UserwidgetsLoginSelfSignOnCustomEvent<{ mode: "login" | "sign" | "register" }>) => void;
     }
     interface UserwidgetsLogout {
         "color"?: smoothly.Color;
@@ -655,7 +682,7 @@ declare namespace LocalJSX {
     interface UserwidgetsRegisterDialog {
         "invite"?: userwidgets.User.Invite;
         "onNotice"?: (event: UserwidgetsRegisterDialogCustomEvent<smoothly.Notice>) => void;
-        "onUserwidgetsActiveAccount"?: (event: UserwidgetsRegisterDialogCustomEvent<boolean>) => void;
+        "onUserwidgetsLoginMode"?: (event: UserwidgetsRegisterDialogCustomEvent<{ mode: "login" | "register" | "sign" }>) => void;
         "onUserwidgetsRegister"?: (event: UserwidgetsRegisterDialogCustomEvent<Pick<smoothly.Submit, "result"> & {
 			invite: userwidgets.User.Invite
 			credentials: userwidgets.User.Credentials.Register
@@ -735,6 +762,7 @@ declare namespace LocalJSX {
         "userwidgets-login": UserwidgetsLogin;
         "userwidgets-login-button": UserwidgetsLoginButton;
         "userwidgets-login-dialog": UserwidgetsLoginDialog;
+        "userwidgets-login-self-sign-on": UserwidgetsLoginSelfSignOn;
         "userwidgets-logout": UserwidgetsLogout;
         "userwidgets-me-menu": UserwidgetsMeMenu;
         "userwidgets-me-name": UserwidgetsMeName;
@@ -772,6 +800,7 @@ declare module "@stencil/core" {
             "userwidgets-login": LocalJSX.UserwidgetsLogin & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginElement>;
             "userwidgets-login-button": LocalJSX.UserwidgetsLoginButton & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginButtonElement>;
             "userwidgets-login-dialog": LocalJSX.UserwidgetsLoginDialog & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginDialogElement>;
+            "userwidgets-login-self-sign-on": LocalJSX.UserwidgetsLoginSelfSignOn & JSXBase.HTMLAttributes<HTMLUserwidgetsLoginSelfSignOnElement>;
             "userwidgets-logout": LocalJSX.UserwidgetsLogout & JSXBase.HTMLAttributes<HTMLUserwidgetsLogoutElement>;
             "userwidgets-me-menu": LocalJSX.UserwidgetsMeMenu & JSXBase.HTMLAttributes<HTMLUserwidgetsMeMenuElement>;
             "userwidgets-me-name": LocalJSX.UserwidgetsMeName & JSXBase.HTMLAttributes<HTMLUserwidgetsMeNameElement>;
