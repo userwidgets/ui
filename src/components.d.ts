@@ -39,6 +39,7 @@ export namespace Components {
         "twoFactor": boolean;
     }
     interface UserwidgetsLoginSelfSignOn {
+        "state": model.State;
     }
     interface UserwidgetsLogout {
         "color": smoothly.Color;
@@ -275,6 +276,7 @@ declare global {
     };
     interface HTMLUserwidgetsLoginSelfSignOnElementEventMap {
         "userwidgetsLoginMode": { mode: "login" | "sign" | "register" };
+        "notice": smoothly.Notice;
     }
     interface HTMLUserwidgetsLoginSelfSignOnElement extends Components.UserwidgetsLoginSelfSignOn, HTMLStencilElement {
         addEventListener<K extends keyof HTMLUserwidgetsLoginSelfSignOnElementEventMap>(type: K, listener: (this: HTMLUserwidgetsLoginSelfSignOnElement, ev: UserwidgetsLoginSelfSignOnCustomEvent<HTMLUserwidgetsLoginSelfSignOnElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -631,7 +633,9 @@ declare namespace LocalJSX {
         "twoFactor"?: boolean;
     }
     interface UserwidgetsLoginSelfSignOn {
+        "onNotice"?: (event: UserwidgetsLoginSelfSignOnCustomEvent<smoothly.Notice>) => void;
         "onUserwidgetsLoginMode"?: (event: UserwidgetsLoginSelfSignOnCustomEvent<{ mode: "login" | "sign" | "register" }>) => void;
+        "state"?: model.State;
     }
     interface UserwidgetsLogout {
         "color"?: smoothly.Color;

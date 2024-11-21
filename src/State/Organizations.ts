@@ -1,6 +1,7 @@
 import { smoothly } from "smoothly"
 import { userwidgets } from "@userwidgets/model"
 import { isly } from "isly"
+import { Applications } from "./Applications"
 import { Me } from "./Me"
 
 namespace Response {
@@ -54,7 +55,11 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			window.localStorage.setItem(this.storage.current, current.id)
 	}
 	private storage = { current: "userwidgetsOrganization" }
-	private constructor(client: userwidgets.ClientCollection, private me: smoothly.WithListenable<Me>) {
+	private constructor(
+		client: userwidgets.ClientCollection,
+		private me: smoothly.WithListenable<Me>,
+		private applications: smoothly.WithListenable<Applications>
+	) {
 		super(client)
 	}
 
@@ -90,6 +95,16 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 			this.fetch()
 		return result || false
 	}
+	async create(organization: userwidgets.Organization.Creatable): Promise<userwidgets.Organization | false> {
+		const result = !this.applications.current
+			? undefined
+			: await this.client.organization
+					.create(organization, this.applications.current.id, window.location.origin)
+					.then(result => (!userwidgets.Organization.is(result) ? false : result))
+		if (result)
+			this.fetch()
+		return result || false
+	}
 	private subscriptions = {
 		key: (key: Me["key"]) => {
 			if (this.#value !== undefined)
@@ -101,9 +116,10 @@ export class Organizations extends smoothly.StateBase<Organizations, userwidgets
 	}
 	static create(
 		client: userwidgets.ClientCollection,
-		me: smoothly.WithListenable<Me>
+		me: smoothly.WithListenable<Me>,
+		applications: smoothly.WithListenable<Applications>
 	): smoothly.WithListenable<Organizations> {
-		const backend = new this(client, me)
+		const backend = new this(client, me, applications)
 		const listenable = smoothly.Listenable.load(backend)
 		me.listen("key", key => backend.subscriptions.key(key), { lazy: true })
 		return listenable

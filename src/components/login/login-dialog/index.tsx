@@ -13,7 +13,6 @@ import * as translation from "./translation"
 export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	@Prop() state: model.State
 	@Prop({ mutable: true }) twoFactor: boolean = false
-	// @Prop() active?: boolean
 	@Prop() invite?: userwidgets.User.Invite
 	@State() application?: userwidgets.Application
 	@State() translate: langly.Translate = translation.create("en")
@@ -53,15 +52,17 @@ export class UserwidgetsLoginDialog implements ComponentWillLoad {
 	loginModeHandler(event: MouseEvent, mode: "login" | "sign" | "register"): void {
 		event.preventDefault()
 		this.userwidgetsLoginMode.emit({ mode })
-		console.log("toggle", mode)
 	}
 	render(): VNode | VNode[] {
-		// console.log("invite is active?", this.active)
 		return (
 			<Host>
 				<slot name={"logo"} />
 				<smoothly-form looks="border" onSmoothlyFormSubmit={e => this.handleSubmit(e)}>
-					<smoothly-input type="email" name="user" onSmoothlyInput={() => this.clear()}>
+					<smoothly-input
+						type="email"
+						name="user"
+						onSmoothlyInput={() => this.clear()}
+						{...(this.invite && { value: this.invite.email, readonly: true })}>
 						{this.translate("Email")}
 					</smoothly-input>
 					<smoothly-input

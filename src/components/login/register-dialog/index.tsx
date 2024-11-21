@@ -53,7 +53,6 @@ export class UserwidgetsRegister implements ComponentWillLoad {
 			})
 	}
 	loginModeHandler(event: MouseEvent, mode: "login" | "register" | "sign"): void {
-		console.log("emitting mode change", mode)
 		event.preventDefault()
 		this.userwidgetsLoginMode.emit({ mode })
 	}

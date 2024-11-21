@@ -139,7 +139,6 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 		event.detail.result(!!(this.credentials && (await this.login(this.credentials, event.detail.code))))
 	}
 	loginModeHandler(event: CustomEvent<{ mode: "login" | "sign" | "register" }>): void {
-		console.log("caught mode change", event.detail.mode)
 		this.mode = event.detail.mode
 	}
 
@@ -179,7 +178,7 @@ export class UserwidgetsLogin implements ComponentWillLoad {
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-register-dialog>
 						) : this.mode === "sign" ? (
-							<userwidgets-login-self-sign-on onUserwidgetsLoginMode={e => this.loginModeHandler(e)}>
+							<userwidgets-login-self-sign-on state={this.state} onUserwidgetsLoginMode={e => this.loginModeHandler(e)}>
 								<slot slot={"logo"} name={"logo"} />
 							</userwidgets-login-self-sign-on>
 						) : (

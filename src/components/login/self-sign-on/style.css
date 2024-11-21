@@ -1,3 +1,15 @@
 :host {
-	display: block;
+	display: grid;
+	padding: 1rem;
+}
+
+:host>smoothly-form p {
+	align-self: center;
+	margin-right: auto;
+}
+
+@media (max-width: 600px) {
+	:host {
+		padding: 0.7rem;
+	}
 }
