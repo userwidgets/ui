@@ -1,7 +1,7 @@
-import { Component, Event, EventEmitter, Prop, State } from "@stencil/core"
-import { smoothly } from "smoothly"
-import { userwidgets } from "@userwidgets/model"
-import { model } from "../../../model"
+import { Component } from "@stencil/core"
+//import { smoothly } from "smoothly"
+//import { userwidgets } from "@userwidgets/model"
+//import { model } from "../../../model"
 
 export interface CustomOption {
 	name: string
@@ -15,17 +15,17 @@ export interface CustomOption {
 	scoped: true,
 })
 export class UserwidgetsPermissionUpdate {
-	@Prop({ mutable: true, reflect: true }) changed = false
-	@Prop() state: model.State
-	@Prop() user: userwidgets.User
-	@Prop() label = "Permissions:"
-	@Prop() options?: CustomOption[]
-	@Prop() preventDefault = false
-	@State() pickerOptions?: (smoothly.Option & { checked: boolean })[]
-	@State() selectedOptions?: userwidgets.User.Permissions.Readable
-	@State() key?: userwidgets.User.Key
-	@State() organization?: userwidgets.Organization
-	@Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions>
+	// @Prop({ mutable: true, reflect: true }) changed = false
+	// @Prop() state: model.State
+	// @Prop() user: userwidgets.User
+	// @Prop() label = "Permissions:"
+	// @Prop() options?: CustomOption[]
+	// @Prop() preventDefault = false
+	// @State() pickerOptions?: (smoothly.Option & { checked: boolean })[]
+	// @State() selectedOptions?: userwidgets.User.Permissions.Readable
+	// @State() key?: userwidgets.User.Key
+	// @State() organization?: userwidgets.Organization
+	// @Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions>
 
 	// @Watch("key")
 	// @Watch("organization")
