@@ -26,7 +26,6 @@ export class UserwidgetsPermissionUpdate {
 	// @State() key?: userwidgets.User.Key
 	// @State() organization?: userwidgets.Organization
 	// @Event() userPermissionUpdated: EventEmitter<userwidgets.User.Permissions>
-
 	// @Watch("key")
 	// @Watch("organization")
 	// updateOptions() {
@@ -56,13 +55,11 @@ export class UserwidgetsPermissionUpdate {
 	// 					.flat()
 	// 					.filter((option): option is Option & { checked: boolean } => !!option)
 	// }
-
 	// componentWillLoad() {
 	// 	this.options && (this.pickerOptions = this.options)
 	// 	!this.options && this.state.me.listen("key", key => (this.key = key || undefined)),
 	// 		this.state.organizations.listen("current", organization => (this.organization = organization || undefined))
 	// }
-
 	// handleMenuClosed(event: CustomEvent<Option[]>) {
 	// 	this.selectedOptions = event.detail.reduce<userwidgets.User.Permissions.Readable>(
 	// 		(target, { value: values }) => (
@@ -86,13 +83,11 @@ export class UserwidgetsPermissionUpdate {
 	// 		)
 	// 	)
 	// }
-
 	// handleClick() {
 	// 	!this.preventDefault &&
 	// 		this.selectedOptions &&
 	// 		this.state.users.updatePermissions(this.user.email, this.selectedOptions)
 	// }
-
 	// render() {
 	// 	return (
 	// 		<smoothly-form looks="line" onSmoothlyFormSubmit={event => event.preventDefault()}>
