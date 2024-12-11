@@ -9,12 +9,10 @@ import { State } from "./State";
 import { model } from "./model";
 import { smoothly } from "smoothly";
 import { userwidgets } from "@userwidgets/model";
-import { CustomOption } from "./components/user/permission-update/index";
 export { State } from "./State";
 export { model } from "./model";
 export { smoothly } from "smoothly";
 export { userwidgets } from "@userwidgets/model";
-export { CustomOption } from "./components/user/permission-update/index";
 export namespace Components {
     interface UserwidgetsDemo {
     }
@@ -134,12 +132,6 @@ export namespace Components {
         "user": userwidgets.User;
     }
     interface UserwidgetsUserPermissionsUpdate {
-        "changed": boolean;
-        "label": string;
-        "options"?: CustomOption[];
-        "preventDefault": boolean;
-        "state": model.State;
-        "user": userwidgets.User;
     }
 }
 export interface UserwidgetsLoginCustomEvent<T> extends CustomEvent<T> {
@@ -189,10 +181,6 @@ export interface UserwidgetsUserInvitedListCustomEvent<T> extends CustomEvent<T>
 export interface UserwidgetsUserListInviteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLUserwidgetsUserListInviteElement;
-}
-export interface UserwidgetsUserPermissionsUpdateCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLUserwidgetsUserPermissionsUpdateElement;
 }
 declare global {
     interface HTMLUserwidgetsDemoElement extends Components.UserwidgetsDemo, HTMLStencilElement {
@@ -522,18 +510,7 @@ declare global {
         prototype: HTMLUserwidgetsUserListRowElement;
         new (): HTMLUserwidgetsUserListRowElement;
     };
-    interface HTMLUserwidgetsUserPermissionsUpdateElementEventMap {
-        "userPermissionUpdated": userwidgets.User.Permissions;
-    }
     interface HTMLUserwidgetsUserPermissionsUpdateElement extends Components.UserwidgetsUserPermissionsUpdate, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLUserwidgetsUserPermissionsUpdateElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserPermissionsUpdateElement, ev: UserwidgetsUserPermissionsUpdateCustomEvent<HTMLUserwidgetsUserPermissionsUpdateElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLUserwidgetsUserPermissionsUpdateElementEventMap>(type: K, listener: (this: HTMLUserwidgetsUserPermissionsUpdateElement, ev: UserwidgetsUserPermissionsUpdateCustomEvent<HTMLUserwidgetsUserPermissionsUpdateElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLUserwidgetsUserPermissionsUpdateElement: {
         prototype: HTMLUserwidgetsUserPermissionsUpdateElement;
@@ -719,13 +696,6 @@ declare namespace LocalJSX {
         "user"?: userwidgets.User;
     }
     interface UserwidgetsUserPermissionsUpdate {
-        "changed"?: boolean;
-        "label"?: string;
-        "onUserPermissionUpdated"?: (event: UserwidgetsUserPermissionsUpdateCustomEvent<userwidgets.User.Permissions>) => void;
-        "options"?: CustomOption[];
-        "preventDefault"?: boolean;
-        "state"?: model.State;
-        "user"?: userwidgets.User;
     }
     interface IntrinsicElements {
         "userwidgets-demo": UserwidgetsDemo;
